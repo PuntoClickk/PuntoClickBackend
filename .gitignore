@@ -36,4 +36,4 @@ out/
 .vscode/
 
 ### Application ###
-.src/main/resources/application.conf
+*.src/main/resources/application.conf
