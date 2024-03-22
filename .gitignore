@@ -37,3 +37,4 @@ out/
 
 ### Application ###
 /src/main/resources/application.conf
+/local.properties
