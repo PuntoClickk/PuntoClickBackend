@@ -1,5 +1,7 @@
 package com.puntoclick.plugins
 
+import com.puntoclick.features.roles.database.RoleDaoFacade
+import com.puntoclick.features.roles.route.roleRouting
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
@@ -11,7 +13,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
 
-fun Application.configureRouting() {
+fun Application.configureRouting(dao: RoleDaoFacade) {
     install(Resources)
     install(StatusPages) {
         exception<Throwable> { call, cause ->
@@ -19,17 +21,7 @@ fun Application.configureRouting() {
         }
     }
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
-        get<Articles> { article ->
-            // Get all articles ...
-            call.respond("List of articles sorted starting from ${article.sort}")
-        }
-        // Static plugin. Try to access `/static/index.html`
-        static("/static") {
-            resources("static")
-        }
+        roleRouting(dao)
     }
 }
 
