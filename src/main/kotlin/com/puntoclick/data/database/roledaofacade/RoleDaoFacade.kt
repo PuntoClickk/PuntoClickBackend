@@ -1,6 +1,6 @@
-package com.puntoclick.features.roles.database
+package com.puntoclick.data.database.roledaofacade
 
-import com.puntoclick.features.roles.entity.Role
+import com.puntoclick.data.database.entity.Role
 import java.util.UUID
 
 interface RoleDaoFacade {

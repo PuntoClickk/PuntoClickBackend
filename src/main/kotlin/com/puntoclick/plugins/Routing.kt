@@ -1,6 +1,6 @@
 package com.puntoclick.plugins
 
-import com.puntoclick.features.roles.database.RoleDaoFacade
+import com.puntoclick.features.roles.controller.RoleController
 import com.puntoclick.features.roles.route.roleRouting
 import io.ktor.http.*
 import io.ktor.resources.*
@@ -12,8 +12,15 @@ import io.ktor.server.resources.Resources
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.ktor.ext.inject
 
-fun Application.configureRouting(dao: RoleDaoFacade) {
+fun Application.configureControllers(){
+    val roleController by inject<RoleController>()
+}
+fun Application.configureRouting() {
+
     install(Resources)
     install(StatusPages) {
         exception<Throwable> { call, cause ->
@@ -21,7 +28,7 @@ fun Application.configureRouting(dao: RoleDaoFacade) {
         }
     }
     routing {
-        roleRouting(dao)
+        roleRouting(roleController)
     }
 }
 

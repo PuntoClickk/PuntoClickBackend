@@ -1,4 +1,4 @@
-package com.puntoclick.features.roles.database
+package com.puntoclick.data.database.roledaofacade
 
 import org.jetbrains.exposed.sql.Table
 

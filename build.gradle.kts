@@ -3,6 +3,7 @@ val kotlin_version: String by project
 val logback_version: String by project
 val postgresql_driver_version: String by project
 val exposed_version: String by project
+val koin_ktor: String by project
 
 plugins {
     kotlin("jvm") version "1.9.23"
@@ -48,4 +49,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+
+    // Koin for Ktor
+    implementation("io.insert-koin:koin-ktor:$koin_ktor")
+    // SLF4J Logger
+    implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
 }
