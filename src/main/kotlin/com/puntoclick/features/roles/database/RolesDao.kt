@@ -3,7 +3,7 @@ package com.puntoclick.features.roles.database
 import org.jetbrains.exposed.sql.Table
 
 
-object RoleTable : Table() {
+object RoleTable : Table("role") {
     val uuid = uuid("id").autoGenerate()
     val name = varchar("name", 30)
     val createAt = long("createAt").default(System.currentTimeMillis())

@@ -1,7 +1,6 @@
 package com.puntoclick.data
 
 import com.puntoclick.features.roles.database.RoleTable
-import io.ktor.http.*
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -13,7 +12,7 @@ object DatabaseFactory {
     fun Application.init() {
 
         val database = Database.connect(
-            url = "jdbc:postgresql://localhost:5432/puntoclick",
+            url = environment.config.propertyOrNull("ktor.database.url")?.getString() ?: "",
             driver = environment.config.propertyOrNull("ktor.database.driver")?.getString() ?: "",
             user = environment.config.propertyOrNull("ktor.database.user")?.getString() ?: "",
             password = environment.config.propertyOrNull("ktor.database.password")?.getString() ?: ""
