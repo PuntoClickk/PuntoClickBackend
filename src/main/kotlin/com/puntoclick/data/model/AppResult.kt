@@ -14,3 +14,13 @@ fun  <T: Any>AppResult<T>.handleResult() : AppResponse<T>{
         is AppResult.Error -> { AppResponse(error = errorResponse)}
     }
 }
+
+fun createError(title: String?, description: String?, status: HttpStatusCode = HttpStatusCode.BadRequest): AppResult.Error {
+    return AppResult.Error(
+        ErrorResponse(
+            title =  title ?: "",
+            description = description ?: ""
+        ),
+        appStatus = status
+    )
+}

@@ -2,8 +2,8 @@ package com.puntoclick.features.roles.controller
 
 import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.database.roledaofacade.RoleDaoFacade
-import com.puntoclick.data.model.ErrorResponse
 import com.puntoclick.data.model.AppResult
+import com.puntoclick.data.model.createError
 import io.ktor.http.*
 import java.lang.Exception
 
@@ -18,13 +18,7 @@ class RoleController(
                 data = facade.allRoles(), appStatus = HttpStatusCode.OK
             )
         } catch (e: Exception) {
-            AppResult.Error(
-                 ErrorResponse(
-                    title =  e.message ?: "",
-                    description = e.message ?: ""
-                ),
-                appStatus = HttpStatusCode.BadRequest
-            )
+            createError(e.message, e.message)
         }
     }
 
