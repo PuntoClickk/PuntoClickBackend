@@ -1,6 +1,6 @@
 package com.puntoclick.data.database.roledaofacade
 
-import com.puntoclick.data.database.DatabaseFactory.dbQuery
+import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.entity.Role
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
