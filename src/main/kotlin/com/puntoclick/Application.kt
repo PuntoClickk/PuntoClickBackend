@@ -20,5 +20,6 @@ fun Application.module() {
     configureSerialization()
     configureSecurity()
     configureRouting(controllers)
+    println("Algo")
 }
 
