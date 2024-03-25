@@ -1,7 +1,7 @@
-package com.puntoclick.features.roles.database
+package com.puntoclick.data.database.roledaofacade
 
-import com.puntoclick.data.DatabaseFactory.dbQuery
-import com.puntoclick.features.roles.entity.Role
+import com.puntoclick.data.database.dbQuery
+import com.puntoclick.data.database.entity.Role
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -19,7 +19,7 @@ class RoleDaoFacadeImp : RoleDaoFacade {
 
     override suspend fun addRole(name: String): Boolean = dbQuery {
         RoleTable.insert {
-            it[this.name] = name
+            it[RoleTable.name] = name
         }.resultedValues?.singleOrNull() != null
     }
 

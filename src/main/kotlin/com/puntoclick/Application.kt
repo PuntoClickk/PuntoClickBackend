@@ -1,8 +1,8 @@
 package com.puntoclick
 
-import com.puntoclick.data.DatabaseFactory.init
-import com.puntoclick.features.roles.database.RoleDaoFacade
-import com.puntoclick.features.roles.database.RoleDaoFacadeImp
+
+import com.puntoclick.data.database.configureDatabase
+import com.puntoclick.di.configureControllers
 import com.puntoclick.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
@@ -10,14 +10,15 @@ import io.ktor.server.netty.*
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
+    configureKoin()
 
-    val dao : RoleDaoFacade = RoleDaoFacadeImp()
-    init()
+    val controllers = configureControllers()
 
+    configureDatabase()
     configureHTTP()
     configureMonitoring()
     configureSerialization()
     configureSecurity()
-    configureRouting(dao)
+    configureRouting(controllers)
 }
 

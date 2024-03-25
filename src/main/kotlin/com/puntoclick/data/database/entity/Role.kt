@@ -1,4 +1,4 @@
-package com.puntoclick.features.roles.entity
+package com.puntoclick.data.database.entity
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
