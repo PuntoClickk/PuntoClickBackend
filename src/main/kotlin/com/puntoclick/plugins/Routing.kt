@@ -1,6 +1,7 @@
 package com.puntoclick.plugins
 
 import com.puntoclick.di.Controllers
+import com.puntoclick.features.login.route.loginRouting
 import com.puntoclick.features.roles.route.roleRouting
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -19,7 +20,7 @@ fun Application.configureRouting(controllers: Controllers) {
         }
     }
     routing {
+        loginRouting()
         roleRouting(controllers.roleController)
-
     }
 }
