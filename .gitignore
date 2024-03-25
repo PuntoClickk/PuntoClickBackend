@@ -37,3 +37,6 @@ out/
 
 ### application.cong ###
 /src/main/resources/application.conf
+
+### Firebase ###
+/ktor-firebase-auth-adminsdk.json
