@@ -4,6 +4,8 @@ val logback_version: String by project
 val postgresql_driver_version: String by project
 val exposed_version: String by project
 val koin_ktor: String by project
+val firebase_auth: String by project
+val firebase_oauth: String by project
 
 plugins {
     kotlin("jvm") version "1.9.23"
@@ -54,4 +56,8 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_ktor")
     // SLF4J Logger
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
+
+    // Firebase Auth
+    implementation("com.google.firebase:firebase-admin:$firebase_auth")
+    implementation("com.google.auth:google-auth-library-oauth2-http:$firebase_oauth")
 }

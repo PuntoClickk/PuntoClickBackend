@@ -2,6 +2,9 @@ package com.puntoclick.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.puntoclick.firebase.FIREBASE_AUTH
+import com.puntoclick.firebase.FirebaseAuthProvider
+import com.puntoclick.firebase.FirebaseConfig
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -27,4 +30,12 @@ fun Application.configureSecurity() {
             }
         }
     }
+}
+
+fun AuthenticationConfig.firebase(
+    name: String? = FIREBASE_AUTH,
+    configure: FirebaseConfig.() -> Unit
+) {
+    val provider = FirebaseAuthProvider(FirebaseConfig(name).apply(configure))
+    register(provider)
 }
