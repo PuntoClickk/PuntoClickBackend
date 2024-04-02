@@ -1,8 +1,7 @@
 package com.puntoclick.features.roles.route
 
-
-import com.puntoclick.data.model.handleResult
 import com.puntoclick.features.roles.controller.RoleController
+import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*

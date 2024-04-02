@@ -1,6 +1,5 @@
 package com.puntoclick.plugins
 
-import com.puntoclick.features.login.route.ParamsJWT
 import com.puntoclick.features.login.route.loginRouting
 import com.puntoclick.features.roles.route.roleRouting
 import io.ktor.http.*
@@ -12,8 +11,9 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 
-fun Application.configureRouting(jwt: ParamsJWT) {
+fun Application.configureRouting() {
 
+    val jwtParams = getJWTParams()
 
     install(Resources)
     install(StatusPages) {
@@ -22,7 +22,7 @@ fun Application.configureRouting(jwt: ParamsJWT) {
         }
     }
     routing {
-        loginRouting(jwt)
+        loginRouting(jwtParams)
         authenticate("auth-jwt") {
             roleRouting()
         }
