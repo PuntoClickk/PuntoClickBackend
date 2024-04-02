@@ -1,6 +1,5 @@
 package com.puntoclick.plugins
 
-import com.puntoclick.di.controllerModule
 import com.puntoclick.di.daoFacadeModule
 import io.ktor.server.application.*
 import org.koin.ktor.plugin.Koin
@@ -11,8 +10,7 @@ fun Application.configureKoin() {
     install(Koin) {
         slf4jLogger()
         modules(
-            daoFacadeModule,
-            controllerModule
+            daoFacadeModule
         )
     }
 }
