@@ -6,8 +6,11 @@ import com.puntoclick.features.roles.controller.RoleController
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.ktor.ext.inject
 
-fun Route.roleRouting(roleController: RoleController) {
+fun Route.roleRouting() {
+
+    val roleController by inject<RoleController>()
 
     route("/role"){
 
