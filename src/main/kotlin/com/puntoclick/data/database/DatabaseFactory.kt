@@ -11,10 +11,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 fun Application.configureDatabase() {
 
     val database = Database.connect(
-        url = environment.config.propertyOrNull("ktor.database.url")?.getString() ?: "",
-        driver = environment.config.propertyOrNull("ktor.database.driver")?.getString() ?: "",
-        user = environment.config.propertyOrNull("ktor.database.user")?.getString() ?: "",
-        password = environment.config.propertyOrNull("ktor.database.password")?.getString() ?: ""
+        url = environment.config.propertyOrNull("database.url")?.getString() ?: "",
+        driver = environment.config.propertyOrNull("database.driver")?.getString() ?: "",
+        user = environment.config.propertyOrNull("database.user")?.getString() ?: "",
+        password = environment.config.propertyOrNull("database.password")?.getString() ?: ""
     )
     transaction(database) {
         SchemaUtils.create(RoleTable)
