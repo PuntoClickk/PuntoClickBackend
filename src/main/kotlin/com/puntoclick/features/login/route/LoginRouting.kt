@@ -21,9 +21,10 @@ fun Route.loginRouting(jwtParamsJWT: ParamsJWT) {
         post("/auth") {
             jwtParamsJWT.apply {
                 val token = JWT.create()
-                    .withAudience(audience)
-                    .withIssuer(issuer)
-                    .withClaim("username", "test")
+                    .withAudience(audience) // TODO(Encrypt)
+                    .withIssuer(issuer) // TODO(Encrypt)
+                    .withClaim("username", "test")// TODO(Encrypt)
+                    .withClaim("asdas","asddasd")// TODO(Encrypt)
                     .withExpiresAt(Date(System.currentTimeMillis() + 60000))
                     .sign(Algorithm.HMAC256(secret))
                 call.respond(hashMapOf("token" to token))

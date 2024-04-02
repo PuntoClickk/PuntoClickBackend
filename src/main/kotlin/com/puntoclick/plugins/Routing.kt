@@ -29,15 +29,5 @@ fun Application.configureRouting(controllers: Controllers, jwt: ParamsJWT) {
         authenticate("auth-jwt") {
             roleRouting(controllers.roleController)
         }
-
-
-     /*   staticFiles(".well-known", dir = ) {
-            staticRootFolder = File("certs")
-            staticFiles("jwks.json")
-        }
-
-        staticFiles(".well-known", File("jwks")){
-            extensions("json")
-        }*/
     }
 }
