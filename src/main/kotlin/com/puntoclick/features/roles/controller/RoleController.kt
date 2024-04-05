@@ -1,7 +1,7 @@
 package com.puntoclick.features.roles.controller
 
 import com.puntoclick.data.database.entity.Role
-import com.puntoclick.data.database.roledaofacade.RoleDaoFacade
+import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.model.AppResult
 import com.puntoclick.features.utils.tryCatch
 import io.ktor.http.*
