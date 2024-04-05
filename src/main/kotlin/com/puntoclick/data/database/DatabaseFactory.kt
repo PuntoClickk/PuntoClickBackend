@@ -1,6 +1,6 @@
 package com.puntoclick.data.database
 
-import com.puntoclick.data.database.roledaofacade.RoleTable
+import com.puntoclick.data.database.role.table.RoleTable
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database

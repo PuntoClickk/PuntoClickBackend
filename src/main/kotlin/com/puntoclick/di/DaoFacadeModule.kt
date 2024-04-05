@@ -1,7 +1,7 @@
 package com.puntoclick.di
 
-import com.puntoclick.data.database.roledaofacade.RoleDaoFacade
-import com.puntoclick.data.database.roledaofacade.RoleDaoFacadeImp
+import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
+import com.puntoclick.data.database.role.daofacade.RoleDaoFacadeImp
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

@@ -1,7 +1,8 @@
-package com.puntoclick.data.database.roledaofacade
+package com.puntoclick.data.database.role.daofacade
 
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.entity.Role
+import com.puntoclick.data.database.role.table.RoleTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*

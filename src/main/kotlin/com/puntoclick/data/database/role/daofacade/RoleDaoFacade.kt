@@ -1,4 +1,4 @@
-package com.puntoclick.data.database.roledaofacade
+package com.puntoclick.data.database.role.daofacade
 
 import com.puntoclick.data.database.entity.Role
 import java.util.UUID
