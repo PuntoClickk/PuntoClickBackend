@@ -1,6 +1,7 @@
 package com.puntoclick.data.database
 
 import com.puntoclick.data.database.role.table.RoleTable
+import com.puntoclick.data.database.team.table.TeamTable
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -18,6 +19,7 @@ fun Application.configureDatabase() {
     )
     transaction(database) {
         SchemaUtils.create(RoleTable)
+        SchemaUtils.create(TeamTable)
     }
 }
 suspend fun <T> dbQuery(block: suspend () -> T): T =

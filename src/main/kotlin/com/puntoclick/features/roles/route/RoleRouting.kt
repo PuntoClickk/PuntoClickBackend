@@ -15,7 +15,7 @@ fun Route.roleRouting() {
 
 
         post("/add") {
-            val result = roleController.addRole("test")
+            val result = roleController.addRole("test2")
             call.respond(result)
         }
 
