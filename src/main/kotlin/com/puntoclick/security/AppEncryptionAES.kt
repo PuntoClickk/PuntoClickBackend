@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec
 class AppEncryptionAES: AppEncryption {
 
     private val key = System.getenv()["PASSWORD_ENC"].orEmpty()
+
     override fun encrypt(plainText: String): String {
         println(key)
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
