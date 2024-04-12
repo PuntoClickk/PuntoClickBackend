@@ -24,7 +24,7 @@ fun Application.configureRouting() {
     }
     routing {
         loginRouting(jwtParams)
-       authenticate("auth-jwt") {
+        authenticate("auth-jwt") {
             roleRouting()
             teamRouting()
         }
