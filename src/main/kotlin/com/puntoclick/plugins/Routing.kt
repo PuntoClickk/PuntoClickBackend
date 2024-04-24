@@ -3,6 +3,7 @@ package com.puntoclick.plugins
 import com.puntoclick.features.login.route.loginRouting
 import com.puntoclick.features.roles.route.roleRouting
 import com.puntoclick.features.team.route.teamRouting
+import com.puntoclick.features.user.route.userRouting
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -27,6 +28,7 @@ fun Application.configureRouting() {
         authenticate("auth-jwt") {
             roleRouting()
             teamRouting()
+            userRouting()
         }
     }
 }
