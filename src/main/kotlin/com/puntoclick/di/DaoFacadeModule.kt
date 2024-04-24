@@ -4,6 +4,8 @@ import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacadeImp
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacadeImp
+import com.puntoclick.data.database.user.daofacade.UserDaoFacade
+import com.puntoclick.data.database.user.daofacade.UserDaoFacadeImp
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -15,4 +17,8 @@ val daoFacadeModule = module {
     singleOf(::TeamDaoFacadeImp) {
         bind<TeamDaoFacade>()
     }
+    singleOf(::UserDaoFacadeImp) {
+        bind<UserDaoFacade>()
+    }
+
 }

@@ -2,6 +2,7 @@ package com.puntoclick.data.database
 
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.database.team.table.TeamTable
+import com.puntoclick.data.database.user.table.UserTable
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -18,6 +19,7 @@ fun Application.configureDatabase() {
         password = environment.config.propertyOrNull("database.password")?.getString() ?: ""
     )
     transaction(database) {
+        SchemaUtils.create(UserTable)
         SchemaUtils.create(RoleTable)
         SchemaUtils.create(TeamTable)
     }
