@@ -25,10 +25,7 @@ class TeamDaoFacadeImp : TeamDaoFacade {
     }
 
     override suspend fun updateTeam(team: Team): Boolean = dbQuery {
-        TeamTable.update {
-            uuid eq team.id
-            it[name] = team.name
-        } > 0
+        TeamTable.update({ TeamTable.uuid eq team.id}) { it[name] = team.name } > 0
     }
 
     override suspend fun deleteTeam(uuid: UUID): Boolean = dbQuery {

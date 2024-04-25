@@ -32,14 +32,15 @@ class RoleController(
 
     suspend fun addRole(name: String): AppResult<Boolean> = tryCatch {
         val validatedName = name.validateRequestString()
-        if (validatedName == null) createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
-        else createRole(validatedName)
+        validatedName?.let { createRole(it) } ?:
+        createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
     }
 
     suspend fun updateRole(id: UUID, name: String): AppResult<Boolean> = tryCatch {
         val validatedName = name.validateRequestString()
-        if (validatedName == null) createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
-        else updateRoleName(id, name)
+        validatedName?.let { updateRoleName(id, name) } ?:
+        createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
+
     }
 
     suspend fun deleteRole(id: UUID): AppResult<Boolean> = tryCatch {
