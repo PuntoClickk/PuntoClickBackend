@@ -4,6 +4,7 @@ import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.model.AppRequest
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.user.controller.UserController
+import com.puntoclick.features.user.model.CreateUserRequest
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -19,7 +20,7 @@ fun Route.userRouting() {
     route("/user") {
 
         post("/add") {
-            val request = call.receive<AppRequest<User>>()
+            val request = call.receive<AppRequest<CreateUserRequest>>()
             val result = userController.createUser(request.data)
             call.respond(message = result.handleResult(), status = result.status)
         }

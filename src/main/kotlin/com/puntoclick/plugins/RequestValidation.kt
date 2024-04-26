@@ -1,18 +1,18 @@
 package com.puntoclick.plugins
 
+import com.puntoclick.data.model.AppRequest
+import com.puntoclick.features.user.model.CreateUserRequest
+import com.puntoclick.features.user.validation.validateCreateUserRequest
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
-import io.ktor.server.plugins.statuspages.*
 
 
-fun Application.configureRequestValidation(){
+fun Application.configureRequestValidation() {
 
-    install(RequestValidation){
+    install(RequestValidation) {
+        validate<AppRequest<CreateUserRequest>> {
+            createUserRequest -> createUserRequest.data.validateCreateUserRequest()
+        }
     }
-
-    install(StatusPages){
-        exception<RequestValidationException>(){ call, cause ->}
-    }
-
 
 }

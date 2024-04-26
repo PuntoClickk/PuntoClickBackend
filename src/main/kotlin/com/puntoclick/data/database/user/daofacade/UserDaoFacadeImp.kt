@@ -7,6 +7,7 @@ import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
 import com.puntoclick.features.roles.model.RoleResponse
 import com.puntoclick.features.team.model.TeamResponse
+import com.puntoclick.features.user.model.CreateUserRequest
 import com.puntoclick.features.user.model.UserResponse
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -20,7 +21,7 @@ class UserDaoFacadeImp : UserDaoFacade {
         }.map(::resultRowToUSer)
     }
 
-    override suspend fun addUser(user: User): Boolean = dbQuery {
+    override suspend fun addUser(user: CreateUserRequest): Boolean = dbQuery {
         UserTable.insert {
             it[name] = user.name
             it[lastName] = user.lastName
@@ -30,7 +31,7 @@ class UserDaoFacadeImp : UserDaoFacade {
             it[type] = user.type
             it[role] = user.role
             it[team] = user.team
-            it[validated] = user.validated
+            //it[validated] = false
             it[birthday] = user.birthday
         }.resultedValues?.singleOrNull() != null
     }
