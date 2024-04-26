@@ -18,6 +18,7 @@ fun Application.configureSerialization() {
             serializersModule = SerializersModule {
                 contextual(UUID::class, UUIDSerializer)
             }
+            ignoreUnknownKeys = true
         })
     }
     routing {
