@@ -5,35 +5,19 @@ import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
+import com.puntoclick.features.roles.model.RoleResponse
+import com.puntoclick.features.team.model.TeamResponse
+import com.puntoclick.features.user.model.UserResponse
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
 
-class UserDaoFacadeImp: UserDaoFacade {
-    override suspend fun allUsers(teamId: UUID): List<User> = dbQuery {
+class UserDaoFacadeImp : UserDaoFacade {
 
-        val query = UserTable.innerJoin(TeamTable).innerJoin(RoleTable) .select {
-            UserTable.team eq teamId and (UserTable.type eq 2)
-
-        }
-
-        query.forEach { row ->
-            val userName = row[UserTable.name]
-            val teamName = row[TeamTable.name]
-            val roleName = row[RoleTable.name]
-
-            println("User: $userName, Team: $teamName")
-        }
-
-
-
-
-
-
-
-        UserTable.select {
-            (UserTable.team eq teamId) and ( UserTable.type eq 2)
-        }.map(::resultRowToUser)
-
+    override suspend fun allUsers(teamId: UUID): List<UserResponse> = dbQuery {
+        UserTable.innerJoin(TeamTable).innerJoin(RoleTable).select {
+            UserTable.team eq teamId //and (UserTable.type eq 2)
+        }.map(::resultRowToUSer)
     }
 
     override suspend fun addUser(user: User): Boolean = dbQuery {
@@ -51,39 +35,42 @@ class UserDaoFacadeImp: UserDaoFacade {
         }.resultedValues?.singleOrNull() != null
     }
 
-    /* override suspend fun user(uuid: UUID): User? {
-         TODO("Not yet implemented")
-     }
+    override suspend fun user(userId: UUID): UserResponse? = dbQuery {
+        (UserTable innerJoin TeamTable innerJoin RoleTable)
+            .select { UserTable.uuid eq userId }
+            .mapNotNull(::resultRowToUSer)
+            .singleOrNull()
 
-     override suspend fun addUser(user: User): Boolean {
-         TODO("Not yet implemented")
-     }
+    }
 
-     override suspend fun updateUser(user: User): Boolean {
-         TODO("Not yet implemented")
-     }
+    override suspend fun updateUser(user: User): Boolean = dbQuery {
+        val rowUpdated = UserTable.update({ UserTable.uuid eq user.id }) {
+            it[name] = user.name
+        }
+        rowUpdated > 0
+    }
 
-     override suspend fun deleteUser(uuid: UUID): Boolean {
-         TODO("Not yet implemented")
-     }*/
+    override suspend fun deleteUser(uuid: UUID): Boolean = dbQuery {
+        val rowDeleted = UserTable.deleteWhere { UserTable.uuid eq uuid }
+        rowDeleted > 0
+    }
 
 
-
-
-    private fun resultRowToUser(row: ResultRow) = User(
+    private fun resultRowToUSer(row: ResultRow) = UserResponse(
         id = row[UserTable.uuid],
         name = row[UserTable.name],
         lastName = row[UserTable.lastName],
         email = row[UserTable.email],
         phoneNumber = row[UserTable.phoneNumber],
-        type = row[UserTable.type],
-        password = row[UserTable.password],
-        role = row[UserTable.role],
-        team = row[UserTable.team],
-        validated = row[UserTable.validated],
         birthday = row[UserTable.birthday],
-        createdAt = row[UserTable.createAt],
-        updateAt = row[UserTable.updateAt],
+        role = RoleResponse(
+            id = row[RoleTable.uuid],
+            name = row[RoleTable.name]
+        ),
+        team = TeamResponse(
+            id = row[TeamTable.uuid],
+            name = row[TeamTable.name],
+        )
     )
 
 }

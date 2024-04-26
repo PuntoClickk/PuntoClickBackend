@@ -1,23 +1,20 @@
-package com.puntoclick.features.user
+package com.puntoclick.features.user.model
 
-import com.puntoclick.data.database.entity.Role
-import com.puntoclick.data.database.entity.Team
 import com.puntoclick.data.utils.UUIDSerializer
+import com.puntoclick.features.roles.model.RoleResponse
+import com.puntoclick.features.team.model.TeamResponse
 import kotlinx.serialization.Serializable
 import java.util.*
 
-data class UserFT(
+@Serializable
+data class UserResponse(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
     val name: String,
     val lastName: String,
     val email: String,
     val phoneNumber: String,
-    val type: Int,
-    val role: Role,
-    val team: Team,
-    val validated: Boolean,
+    val role: RoleResponse,
+    val team: TeamResponse,
     val birthday: Long,
-    val createdAt: Long,
-    val updateAt: Long
 )
