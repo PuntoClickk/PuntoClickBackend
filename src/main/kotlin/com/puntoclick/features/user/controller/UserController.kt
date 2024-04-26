@@ -3,6 +3,7 @@ package com.puntoclick.features.user.controller
 import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
 import com.puntoclick.data.model.AppResult
+import com.puntoclick.features.user.model.CreateUserRequest
 import com.puntoclick.features.user.model.UserResponse
 import com.puntoclick.features.utils.createError
 import com.puntoclick.features.utils.tryCatch
@@ -29,8 +30,8 @@ class UserController(
         )
     }
 
-    suspend fun createUser(user: User): AppResult<Boolean> = tryCatch {
-        if (userDaoFacade.addUser(user)) AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
+    suspend fun createUser(createUserRequest: CreateUserRequest): AppResult<Boolean> = tryCatch {
+        if (userDaoFacade.addUser(createUserRequest)) AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
         else createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
     }
 
