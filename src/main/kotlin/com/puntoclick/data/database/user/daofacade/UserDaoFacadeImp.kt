@@ -44,17 +44,14 @@ class UserDaoFacadeImp : UserDaoFacade {
     }
 
     override suspend fun updateUser(user: User): Boolean = dbQuery {
-        val rowUpdated = UserTable.update({ UserTable.uuid eq user.id }) {
+        UserTable.update({ UserTable.uuid eq user.id }) {
             it[name] = user.name
-        }
-        rowUpdated > 0
+        } > 0
     }
 
     override suspend fun deleteUser(uuid: UUID): Boolean = dbQuery {
-        val rowDeleted = UserTable.deleteWhere { UserTable.uuid eq uuid }
-        rowDeleted > 0
+        UserTable.deleteWhere { UserTable.uuid eq uuid } > 0
     }
-
 
     private fun resultRowToUSer(row: ResultRow) = UserResponse(
         id = row[UserTable.uuid],
