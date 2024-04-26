@@ -25,10 +25,7 @@ class RoleDaoFacadeImp : RoleDaoFacade {
     }
 
     override suspend fun updateRole(role: Role): Boolean = dbQuery {
-        RoleTable.update {
-            uuid eq role.id
-            it[name] = role.name
-        } > 0
+        RoleTable.update({ RoleTable.uuid eq role.id}) { it[name] = role.name } > 0
     }
 
     override suspend fun deleteRole(uuid: UUID): Boolean = dbQuery {

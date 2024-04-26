@@ -40,9 +40,7 @@ fun Route.teamRouting() {
         post("/delete") {
             val request : AppRequest<UUIDAppRequest> = call.receive()
             val result = teamController.deleteTeam(request.data.id)
-            call.respond(result)
+            call.respond(message = result.handleResult() , status = result.status)
         }
-
     }
 }
-

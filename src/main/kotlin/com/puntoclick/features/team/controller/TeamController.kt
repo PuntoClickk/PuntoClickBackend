@@ -10,8 +10,6 @@ import java.util.UUID
 class TeamController(
     private val facade: TeamDaoFacade
 ) {
-
-
     suspend fun getTeam(id: UUID) = tryCatch {
         val team = searchTeam(id = id)
         team?.let {
@@ -33,14 +31,22 @@ class TeamController(
         else updateTeamName(id, validatedName)
     }
 
-    suspend fun deleteTeam(id: UUID) = tryCatch {
-        val team = searchTeam(id = id)
-        team?.let {
+    suspend fun deleteTeam(id: UUID): AppResult<Boolean> = tryCatch {
+        val result = facade.deleteTeam(id)
+        if (result) {
             AppResult.Success(
-                data = it, appStatus = HttpStatusCode.OK
+                data = true,
+                appStatus = HttpStatusCode.OK
             )
-        } ?: createError(title = NOT_FOUND_OBJECT_TITLE, NOT_FOUND_OBJECT_DESCRIPTION, HttpStatusCode.NotFound)
+        } else {
+            createError(
+                title = NOT_FOUND_OBJECT_TITLE,
+                description = NOT_FOUND_OBJECT_DESCRIPTION,
+                status = HttpStatusCode.NotFound
+            )
+        }
     }
+
 
     private suspend fun searchTeam(id: UUID): Team? {
         return facade.team(id)
@@ -63,6 +69,4 @@ class TeamController(
             )
         } ?: createError(title = NOT_FOUND_OBJECT_TITLE, NOT_FOUND_OBJECT_DESCRIPTION, HttpStatusCode.NotFound)
     }
-
-
 }
