@@ -32,15 +32,7 @@ class TeamController(
     }
 
     suspend fun deleteTeam(id: UUID): AppResult<Boolean> = tryCatch {
-        val team = searchTeam(id = id) ?: run {
-            return@tryCatch createError(
-                title = NOT_FOUND_OBJECT_TITLE,
-                description = NOT_FOUND_OBJECT_DESCRIPTION,
-                status = HttpStatusCode.NotFound
-            )
-        }
-
-        val result = facade.deleteTeam(team.id)
+        val result = facade.deleteTeam(id)
         if (result) {
             AppResult.Success(
                 data = true,

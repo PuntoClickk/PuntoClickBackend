@@ -44,15 +44,7 @@ class RoleController(
     }
 
     suspend fun deleteRole(id: UUID): AppResult<Boolean> = tryCatch {
-        val role = searchRole(id = id) ?: run {
-            return@tryCatch createError(
-                title = NOT_FOUND_OBJECT_TITLE,
-                description = NOT_FOUND_OBJECT_DESCRIPTION,
-                status = HttpStatusCode.NotFound
-            )
-        }
-
-        val result = facade.deleteRole(role.id)
+        val result = facade.deleteRole(id)
         if (result) {
             AppResult.Success(
                 data = true,
