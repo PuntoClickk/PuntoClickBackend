@@ -2,17 +2,18 @@ package com.puntoclick.data.database.user.table
 
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.database.team.table.TeamTable
+import com.puntoclick.data.utils.*
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 
 
 object UserTable : Table("user") {
     val uuid = uuid("id").autoGenerate()
-    val name = varchar("name", 30)
-    val lastName = varchar("lastName", 30)
-    val email = varchar("email", 50)
-    val phoneNumber = varchar("phoneNumber", 13)
-    val password = varchar("password",200)
+    val name = varchar("name", NAME_LENGTH)
+    val lastName = varchar("lastName", NAME_LENGTH)
+    val email = varchar("email", EMAIL_LENGTH)
+    val phoneNumber = varchar("phoneNumber", PHONE_NUMBER_LENGTH)
+    val password = varchar("password",PASSWORD_LENGTH)
     val type = integer("type")
     val validated = bool("validated").default(false)
     val birthday = long("birthday")
