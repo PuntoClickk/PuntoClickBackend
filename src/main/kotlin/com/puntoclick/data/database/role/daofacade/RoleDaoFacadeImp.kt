@@ -3,6 +3,8 @@ package com.puntoclick.data.database.role.daofacade
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.database.role.table.RoleTable
+import com.puntoclick.features.roles.model.CreateRoleRequest
+import com.puntoclick.features.roles.model.UpdateRoleRequest
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -18,14 +20,14 @@ class RoleDaoFacadeImp : RoleDaoFacade {
         }.map(::resultRowToRole).singleOrNull()
     }
 
-    override suspend fun addRole(name: String): Boolean = dbQuery {
+    override suspend fun addRole(createRoleRequest: CreateRoleRequest): Boolean = dbQuery {
         RoleTable.insert {
-            it[RoleTable.name] = name
+            it[name] = createRoleRequest.name
         }.resultedValues?.singleOrNull() != null
     }
 
-    override suspend fun updateRole(role: Role): Boolean = dbQuery {
-        RoleTable.update({ RoleTable.uuid eq role.id}) { it[name] = role.name } > 0
+    override suspend fun updateRole(updateRoleRequest: UpdateRoleRequest): Boolean = dbQuery {
+        RoleTable.update({ RoleTable.uuid eq updateRoleRequest.id}) { it[name] = updateRoleRequest.name } > 0
     }
 
     override suspend fun deleteRole(uuid: UUID): Boolean = dbQuery {

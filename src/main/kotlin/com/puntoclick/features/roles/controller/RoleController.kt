@@ -3,6 +3,8 @@ package com.puntoclick.features.roles.controller
 import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.model.AppResult
+import com.puntoclick.features.roles.model.CreateRoleRequest
+import com.puntoclick.features.roles.model.UpdateRoleRequest
 import com.puntoclick.features.utils.*
 import io.ktor.http.*
 import java.util.*
@@ -30,17 +32,17 @@ class RoleController(
         return facade.role(id)
     }
 
-    suspend fun addRole(name: String): AppResult<Boolean> = tryCatch {
-        val validatedName = name.validateRequestString()
-        validatedName?.let { createRole(it) } ?:
+    suspend fun addRole(createRoleRequest: CreateRoleRequest): AppResult<Boolean> = tryCatch {
+        val validatedName = createRoleRequest.name.validateRequestString()
+        validatedName?.let { createRole(createRoleRequest) } ?:
         createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
     }
 
-    suspend fun updateRole(id: UUID, name: String): AppResult<Boolean> = tryCatch {
-        val validatedName = name.validateRequestString()
-        validatedName?.let { updateRoleName(id, name) } ?:
-        createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
-
+    suspend fun updateRole(updateRoleRequest: UpdateRoleRequest): AppResult<Boolean> = tryCatch {
+        val validatedName = updateRoleRequest.name.validateRequestString()
+        validatedName?.let {
+            updateRoleName(updateRoleRequest)
+        } ?: createError(title = "Not valid", "Desc Error", HttpStatusCode.BadRequest)
     }
 
     suspend fun deleteRole(id: UUID): AppResult<Boolean> = tryCatch {
@@ -59,21 +61,17 @@ class RoleController(
         }
     }
 
-    private suspend fun createRole(name: String): AppResult<Boolean> =
-        if (facade.addRole(name)) {
-            AppResult.Success(
-                data = true, appStatus = HttpStatusCode.OK
-            )
+    private suspend fun createRole(createRoleRequest: CreateRoleRequest): AppResult<Boolean> =
+        if (facade.addRole(createRoleRequest)) {
+            AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
         } else createError(title = "NError", "Desc Error", HttpStatusCode.BadRequest)
 
 
-    private suspend fun updateRoleName(id: UUID, name: String): AppResult<Boolean> {
-        val role = searchRole(id = id)
-        return role?.let {
-            facade.updateRole(it.copy(name = name))
+    private suspend fun updateRoleName(updateRoleRequest: UpdateRoleRequest): AppResult<Boolean> =
+        if (facade.updateRole(updateRoleRequest)) {
             AppResult.Success(
                 data = true, appStatus = HttpStatusCode.OK
             )
-        } ?: createError(title = NOT_FOUND_OBJECT_TITLE, NOT_FOUND_OBJECT_DESCRIPTION, HttpStatusCode.NotFound)
-    }
+        } else createError(title = "Not found", "Desc Error", HttpStatusCode.BadRequest)
+
 }

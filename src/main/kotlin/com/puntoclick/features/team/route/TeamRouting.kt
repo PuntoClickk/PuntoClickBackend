@@ -1,9 +1,10 @@
 package com.puntoclick.features.team.route
 
-import com.puntoclick.data.database.entity.Team
 import com.puntoclick.data.model.AppRequest
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.team.controller.TeamController
+import com.puntoclick.features.team.model.CreateTeamRequest
+import com.puntoclick.features.team.model.UpdateTeamRequest
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -19,7 +20,7 @@ fun Route.teamRouting() {
     route("/team"){
 
         post("/add") {
-            val request = call.receive<AppRequest<String>>()
+            val request = call.receive<AppRequest<CreateTeamRequest>>()
              val result = teamController.addTeam(request.data)
             call.respond(message = result.handleResult(), status= result.status)
         }
@@ -31,9 +32,9 @@ fun Route.teamRouting() {
         }
 
         post("/update") {
-            val request : AppRequest<Team> = call.receive()
+            val request : AppRequest<UpdateTeamRequest> = call.receive()
             val team = request.data
-            val result = teamController.updateTeam(team.id, name = team.name)
+            val result = teamController.updateTeam(team)
             call.respond(message = result.handleResult() , status = result.status )
         }
 

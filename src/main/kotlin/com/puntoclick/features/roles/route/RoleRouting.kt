@@ -1,9 +1,10 @@
 package com.puntoclick.features.roles.route
 
-import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.model.AppRequest
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.roles.controller.RoleController
+import com.puntoclick.features.roles.model.CreateRoleRequest
+import com.puntoclick.features.roles.model.UpdateRoleRequest
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -18,7 +19,7 @@ fun Route.roleRouting() {
     route("/role"){
 
         post("/add") {
-            val request = call.receive<AppRequest<String>>()
+            val request = call.receive<AppRequest<CreateRoleRequest>>()
             val result = roleController.addRole(request.data)
             call.respond(message = result.handleResult(), status = result.status)
         }
@@ -35,9 +36,9 @@ fun Route.roleRouting() {
         }
 
         post("/update") {
-            val request : AppRequest<Role> = call.receive()
+            val request : AppRequest<UpdateRoleRequest> = call.receive()
             val role = request.data
-            val result = roleController.updateRole(role.id, role.name)
+            val result = roleController.updateRole(role)
             call.respond(message = result.handleResult() , status = result.status )
         }
 
