@@ -31,7 +31,6 @@ class UserDaoFacadeImp : UserDaoFacade {
             it[type] = user.type
             it[role] = user.role
             it[team] = user.team
-            //it[validated] = false
             it[birthday] = user.birthday
         }.resultedValues?.singleOrNull() != null
     }
