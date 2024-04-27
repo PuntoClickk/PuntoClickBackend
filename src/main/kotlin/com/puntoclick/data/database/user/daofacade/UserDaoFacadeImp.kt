@@ -9,6 +9,7 @@ import com.puntoclick.features.roles.model.RoleResponse
 import com.puntoclick.features.team.model.TeamResponse
 import com.puntoclick.features.user.model.CreateUserRequest
 import com.puntoclick.features.user.model.UserResponse
+import com.puntoclick.features.utils.escapeSingleQuotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -23,11 +24,11 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     override suspend fun addUser(user: CreateUserRequest): Boolean = dbQuery {
         UserTable.insert {
-            it[name] = user.name
-            it[lastName] = user.lastName
-            it[email] = user.email
-            it[phoneNumber] = user.phoneNumber
-            it[password] = user.password
+            it[name] = user.name.escapeSingleQuotes()
+            it[lastName] = user.lastName.escapeSingleQuotes()
+            it[email] = user.email.escapeSingleQuotes()
+            it[phoneNumber] = user.phoneNumber.escapeSingleQuotes()
+            it[password] = user.password.escapeSingleQuotes()
             it[type] = user.type
             it[role] = user.role
             it[team] = user.team

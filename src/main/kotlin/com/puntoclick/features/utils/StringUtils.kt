@@ -1,14 +1,8 @@
 package com.puntoclick.features.utils
 
 
-@Suppress("unused")
-fun String.isStringAllowed(): Boolean {
-    val regex = Regex("^[a-zA-Z0-9\\s]*\$")
-    return regex.matches(this)
-}
-@Suppress("unused")
-fun String.preventSQLInjection(): String = replace("'", "''")
 
+@Deprecated("Use new  validateStringRequest")
 fun String.validateRequestString(maxLength: Int = 30): String? {
     if (isEmpty()) return null
     if (length >= maxLength) return null
@@ -22,6 +16,24 @@ fun String.validateRequestString(maxLength: Int = 30): String? {
 
     return processedString
 }
+
+fun String.validateStringRequest(maxLength: Int = 30): Boolean {
+    return  when{
+        isEmpty() -> false
+        (length >= maxLength) -> false
+        !isStringValid() -> false
+        else -> true
+    }
+}
+
+private fun String.isStringValid(): Boolean {
+    val regex = Regex("^[a-zA-Z0-9\\s]*\$") // Only allows letters, numbers, and spaces
+    return regex.matches(this)
+}
+
+
+fun String.escapeSingleQuotes(): String = replace("'", "''")
+
 
 fun isValidEmail(email: String): Boolean {
     val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")

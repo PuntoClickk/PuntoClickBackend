@@ -43,10 +43,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 
     // REQUEST VALIDATION
-    postgresql_driver_version
     implementation("io.ktor:ktor-server-request-validation:$ktor_version")
 
-    //PostgreSQL
+    // PostgresSQL
     implementation("org.postgresql:postgresql:$postgresql_driver_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
