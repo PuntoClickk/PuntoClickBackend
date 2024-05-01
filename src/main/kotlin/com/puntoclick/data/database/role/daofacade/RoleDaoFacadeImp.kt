@@ -5,6 +5,7 @@ import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.features.roles.model.CreateRoleRequest
 import com.puntoclick.features.roles.model.UpdateRoleRequest
+import com.puntoclick.features.utils.escapeSingleQuotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -22,12 +23,16 @@ class RoleDaoFacadeImp : RoleDaoFacade {
 
     override suspend fun addRole(createRoleRequest: CreateRoleRequest): Boolean = dbQuery {
         RoleTable.insert {
-            it[name] = createRoleRequest.name
+            it[name] = createRoleRequest.name.escapeSingleQuotes()
         }.resultedValues?.singleOrNull() != null
     }
 
     override suspend fun updateRole(updateRoleRequest: UpdateRoleRequest): Boolean = dbQuery {
-        RoleTable.update({ RoleTable.uuid eq updateRoleRequest.id}) { it[name] = updateRoleRequest.name } > 0
+        RoleTable.update({
+            RoleTable.uuid eq updateRoleRequest.id
+        }) {
+            it[name] = updateRoleRequest.name.escapeSingleQuotes()
+        } > 0
     }
 
     override suspend fun deleteRole(uuid: UUID): Boolean = dbQuery {
