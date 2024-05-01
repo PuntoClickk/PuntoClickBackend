@@ -5,10 +5,10 @@ import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
-import com.puntoclick.features.roles.model.RoleResponse
-import com.puntoclick.features.team.model.TeamResponse
-import com.puntoclick.features.user.model.CreateUserRequest
-import com.puntoclick.features.user.model.UserResponse
+import com.puntoclick.data.model.role.RoleResponse
+import com.puntoclick.data.model.team.TeamResponse
+import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.escapeSingleQuotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

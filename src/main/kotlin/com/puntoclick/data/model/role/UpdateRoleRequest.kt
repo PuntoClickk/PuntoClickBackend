@@ -1,12 +1,12 @@
-package com.puntoclick.features.team.model
+package com.puntoclick.data.model.role
 
 import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.*
 
 @Serializable
-data class TeamResponse(
+data class UpdateRoleRequest(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
-    val name: String,
+    val name: String
 )

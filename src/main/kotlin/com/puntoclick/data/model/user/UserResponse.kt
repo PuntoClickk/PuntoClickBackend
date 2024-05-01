@@ -1,8 +1,8 @@
-package com.puntoclick.features.user.model
+package com.puntoclick.data.model.user
 
 import com.puntoclick.data.utils.UUIDSerializer
-import com.puntoclick.features.roles.model.RoleResponse
-import com.puntoclick.features.team.model.TeamResponse
+import com.puntoclick.data.model.role.RoleResponse
+import com.puntoclick.data.model.team.TeamResponse
 import kotlinx.serialization.Serializable
 import java.util.*
 

@@ -1,21 +1,21 @@
 package com.puntoclick.data.database.role.daofacade
 
 import com.puntoclick.data.database.dbQuery
-import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.database.role.table.RoleTable
-import com.puntoclick.features.roles.model.CreateRoleRequest
-import com.puntoclick.features.roles.model.UpdateRoleRequest
+import com.puntoclick.data.model.role.CreateRoleRequest
+import com.puntoclick.data.model.role.RoleResponse
+import com.puntoclick.data.model.role.UpdateRoleRequest
 import com.puntoclick.features.utils.escapeSingleQuotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
 
 class RoleDaoFacadeImp : RoleDaoFacade {
-    override suspend fun allRoles(): List<Role> = dbQuery {
+    override suspend fun allRoles(): List<RoleResponse> = dbQuery {
         RoleTable.selectAll().map(::resultRowToRole)
     }
 
-    override suspend fun role(uuid: UUID): Role? = dbQuery {
+    override suspend fun role(uuid: UUID): RoleResponse? = dbQuery {
         RoleTable.select{
             RoleTable.uuid eq uuid
         }.map(::resultRowToRole).singleOrNull()
@@ -39,10 +39,8 @@ class RoleDaoFacadeImp : RoleDaoFacade {
         RoleTable.deleteWhere { RoleTable.uuid eq uuid } > 0
     }
 
-    private fun resultRowToRole(row: ResultRow) = Role(
+    private fun resultRowToRole(row: ResultRow) = RoleResponse(
         id = row[RoleTable.uuid],
-        name = row[RoleTable.name],
-        createdAt = row[RoleTable.createAt],
-        lastUpdate = row[RoleTable.updateAt]
+        name = row[RoleTable.name]
     )
 }

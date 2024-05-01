@@ -2,8 +2,8 @@ package com.puntoclick.features.roles.route
 
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.roles.controller.RoleController
-import com.puntoclick.features.roles.model.CreateRoleRequest
-import com.puntoclick.features.roles.model.UpdateRoleRequest
+import com.puntoclick.data.model.role.CreateRoleRequest
+import com.puntoclick.data.model.role.UpdateRoleRequest
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*

@@ -1,11 +1,11 @@
 package com.puntoclick.features.team.controller
 
-import com.puntoclick.data.database.entity.Team
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.model.AppResult
 import com.puntoclick.data.utils.*
-import com.puntoclick.features.team.model.CreateTeamRequest
-import com.puntoclick.features.team.model.UpdateTeamRequest
+import com.puntoclick.data.model.team.CreateTeamRequest
+import com.puntoclick.data.model.team.TeamResponse
+import com.puntoclick.data.model.team.UpdateTeamRequest
 import com.puntoclick.features.utils.*
 import io.ktor.http.*
 import java.util.UUID
@@ -13,7 +13,7 @@ import java.util.UUID
 class TeamController(
     private val facade: TeamDaoFacade
 ) {
-    suspend fun getTeam(id: UUID): AppResult<Team> {
+    suspend fun getTeam(id: UUID): AppResult<TeamResponse> {
         val team = searchTeam(id = id)
         return team?.let {
             AppResult.Success(
@@ -47,7 +47,7 @@ class TeamController(
     }
 
 
-    private suspend fun searchTeam(id: UUID): Team? {
+    private suspend fun searchTeam(id: UUID): TeamResponse? {
         return facade.team(id)
     }
 

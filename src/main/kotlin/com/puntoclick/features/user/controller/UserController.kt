@@ -3,8 +3,8 @@ package com.puntoclick.features.user.controller
 import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
 import com.puntoclick.data.model.AppResult
-import com.puntoclick.features.user.model.CreateUserRequest
-import com.puntoclick.features.user.model.UserResponse
+import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.createError
 import io.ktor.http.*
 import java.util.*

@@ -2,8 +2,8 @@ package com.puntoclick.features.team.route
 
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.team.controller.TeamController
-import com.puntoclick.features.team.model.CreateTeamRequest
-import com.puntoclick.features.team.model.UpdateTeamRequest
+import com.puntoclick.data.model.team.CreateTeamRequest
+import com.puntoclick.data.model.team.UpdateTeamRequest
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*

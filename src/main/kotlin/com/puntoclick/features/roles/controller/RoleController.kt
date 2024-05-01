@@ -1,11 +1,11 @@
 package com.puntoclick.features.roles.controller
 
-import com.puntoclick.data.database.entity.Role
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.model.AppResult
 import com.puntoclick.data.utils.*
-import com.puntoclick.features.roles.model.CreateRoleRequest
-import com.puntoclick.features.roles.model.UpdateRoleRequest
+import com.puntoclick.data.model.role.CreateRoleRequest
+import com.puntoclick.data.model.role.RoleResponse
+import com.puntoclick.data.model.role.UpdateRoleRequest
 import com.puntoclick.features.utils.*
 import io.ktor.http.*
 import java.util.*
@@ -14,13 +14,13 @@ class RoleController(
     private val facade: RoleDaoFacade
 ) {
 
-    suspend fun getRoles(): AppResult<List<Role>> {
+    suspend fun getRoles(): AppResult<List<RoleResponse>> {
         return AppResult.Success(
             data = facade.allRoles(), appStatus = HttpStatusCode.OK
         )
     }
 
-    suspend fun getRole(id: UUID): AppResult<Role> {
+    suspend fun getRole(id: UUID): AppResult<RoleResponse> {
         val role = searchRole(id = id)
         return role?.let {
             AppResult.Success(
@@ -29,7 +29,7 @@ class RoleController(
         } ?: createError(title = ERROR_TITLE, GET_REGISTER, HttpStatusCode.NotFound)
     }
 
-    private suspend fun searchRole(id: UUID): Role? {
+    private suspend fun searchRole(id: UUID): RoleResponse? {
         return facade.role(id)
     }
 
