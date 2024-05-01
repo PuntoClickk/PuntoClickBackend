@@ -1,4 +1,4 @@
-package com.puntoclick.features.user.model
+package com.puntoclick.data.model.user
 
 import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
