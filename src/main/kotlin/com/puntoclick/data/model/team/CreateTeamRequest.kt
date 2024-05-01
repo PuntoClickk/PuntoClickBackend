@@ -1,8 +1,8 @@
-package com.puntoclick.features.roles.model
+package com.puntoclick.data.model.team
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateRoleRequest(
+class CreateTeamRequest(
     val name: String
 )
