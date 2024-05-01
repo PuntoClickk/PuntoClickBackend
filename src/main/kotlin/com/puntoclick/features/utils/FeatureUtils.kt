@@ -18,17 +18,8 @@ fun createError(title: String?, description: String?, status: HttpStatusCode = H
     return AppResult.Error(
         ErrorResponse(
             title =  title ?: "",
-            description = description ?: ""
+            description = description ?: "",
         ),
         appStatus = status
     )
-}
-
-
-inline fun <T: Any> tryCatch( block: () -> AppResult<T>): AppResult<T> {
-    return try {
-        block.invoke()
-    } catch (e: Exception) {
-        createError(e.message, e.message)
-    }
 }
