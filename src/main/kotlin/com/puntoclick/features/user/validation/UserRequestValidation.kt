@@ -11,7 +11,7 @@ fun CreateUserRequest.validateCreateUserRequest (): ValidationResult {
         return when {
             !lastName.validateStringRequest() -> ValidationResult.Invalid("Error Name")
             !name.validateStringRequest() -> ValidationResult.Invalid("Error Name")
-            isValidEmail(email) -> ValidationResult.Invalid("Error Email")
+            !isValidEmail(email) -> ValidationResult.Invalid("Error Email")
             else -> ValidationResult.Valid
         }
 }
