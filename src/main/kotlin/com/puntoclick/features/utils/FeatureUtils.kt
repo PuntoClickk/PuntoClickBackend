@@ -18,7 +18,7 @@ fun createError(title: String?, description: String?, status: HttpStatusCode = H
     return AppResult.Error(
         ErrorResponse(
             title =  title ?: "",
-            description = description ?: "",
+            description = description ?: ""
         ),
         appStatus = status
     )
