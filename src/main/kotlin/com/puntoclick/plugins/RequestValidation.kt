@@ -1,10 +1,10 @@
 package com.puntoclick.plugins
 
-import com.puntoclick.features.roles.model.CreateRoleRequest
+import com.puntoclick.data.model.role.CreateRoleRequest
 import com.puntoclick.features.roles.validation.validateRoleRequest
-import com.puntoclick.features.team.model.CreateTeamRequest
+import com.puntoclick.data.model.team.CreateTeamRequest
 import com.puntoclick.features.team.validation.validateTeamRequest
-import com.puntoclick.features.user.model.CreateUserRequest
+import com.puntoclick.data.model.user.CreateUserRequest
 import com.puntoclick.features.user.validation.validateCreateUserRequest
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*

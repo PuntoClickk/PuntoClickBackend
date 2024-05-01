@@ -1,8 +1,8 @@
 package com.puntoclick.data.database.user.daofacade
 
 import com.puntoclick.data.database.entity.User
-import com.puntoclick.features.user.model.CreateUserRequest
-import com.puntoclick.features.user.model.UserResponse
+import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.UserResponse
 import java.util.*
 
 interface UserDaoFacade {

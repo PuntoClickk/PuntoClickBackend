@@ -1,6 +1,6 @@
 package com.puntoclick.features.roles.validation
 
-import com.puntoclick.features.roles.model.CreateRoleRequest
+import com.puntoclick.data.model.role.CreateRoleRequest
 import com.puntoclick.features.utils.validateStringRequest
 import io.ktor.server.plugins.requestvalidation.*
 

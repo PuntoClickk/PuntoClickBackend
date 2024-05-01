@@ -1,6 +1,6 @@
 package com.puntoclick.features.team.validation
 
-import com.puntoclick.features.team.model.CreateTeamRequest
+import com.puntoclick.data.model.team.CreateTeamRequest
 import com.puntoclick.features.utils.validateStringRequest
 import io.ktor.server.plugins.requestvalidation.*
 

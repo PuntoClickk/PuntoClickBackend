@@ -3,7 +3,7 @@ package com.puntoclick.features.user.route
 import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.user.controller.UserController
-import com.puntoclick.features.user.model.CreateUserRequest
+import com.puntoclick.data.model.user.CreateUserRequest
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*
