@@ -13,32 +13,26 @@ import java.util.UUID
 class TeamController(
     private val facade: TeamDaoFacade
 ) {
-    suspend fun getTeam(id: UUID) = tryCatch {
+    suspend fun getTeam(id: UUID): AppResult<Team> {
         val team = searchTeam(id = id)
-        team?.let {
+        return team?.let {
             AppResult.Success(
                 data = it, appStatus = HttpStatusCode.OK
             )
         } ?: createError(title = ERROR_TITLE, GET_REGISTER, HttpStatusCode.NotFound)
     }
 
-    suspend fun addTeam(createTeamRequest: CreateTeamRequest): AppResult<Boolean> = tryCatch {
-        val validatedName = createTeamRequest.name.validateRequestString()
-        validatedName?.let {
-            createTeam(createTeamRequest)
-        } ?: createError(title = ERROR_TITLE, CREATE_BODY, HttpStatusCode.BadRequest)
+    suspend fun addTeam(createTeamRequest: CreateTeamRequest): AppResult<Boolean> {
+        return createTeam(createTeamRequest)
     }
 
-    suspend fun updateTeam(updateTeamRequest: UpdateTeamRequest):AppResult<Boolean> = tryCatch {
-        val validatedName = updateTeamRequest.name.validateRequestString()
-        validatedName?.let {
-            updateTeamName(updateTeamRequest)
-        } ?: createError(title = ERROR_TITLE, UPDATE_BODY, HttpStatusCode.BadRequest)
+    suspend fun updateTeam(updateTeamRequest: UpdateTeamRequest):AppResult<Boolean> {
+        return updateTeamName(updateTeamRequest)
     }
 
-    suspend fun deleteTeam(id: UUID): AppResult<Boolean> = tryCatch {
+    suspend fun deleteTeam(id: UUID): AppResult<Boolean> {
         val result = facade.deleteTeam(id)
-        if (result) {
+        return if (result) {
             AppResult.Success(
                 data = true,
                 appStatus = HttpStatusCode.OK

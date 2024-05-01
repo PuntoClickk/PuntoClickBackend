@@ -5,6 +5,7 @@ import com.puntoclick.data.database.entity.Team
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.features.team.model.CreateTeamRequest
 import com.puntoclick.features.team.model.UpdateTeamRequest
+import com.puntoclick.features.utils.escapeSingleQuotes
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -22,12 +23,16 @@ class TeamDaoFacadeImp : TeamDaoFacade {
 
     override suspend fun addTeam(createTeamRequest: CreateTeamRequest): Boolean = dbQuery {
         TeamTable.insert {
-            it[name] = createTeamRequest.name
+            it[name] = createTeamRequest.name.escapeSingleQuotes()
         }.resultedValues?.singleOrNull() != null
     }
 
     override suspend fun updateTeam(updateTeamRequest: UpdateTeamRequest): Boolean = dbQuery {
-        TeamTable.update({ TeamTable.uuid eq updateTeamRequest.id}) { it[name] = updateTeamRequest.name } > 0
+        TeamTable.update({
+            TeamTable.uuid eq updateTeamRequest.id
+        }) {
+            it[name] = updateTeamRequest.name.escapeSingleQuotes()
+        } > 0
     }
 
     override suspend fun deleteTeam(uuid: UUID): Boolean = dbQuery {
