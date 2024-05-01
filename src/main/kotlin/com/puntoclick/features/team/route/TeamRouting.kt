@@ -1,6 +1,5 @@
 package com.puntoclick.features.team.route
 
-import com.puntoclick.data.model.AppRequest
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.team.controller.TeamController
 import com.puntoclick.features.team.model.CreateTeamRequest
@@ -20,27 +19,26 @@ fun Route.teamRouting() {
     route("/team"){
 
         post("/add") {
-            val request = call.receive<AppRequest<CreateTeamRequest>>()
-             val result = teamController.addTeam(request.data)
+            val request = call.receive<CreateTeamRequest>()
+             val result = teamController.addTeam(request)
             call.respond(message = result.handleResult(), status= result.status)
         }
 
         post("/") {
-            val request = call.receive<AppRequest<UUIDAppRequest>>()
-            val result = teamController.getTeam(request.data.id)
+            val request = call.receive<UUIDAppRequest>()
+            val result = teamController.getTeam(request.id)
             call.respond(message = result.handleResult(), status= result.status)
         }
 
         post("/update") {
-            val request : AppRequest<UpdateTeamRequest> = call.receive()
-            val team = request.data
+            val team : UpdateTeamRequest = call.receive()
             val result = teamController.updateTeam(team)
             call.respond(message = result.handleResult() , status = result.status )
         }
 
         post("/delete") {
-            val request : AppRequest<UUIDAppRequest> = call.receive()
-            val result = teamController.deleteTeam(request.data.id)
+            val uuidAppRequest : UUIDAppRequest = call.receive()
+            val result = teamController.deleteTeam(uuidAppRequest.id)
             call.respond(message = result.handleResult() , status = result.status)
         }
     }

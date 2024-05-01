@@ -1,6 +1,5 @@
 package com.puntoclick.features.roles.route
 
-import com.puntoclick.data.model.AppRequest
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.roles.controller.RoleController
 import com.puntoclick.features.roles.model.CreateRoleRequest
@@ -19,8 +18,8 @@ fun Route.roleRouting() {
     route("/role"){
 
         post("/add") {
-            val request = call.receive<AppRequest<CreateRoleRequest>>()
-            val result = roleController.addRole(request.data)
+            val request = call.receive<CreateRoleRequest>()
+            val result = roleController.addRole(request)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -30,21 +29,20 @@ fun Route.roleRouting() {
         }
 
         post("/") {
-            val request = call.receive<AppRequest<UUIDAppRequest>>()
-            val result = roleController.getRole(request.data.id)
+            val request = call.receive<UUIDAppRequest>()
+            val result = roleController.getRole(request.id)
             call.respond(message = result.handleResult(), status= result.status)
         }
 
         post("/update") {
-            val request : AppRequest<UpdateRoleRequest> = call.receive()
-            val role = request.data
+            val role : UpdateRoleRequest = call.receive()
             val result = roleController.updateRole(role)
             call.respond(message = result.handleResult() , status = result.status )
         }
 
         post("/delete") {
-            val request : AppRequest<UUIDAppRequest> = call.receive()
-            val result = roleController.deleteRole(request.data.id)
+            val uuidAppRequest : UUIDAppRequest = call.receive()
+            val result = roleController.deleteRole(uuidAppRequest.id)
             call.respond(message = result.handleResult() , status = result.status)
         }
     }
