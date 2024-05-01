@@ -39,3 +39,8 @@ fun isValidEmail(email: String): Boolean {
     val emailRegex = Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
     return emailRegex.matches(email)
 }
+
+fun isValidCellPhoneNumber(phoneNumber: String): Boolean {
+    val phoneNumberRegex = Regex("^\\+?[1-9]\\d{1,14}$")
+    return phoneNumberRegex.matches(phoneNumber)
+}
