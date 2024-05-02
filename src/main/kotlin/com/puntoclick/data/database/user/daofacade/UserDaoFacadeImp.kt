@@ -8,6 +8,7 @@ import com.puntoclick.data.database.user.table.UserTable
 import com.puntoclick.data.model.role.RoleResponse
 import com.puntoclick.data.model.team.TeamResponse
 import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.UserLogin
 import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.escapeSingleQuotes
 import org.jetbrains.exposed.sql.*
@@ -44,6 +45,13 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     }
 
+    override suspend fun user(email: String): UserLogin? = dbQuery {
+        UserTable
+            .select { UserTable.email eq email }
+            .mapNotNull(::resultRowToUserLogin)
+            .singleOrNull()
+    }
+
     override suspend fun updateUser(user: User): Boolean = dbQuery {
         UserTable.update({ UserTable.uuid eq user.id }) {
             it[name] = user.name
@@ -69,6 +77,11 @@ class UserDaoFacadeImp : UserDaoFacade {
             id = row[TeamTable.uuid],
             name = row[TeamTable.name],
         )
+    )
+
+    private fun resultRowToUserLogin(row: ResultRow) = UserLogin(
+        id = row[UserTable.uuid],
+        password = row[UserTable.password]
     )
 
 }

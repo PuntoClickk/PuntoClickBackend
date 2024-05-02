@@ -1,10 +1,12 @@
 package com.puntoclick.plugins
 
 import com.puntoclick.data.model.ErrorResponse
-import com.puntoclick.features.login.route.loginRouting
+import com.puntoclick.features.auth.route.authRouting
 import com.puntoclick.features.roles.route.roleRouting
 import com.puntoclick.features.team.route.teamRouting
 import com.puntoclick.features.user.route.userRouting
+import com.puntoclick.security.AppEncryption
+import com.puntoclick.security.AppEncryptionAES
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -13,10 +15,13 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.core.qualifier.named
+import org.koin.ktor.ext.inject
 
 
 fun Application.configureRouting() {
 
+    val appEncryption: AppEncryption by inject<AppEncryptionAES>(qualifier = named("AES") )
     val jwtParams = getJWTParams()
 
     install(Resources)
@@ -29,7 +34,7 @@ fun Application.configureRouting() {
         }
     }
     routing {
-        loginRouting(jwtParams)
+        authRouting(jwtParams, appEncryption)
         authenticate("auth-jwt") {
             roleRouting()
             teamRouting()
