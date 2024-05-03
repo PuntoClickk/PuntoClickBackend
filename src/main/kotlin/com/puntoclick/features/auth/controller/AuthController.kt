@@ -10,7 +10,7 @@ import com.puntoclick.data.model.auth.LoginRequest
 import com.puntoclick.data.model.auth.TokenResponse
 import com.puntoclick.data.model.role.RoleType
 import com.puntoclick.data.model.user.CreateUserRequest
-import com.puntoclick.data.model.user.mapCreateUserRequestToUser2
+import com.puntoclick.data.model.user.mapCreateUserRequestToUser
 import com.puntoclick.features.utils.createError
 import com.puntoclick.plugins.JWTParams
 import com.puntoclick.plugins.loadECPrivateKey
@@ -27,11 +27,11 @@ class AuthController(
 ) {
 
     suspend fun createUser(createUserRequest: CreateUserRequest): AppResult<Boolean> {
-        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return createError(title = "Error", "Error Team", HttpStatusCode.BadRequest)
         val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return createError(title = "Error", "Error Team", HttpStatusCode.BadRequest)
+        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return createError(title = "Error", "Error Team", HttpStatusCode.BadRequest)
 
-        val user = createUserRequest.mapCreateUserRequestToUser2(role = roleUUID, team = teamUUID)
-        
+        val user = createUserRequest.mapCreateUserRequestToUser(role = roleUUID, team = teamUUID)
+
         return if (userDaoFacade.addUser(user)) AppResult.Success(
             data = true, appStatus = HttpStatusCode.OK
         )

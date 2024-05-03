@@ -33,7 +33,7 @@ data class CreateUser(
     val team: UUID,
 )
 
-fun CreateUserRequest.mapCreateUserRequestToUser2(
+fun CreateUserRequest.mapCreateUserRequestToUser(
     role: UUID,
     team: UUID
 ): CreateUser {
