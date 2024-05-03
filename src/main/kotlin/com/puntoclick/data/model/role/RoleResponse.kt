@@ -8,5 +8,6 @@ import java.util.*
 data class RoleResponse(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
+    val type: Int,
     val name: String,
 )

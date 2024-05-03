@@ -13,9 +13,40 @@ data class CreateUserRequest(
     val phoneNumber: String,
     val password: String,
     val type: Int,
+    val birthday: Long,
+    val teamName: String
+)
+
+@Serializable
+data class CreateUser(
+    val name: String,
+    val lastName: String,
+    val email: String,
+    val phoneNumber: String,
+    val password: String,
+    val type: Int,
+    val birthday: Long,
+    val teamName: String,
     @Serializable(with = UUIDSerializer::class)
     val role: UUID,
     @Serializable(with = UUIDSerializer::class)
     val team: UUID,
-    val birthday: Long,
 )
+
+fun CreateUserRequest.mapCreateUserRequestToUser(
+    role: UUID,
+    team: UUID
+): CreateUser {
+    return CreateUser(
+        name = name,
+        lastName = lastName,
+        email = email,
+        phoneNumber = phoneNumber,
+        password = password,
+        type = type,
+        birthday = birthday,
+        teamName = teamName,
+        role = role,
+        team = team
+    )
+}

@@ -2,7 +2,6 @@ package com.puntoclick.data.database.team.daofacade
 
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.team.table.TeamTable
-import com.puntoclick.data.model.team.CreateTeamRequest
 import com.puntoclick.data.model.team.TeamResponse
 import com.puntoclick.data.model.team.UpdateTeamRequest
 import com.puntoclick.features.utils.escapeSingleQuotes
@@ -21,10 +20,12 @@ class TeamDaoFacadeImp : TeamDaoFacade {
         }.map(::resultRowToTeam).singleOrNull()
     }
 
-    override suspend fun addTeam(createTeamRequest: CreateTeamRequest): Boolean = dbQuery {
-        TeamTable.insert {
-            it[name] = createTeamRequest.name.escapeSingleQuotes()
-        }.resultedValues?.singleOrNull() != null
+    override suspend fun addTeam(name: String): UUID? = dbQuery {
+        val resultRow = TeamTable.insert {
+            it[this.name] = name.escapeSingleQuotes()
+        }.resultedValues?.singleOrNull()
+
+        resultRow?.get(TeamTable.uuid)
     }
 
     override suspend fun updateTeam(updateTeamRequest: UpdateTeamRequest): Boolean = dbQuery {

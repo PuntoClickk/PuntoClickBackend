@@ -7,10 +7,11 @@ import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
 import com.puntoclick.data.model.role.RoleResponse
 import com.puntoclick.data.model.team.TeamResponse
-import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.CreateUser
 import com.puntoclick.data.model.user.UserLogin
 import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.escapeSingleQuotes
+import com.puntoclick.security.hashPassword
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -19,17 +20,17 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     override suspend fun allUsers(teamId: UUID): List<UserResponse> = dbQuery {
         UserTable.innerJoin(TeamTable).innerJoin(RoleTable).select {
-            UserTable.team eq teamId //and (UserTable.type eq 2)
+            UserTable.team eq teamId and (UserTable.type eq 2)
         }.map(::resultRowToUSer)
     }
 
-    override suspend fun addUser(user: CreateUserRequest): Boolean = dbQuery {
+    override suspend fun addUser(user: CreateUser): Boolean = dbQuery {
         UserTable.insert {
             it[name] = user.name.escapeSingleQuotes()
             it[lastName] = user.lastName.escapeSingleQuotes()
             it[email] = user.email.escapeSingleQuotes()
             it[phoneNumber] = user.phoneNumber.escapeSingleQuotes()
-            it[password] = user.password.escapeSingleQuotes()
+            it[password] = user.password.escapeSingleQuotes().hashPassword()
             it[type] = user.type
             it[role] = user.role
             it[team] = user.team
@@ -71,6 +72,7 @@ class UserDaoFacadeImp : UserDaoFacade {
         birthday = row[UserTable.birthday],
         role = RoleResponse(
             id = row[RoleTable.uuid],
+            type = row[RoleTable.type],
             name = row[RoleTable.name]
         ),
         team = TeamResponse(

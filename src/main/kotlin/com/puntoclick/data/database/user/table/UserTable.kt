@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.puntoclick.data.database.user.table
 
 import com.puntoclick.data.database.role.table.RoleTable

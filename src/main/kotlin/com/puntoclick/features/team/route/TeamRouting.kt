@@ -1,9 +1,8 @@
 package com.puntoclick.features.team.route
 
 import com.puntoclick.data.model.UUIDAppRequest
-import com.puntoclick.features.team.controller.TeamController
-import com.puntoclick.data.model.team.CreateTeamRequest
 import com.puntoclick.data.model.team.UpdateTeamRequest
+import com.puntoclick.features.team.controller.TeamController
 import com.puntoclick.features.utils.handleResult
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -17,12 +16,6 @@ fun Route.teamRouting() {
     val teamController by inject<TeamController>()
 
     route("/team"){
-
-        post("/add") {
-            val request = call.receive<CreateTeamRequest>()
-             val result = teamController.addTeam(request)
-            call.respond(message = result.handleResult(), status= result.status)
-        }
 
         post("/") {
             val request = call.receive<UUIDAppRequest>()
