@@ -1,3 +1,5 @@
+@file:Suppress("PropertyName", "SpellCheckingInspection")
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -53,6 +55,10 @@ dependencies {
 
     // Koin for Ktor
     implementation("io.insert-koin:koin-ktor:$koin_ktor")
+
     // SLF4J Logger
     implementation("io.insert-koin:koin-logger-slf4j:$koin_ktor")
+
+    // BCrypt
+    implementation("at.favre.lib:bcrypt:0.10.2")
 }

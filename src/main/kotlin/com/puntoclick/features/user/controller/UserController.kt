@@ -3,7 +3,6 @@ package com.puntoclick.features.user.controller
 import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
 import com.puntoclick.data.model.AppResult
-import com.puntoclick.data.model.user.CreateUserRequest
 import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.createError
 import io.ktor.http.*
@@ -25,13 +24,6 @@ class UserController(
         } ?: createError(
             "Error", "No User found", HttpStatusCode.NotFound
         )
-    }
-
-    suspend fun createUser(createUserRequest: CreateUserRequest): AppResult<Boolean> {
-        return if (userDaoFacade.addUser(createUserRequest)) AppResult.Success(
-            data = true, appStatus = HttpStatusCode.OK
-        )
-        else createError(title = "Error", "User not created", HttpStatusCode.BadRequest)
     }
 
     suspend fun updateUser(user: User): AppResult<Boolean> {

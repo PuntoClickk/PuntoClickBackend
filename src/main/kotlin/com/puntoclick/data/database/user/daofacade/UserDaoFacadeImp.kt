@@ -11,6 +11,7 @@ import com.puntoclick.data.model.user.CreateUserRequest
 import com.puntoclick.data.model.user.UserLogin
 import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.escapeSingleQuotes
+import com.puntoclick.security.hashPassword
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
@@ -29,7 +30,7 @@ class UserDaoFacadeImp : UserDaoFacade {
             it[lastName] = user.lastName.escapeSingleQuotes()
             it[email] = user.email.escapeSingleQuotes()
             it[phoneNumber] = user.phoneNumber.escapeSingleQuotes()
-            it[password] = user.password.escapeSingleQuotes()
+            it[password] = user.password.escapeSingleQuotes().hashPassword()
             it[type] = user.type
             it[role] = user.role
             it[team] = user.team
