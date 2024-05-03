@@ -13,7 +13,7 @@ object UserTable : Table("user") {
     val uuid = uuid("id").autoGenerate()
     val name = varchar("name", NAME_LENGTH)
     val lastName = varchar("lastName", NAME_LENGTH)
-    val email = varchar("email", EMAIL_LENGTH).uniqueIndex()
+    val email = varchar("email", EMAIL_LENGTH)
     val phoneNumber = varchar("phoneNumber", PHONE_NUMBER_LENGTH)
     val password = varchar("password",PASSWORD_LENGTH)
     val type = integer("type")

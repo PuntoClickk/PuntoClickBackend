@@ -21,8 +21,16 @@ class RoleDaoFacadeImp : RoleDaoFacade {
         }.map(::resultRowToRole).singleOrNull()
     }
 
+    override suspend fun role(type: Int): RoleResponse? = dbQuery {
+        RoleTable.select{
+            RoleTable.type eq type
+        }.map(::resultRowToRole).singleOrNull()
+
+    }
+
     override suspend fun addRole(createRoleRequest: CreateRoleRequest): Boolean = dbQuery {
         RoleTable.insert {
+            it[type] = createRoleRequest.type
             it[name] = createRoleRequest.name.escapeSingleQuotes()
         }.resultedValues?.singleOrNull() != null
     }
@@ -41,6 +49,7 @@ class RoleDaoFacadeImp : RoleDaoFacade {
 
     private fun resultRowToRole(row: ResultRow) = RoleResponse(
         id = row[RoleTable.uuid],
+        type = row[RoleTable.type],
         name = row[RoleTable.name]
     )
 }

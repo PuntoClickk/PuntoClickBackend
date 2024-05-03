@@ -2,11 +2,15 @@ package com.puntoclick.features.auth.controller
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
+import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
 import com.puntoclick.data.model.AppResult
 import com.puntoclick.data.model.auth.LoginRequest
 import com.puntoclick.data.model.auth.TokenResponse
+import com.puntoclick.data.model.role.RoleType
 import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.mapCreateUserRequestToUser2
 import com.puntoclick.features.utils.createError
 import com.puntoclick.plugins.JWTParams
 import com.puntoclick.plugins.loadECPrivateKey
@@ -17,11 +21,18 @@ import java.util.*
 
 class AuthController(
     private val userDaoFacade: UserDaoFacade,
-    private val appEncryption: AppEncryption
+    private val appEncryption: AppEncryption,
+    private val teamDaoFacade: TeamDaoFacade,
+    private val roleDaoFacade: RoleDaoFacade
 ) {
 
     suspend fun createUser(createUserRequest: CreateUserRequest): AppResult<Boolean> {
-        return if (userDaoFacade.addUser(createUserRequest)) AppResult.Success(
+        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return createError(title = "Error", "Error Team", HttpStatusCode.BadRequest)
+        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return createError(title = "Error", "Error Team", HttpStatusCode.BadRequest)
+
+        val user = createUserRequest.mapCreateUserRequestToUser2(role = roleUUID, team = teamUUID)
+        
+        return if (userDaoFacade.addUser(user)) AppResult.Success(
             data = true, appStatus = HttpStatusCode.OK
         )
         else createError(title = "Error", "User not created", HttpStatusCode.BadRequest)

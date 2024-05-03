@@ -8,6 +8,7 @@ import java.util.UUID
 interface RoleDaoFacade {
     suspend fun allRoles(): List<RoleResponse>
     suspend fun role(uuid: UUID): RoleResponse?
+    suspend fun role(type: Int): RoleResponse?
     suspend fun addRole(createRoleRequest: CreateRoleRequest): Boolean
     suspend fun updateRole(updateRoleRequest: UpdateRoleRequest): Boolean
     suspend fun deleteRole(uuid: UUID): Boolean

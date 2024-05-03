@@ -12,5 +12,5 @@ val controllerModule = module {
     singleOf(::RoleController)
     singleOf(::TeamController)
     singleOf(::UserController)
-    single { AuthController(get(), get(named("AES"))) }
+    single { AuthController(get(), get(named("AES")),get(), get()) }
 }

@@ -3,7 +3,6 @@ package com.puntoclick.features.team.controller
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.model.AppResult
 import com.puntoclick.data.utils.*
-import com.puntoclick.data.model.team.CreateTeamRequest
 import com.puntoclick.data.model.team.TeamResponse
 import com.puntoclick.data.model.team.UpdateTeamRequest
 import com.puntoclick.features.utils.*
@@ -20,10 +19,6 @@ class TeamController(
                 data = it, appStatus = HttpStatusCode.OK
             )
         } ?: createError(title = ERROR_TITLE, GET_REGISTER, HttpStatusCode.NotFound)
-    }
-
-    suspend fun addTeam(createTeamRequest: CreateTeamRequest): AppResult<Boolean> {
-        return createTeam(createTeamRequest)
     }
 
     suspend fun updateTeam(updateTeamRequest: UpdateTeamRequest):AppResult<Boolean> {
@@ -50,12 +45,6 @@ class TeamController(
     private suspend fun searchTeam(id: UUID): TeamResponse? {
         return facade.team(id)
     }
-
-    private suspend fun createTeam(createTeamRequest: CreateTeamRequest): AppResult<Boolean> =
-        if (facade.addTeam(createTeamRequest)) {
-            AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
-        } else createError(title = ERROR_TITLE, CREATE_BODY, HttpStatusCode.BadRequest)
-
 
     private suspend fun updateTeamName(updateTeamRequest: UpdateTeamRequest): AppResult<Boolean> =
         if (facade.updateTeam(updateTeamRequest)) {
