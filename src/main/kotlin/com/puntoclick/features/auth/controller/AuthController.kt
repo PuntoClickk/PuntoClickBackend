@@ -31,8 +31,8 @@ class AuthController(
 ) {
 
     suspend fun createUser(createUserRequest: CreateUserRequest, locale: Locale): AppResult<Boolean> {
-        val errorTitle = locale.loadLocalizedResources().getString(GENERIC_TITLE_ERROR)
-        val errorMessage = locale.loadLocalizedResources().getString(USER_NOT_CREATED_ERROR)
+        val errorTitle = locale.getString(GENERIC_TITLE_ERROR)
+        val errorMessage = locale.getString(USER_NOT_CREATED_ERROR)
         val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
         val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
 
@@ -46,8 +46,8 @@ class AuthController(
 
     suspend fun login(loginRequest: LoginRequest, jwtParams: JWTParams, locale: Locale): AppResult<TokenResponse> {
         val user = userDaoFacade.user(loginRequest.email)
-        val errorTitle = locale.loadLocalizedResources().getString(GENERIC_TITLE_ERROR)
-        val errorMessage = locale.loadLocalizedResources().getString(LOGIN_MESSAGE_ERROR_STRING_KEY)
+        val errorTitle = locale.getString(GENERIC_TITLE_ERROR)
+        val errorMessage = locale.getString(LOGIN_MESSAGE_ERROR_STRING_KEY)
         return user?.let {
             if (validatePassword(password = loginRequest.password, it.password)){
                 AppResult.Success(data = createToken(it, jwtParams), appStatus = HttpStatusCode.OK)
