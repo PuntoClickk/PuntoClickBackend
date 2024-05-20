@@ -3,6 +3,10 @@ package com.puntoclick.plugins
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.puntoclick.data.model.ErrorResponse
+import com.puntoclick.data.utils.ROLE_IDENTIFIER
+import com.puntoclick.data.utils.TEAM_IDENTIFIER
+import com.puntoclick.data.utils.USER_IDENTIFIER
+import com.puntoclick.security.AppEncryption
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -17,7 +21,6 @@ import java.util.*
 
 
 fun Application.configureSecurity() {
-
     val jwtParams = getJWTParams()
 
     authentication {
@@ -32,7 +35,10 @@ fun Application.configureSecurity() {
             )
 
             validate { credential ->
-                if (credential.payload.getClaim("username").asString() != "") {
+                if (!credential.payload.getClaim(USER_IDENTIFIER).asString().isNullOrEmpty() &&
+                    !credential.payload.getClaim(TEAM_IDENTIFIER).asString().isNullOrEmpty() &&
+                    !credential.payload.getClaim(ROLE_IDENTIFIER).asString().isNullOrEmpty()
+                    ) {
                     JWTPrincipal(credential.payload)
                 } else {
                     null
@@ -80,3 +86,18 @@ data class JWTParams(
     val private: String,
     val public: String
 )
+
+data class ClaimParams(
+    val userUUID: UUID,
+    val teamUUID: UUID,
+    val roleUUID: UUID,
+)
+
+
+fun ApplicationCall.getIdentifier(appEncryption: AppEncryption, claimName: String): UUID?{
+    val principal = this.principal<JWTPrincipal>()
+    return principal?.payload?.getClaim(claimName)?.asString()?.let {
+        val uuid = appEncryption.decrypt(it)
+        UUID.fromString(uuid)
+    }
+}

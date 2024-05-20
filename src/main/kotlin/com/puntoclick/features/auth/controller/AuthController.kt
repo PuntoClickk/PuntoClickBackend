@@ -10,8 +10,13 @@ import com.puntoclick.data.model.auth.LoginRequest
 import com.puntoclick.data.model.auth.TokenResponse
 import com.puntoclick.data.model.role.RoleType
 import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.user.UserLogin
 import com.puntoclick.data.model.user.mapCreateUserRequestToUser
+import com.puntoclick.data.utils.ROLE_IDENTIFIER
+import com.puntoclick.data.utils.TEAM_IDENTIFIER
+import com.puntoclick.data.utils.USER_IDENTIFIER
 import com.puntoclick.features.utils.createError
+import com.puntoclick.plugins.ClaimParams
 import com.puntoclick.plugins.JWTParams
 import com.puntoclick.plugins.loadECPrivateKey
 import com.puntoclick.security.AppEncryption
@@ -41,27 +46,36 @@ class AuthController(
     suspend fun login(loginRequest: LoginRequest, jwtParams: JWTParams): AppResult<TokenResponse> {
         val user = userDaoFacade.user(loginRequest.email)
         return user?.let {
-            if (validatePassword(password = loginRequest.password, it.password))
-                AppResult.Success(data = createToken(user.id, jwtParams), appStatus = HttpStatusCode.OK)
-            else  createError(title = "Error", "Password wrong1")
+            if (validatePassword(password = loginRequest.password, it.password)){
+                val claimParams = it.getClaimParams()
+                AppResult.Success(data = createToken(claimParams, jwtParams), appStatus = HttpStatusCode.OK)
+            } else  createError(title = "Error", "Password wrong1")
         } ?: createError(title = "Error", "Password wrong2")
     }
 
-    private fun createToken(uuid: UUID,jwtParams: JWTParams): TokenResponse {
+    private fun createToken(claimParams: ClaimParams, jwtParams: JWTParams): TokenResponse {
         jwtParams.apply {
             val algorithm = Algorithm.ECDSA256(loadECPrivateKey(jwtParams.private))
             val now = System.currentTimeMillis()
-            val text =  appEncryption.encrypt(uuid.toString())
+            val oneMonthInMillis = 30L * 24L * 60L * 60L * 1000L
+            val encryptedId = appEncryption.encrypt(claimParams.userUUID.toString())
+            val encryptedTeamId = appEncryption.encrypt(claimParams.teamUUID.toString())
+            val encryptedRoleId = appEncryption.encrypt(claimParams.roleUUID.toString())
             val token = JWT.create()
                 .withIssuer(issuer)
                 .withAudience(audience)
-                .withClaim("identifier", text)
-                .withExpiresAt(Date(now + (60 * 1000)))
+                .withClaim(USER_IDENTIFIER, encryptedId)
+                .withClaim(TEAM_IDENTIFIER, encryptedTeamId)
+                .withClaim(ROLE_IDENTIFIER, encryptedRoleId)
+                .withExpiresAt(Date(now + oneMonthInMillis))
                 .sign(algorithm)
             return TokenResponse(token)
         }
     }
 
+    private fun UserLogin.getClaimParams() = ClaimParams(
+            userUUID = id, teamUUID = teamUUID, roleUUID = roleUUID
+        )
 
     private fun validatePassword(password: String,hashedPassword: String ): Boolean {
         return password.verifyPassword(hashedPassword = hashedPassword)
