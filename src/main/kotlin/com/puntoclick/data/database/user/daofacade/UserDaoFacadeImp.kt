@@ -21,7 +21,7 @@ class UserDaoFacadeImp : UserDaoFacade {
     override suspend fun allUsers(teamId: UUID): List<UserResponse> = dbQuery {
         UserTable.innerJoin(TeamTable).innerJoin(RoleTable).select {
             UserTable.team eq teamId and (UserTable.type eq 2)
-        }.map(::resultRowToUSer)
+        }.map(::resultRowToUser)
     }
 
     override suspend fun addUser(user: CreateUser): Boolean = dbQuery {
@@ -41,7 +41,7 @@ class UserDaoFacadeImp : UserDaoFacade {
     override suspend fun user(userId: UUID): UserResponse? = dbQuery {
         (UserTable innerJoin TeamTable innerJoin RoleTable)
             .select { UserTable.uuid eq userId }
-            .mapNotNull(::resultRowToUSer)
+            .mapNotNull(::resultRowToUser)
             .singleOrNull()
 
     }
@@ -63,7 +63,7 @@ class UserDaoFacadeImp : UserDaoFacade {
         UserTable.deleteWhere { UserTable.uuid eq uuid } > 0
     }
 
-    private fun resultRowToUSer(row: ResultRow) = UserResponse(
+    private fun resultRowToUser(row: ResultRow) = UserResponse(
         id = row[UserTable.uuid],
         name = row[UserTable.name],
         lastName = row[UserTable.lastName],
@@ -83,7 +83,9 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     private fun resultRowToUserLogin(row: ResultRow) = UserLogin(
         id = row[UserTable.uuid],
-        password = row[UserTable.password]
+        password = row[UserTable.password],
+        teamUUID = row[UserTable.team],
+        roleUUID = row[UserTable.role]
     )
 
 }
