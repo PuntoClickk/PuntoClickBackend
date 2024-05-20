@@ -87,12 +87,6 @@ data class JWTParams(
     val public: String
 )
 
-data class ClaimParams(
-    val userUUID: UUID,
-    val teamUUID: UUID,
-    val roleUUID: UUID,
-)
-
 
 fun ApplicationCall.getIdentifier(appEncryption: AppEncryption, claimName: String): UUID?{
     val principal = this.principal<JWTPrincipal>()

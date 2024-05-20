@@ -5,6 +5,7 @@ import com.puntoclick.data.model.user.CreateUserRequest
 import com.puntoclick.features.auth.controller.AuthController
 import com.puntoclick.features.utils.handleResult
 import com.puntoclick.plugins.JWTParams
+import com.puntoclick.features.utils.retrieveLocale
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -20,13 +21,15 @@ fun Route.authRouting(jwtParams: JWTParams) {
 
         post("/add") {
             val request = call.receive<CreateUserRequest>()
-            val result = authController.createUser(request)
+            val locale = call.retrieveLocale()
+            val result = authController.createUser(request, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
         post("/login") {
             val loginRequest = call.receive<LoginRequest>()
-            val result = authController.login(loginRequest, jwtParams)
+            val locale = call.retrieveLocale()
+            val result = authController.login(loginRequest, jwtParams, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
     }
