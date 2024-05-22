@@ -7,7 +7,7 @@ import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
 import com.puntoclick.data.model.role.RoleResponse
 import com.puntoclick.data.model.team.TeamResponse
-import com.puntoclick.data.model.user.CreateUser
+import com.puntoclick.data.model.auth.CreateUser
 import com.puntoclick.data.model.user.UserLogin
 import com.puntoclick.data.model.user.UserResponse
 import com.puntoclick.features.utils.escapeSingleQuotes

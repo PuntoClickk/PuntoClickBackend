@@ -1,7 +1,7 @@
 package com.puntoclick.data.database.user.daofacade
 
 import com.puntoclick.data.database.entity.User
-import com.puntoclick.data.model.user.CreateUser
+import com.puntoclick.data.model.auth.CreateUser
 import com.puntoclick.data.model.user.UserLogin
 import com.puntoclick.data.model.user.UserResponse
 import java.util.*

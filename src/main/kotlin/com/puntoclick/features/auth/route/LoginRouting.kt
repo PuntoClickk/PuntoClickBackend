@@ -1,7 +1,7 @@
 package com.puntoclick.features.auth.route
 
 import com.puntoclick.data.model.auth.LoginRequest
-import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.features.auth.controller.AuthController
 import com.puntoclick.features.utils.handleResult
 import com.puntoclick.plugins.JWTParams

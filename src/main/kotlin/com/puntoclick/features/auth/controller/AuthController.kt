@@ -9,9 +9,9 @@ import com.puntoclick.data.model.AppResult
 import com.puntoclick.data.model.auth.LoginRequest
 import com.puntoclick.data.model.auth.TokenResponse
 import com.puntoclick.data.model.role.RoleType
-import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.data.model.user.UserLogin
-import com.puntoclick.data.model.user.mapCreateUserRequestToUser
+import com.puntoclick.data.model.auth.mapCreateUserRequestToUser
 import com.puntoclick.data.utils.ROLE_IDENTIFIER
 import com.puntoclick.data.utils.TEAM_IDENTIFIER
 import com.puntoclick.data.utils.USER_IDENTIFIER
