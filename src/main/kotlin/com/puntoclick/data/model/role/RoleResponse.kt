@@ -10,4 +10,5 @@ data class RoleResponse(
     val id: UUID,
     val type: Int,
     val name: String,
+    val isActive: Boolean
 )

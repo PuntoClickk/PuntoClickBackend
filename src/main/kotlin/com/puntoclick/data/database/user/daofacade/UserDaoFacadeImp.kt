@@ -73,7 +73,8 @@ class UserDaoFacadeImp : UserDaoFacade {
         role = RoleResponse(
             id = row[RoleTable.uuid],
             type = row[RoleTable.type],
-            name = row[RoleTable.name]
+            name = row[RoleTable.name],
+            isActive = row[RoleTable.isActive]
         ),
         team = TeamResponse(
             id = row[TeamTable.uuid],

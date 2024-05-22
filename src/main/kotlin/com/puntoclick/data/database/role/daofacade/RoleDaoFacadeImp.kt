@@ -50,6 +50,7 @@ class RoleDaoFacadeImp : RoleDaoFacade {
     private fun resultRowToRole(row: ResultRow) = RoleResponse(
         id = row[RoleTable.uuid],
         type = row[RoleTable.type],
-        name = row[RoleTable.name]
+        name = row[RoleTable.name],
+        isActive = row[RoleTable.isActive]
     )
 }
