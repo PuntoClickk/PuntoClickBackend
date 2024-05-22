@@ -10,6 +10,7 @@ object RoleTable : Table("role") {
     val uuid = uuid("id").autoGenerate()
     val type = integer("type")
     val name = varchar("name", NAME_LENGTH)
+    val isActive = bool("isActive").default(true)
     val createAt = long("createAt").default(System.currentTimeMillis())
     val updateAt = long("updateAt").default(System.currentTimeMillis())
 
