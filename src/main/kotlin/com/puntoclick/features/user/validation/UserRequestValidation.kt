@@ -1,6 +1,6 @@
 package com.puntoclick.features.user.validation
 
-import com.puntoclick.data.model.user.CreateUserRequest
+import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.features.utils.isValidCellPhoneNumber
 import com.puntoclick.features.utils.isValidEmail
 import com.puntoclick.features.utils.validateStringRequest
