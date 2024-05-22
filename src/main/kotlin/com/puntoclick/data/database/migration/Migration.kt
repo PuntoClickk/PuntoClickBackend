@@ -11,6 +11,5 @@ fun addIsActiveColumToRole(){
         stateMet.forEach {
             exec(it)
         }
-
     }
 }
