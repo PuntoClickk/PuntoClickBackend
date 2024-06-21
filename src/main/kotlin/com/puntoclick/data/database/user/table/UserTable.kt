@@ -25,9 +25,8 @@ object UserTable : Table("user") {
     val role = reference("role", RoleTable.uuid, onDelete = ReferenceOption.NO_ACTION)
     val team = reference("team", TeamTable.uuid)
     val isEmailVerified = bool("isEmailVerified").default(false)
-    val isPhoneNumberVerified = bool("isPhoneNumberVerified").default(false)
     val isActive = bool("isActive").default(true)
-    val isBlocked = bool("isBlocked").default(false)
+    val isLocked = bool("isLocked").default(false)
     val createAt = long("createAt").default(System.currentTimeMillis())
     val updateAt = long("updateAt").default(System.currentTimeMillis())
 
