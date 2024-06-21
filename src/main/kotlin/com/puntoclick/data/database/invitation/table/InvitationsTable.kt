@@ -4,7 +4,7 @@ import com.puntoclick.data.database.team.table.TeamTable
 import org.jetbrains.exposed.sql.Table
 
 
-object InvitationTable : Table("invitation_code") {
+object InvitationTable : Table("invitation") {
     val uuid = uuid("id").autoGenerate().uniqueIndex()
     val team = reference("team", TeamTable.uuid)
     val code = varchar("code", 255).uniqueIndex()
