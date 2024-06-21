@@ -6,15 +6,27 @@ import java.util.*
 
 
 @Serializable
+data class CreateAdminRequest(
+    val name: String,
+    val lastName: String,
+    val email: String,
+    val phoneNumber: String,
+    val password: String,
+    val type: Int = 1,
+    val birthday: Long,
+    val teamName: String
+)
+
+@Serializable
 data class CreateUserRequest(
     val name: String,
     val lastName: String,
     val email: String,
     val phoneNumber: String,
     val password: String,
-    val type: Int,
+    val type: Int = 2,
     val birthday: Long,
-    val teamName: String
+    val invitationCode: String
 )
 
 @Serializable
@@ -33,7 +45,7 @@ data class CreateUser(
     val team: UUID,
 )
 
-fun CreateUserRequest.mapCreateUserRequestToUser(
+fun CreateAdminRequest.mapCreateUserRequestToUser(
     role: UUID,
     team: UUID
 ): CreateUser {

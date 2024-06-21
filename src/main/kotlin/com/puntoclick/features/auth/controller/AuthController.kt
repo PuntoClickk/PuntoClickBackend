@@ -6,12 +6,9 @@ import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
 import com.puntoclick.data.model.AppResult
-import com.puntoclick.data.model.auth.LoginRequest
-import com.puntoclick.data.model.auth.TokenResponse
+import com.puntoclick.data.model.auth.*
 import com.puntoclick.data.model.role.RoleType
-import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.data.model.user.UserLogin
-import com.puntoclick.data.model.auth.mapCreateUserRequestToUser
 import com.puntoclick.data.utils.ROLE_IDENTIFIER
 import com.puntoclick.data.utils.TEAM_IDENTIFIER
 import com.puntoclick.data.utils.USER_IDENTIFIER
@@ -30,35 +27,32 @@ class AuthController(
     private val roleDaoFacade: RoleDaoFacade
 ) {
 
-    suspend fun createUser(createUserRequest: CreateUserRequest, locale: Locale): AppResult<Boolean> {
-        val errorTitle = locale.getString(GENERIC_TITLE_ERROR)
-        val errorMessage = locale.getString(USER_NOT_CREATED_ERROR)
-        val errorEmailMessage = locale.getString(EMAIL_MESSAGE_ERROR)
-
-        if (userDaoFacade.emailExists(createUserRequest.email)) return createError(title = errorTitle, errorEmailMessage, HttpStatusCode.BadRequest)
-
-        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
-        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
+    suspend fun createAdmin(createUserRequest: CreateAdminRequest, locale: Locale): AppResult<Boolean> {
+        if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists(locale)
+        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return getErrorUserNotCreated(locale)
+        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return getErrorUserNotCreated(locale)
 
         val user = createUserRequest.mapCreateUserRequestToUser(role = roleUUID, team = teamUUID)
 
         return if (userDaoFacade.addUser(user)) AppResult.Success(
             data = true, appStatus = HttpStatusCode.OK
-        )
-        else createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
+        ) else locale.createGenericError()
     }
 
     suspend fun login(loginRequest: LoginRequest, jwtParams: JWTParams, locale: Locale): AppResult<TokenResponse> {
         val user = userDaoFacade.user(loginRequest.email)
-        val errorTitle = locale.getString(GENERIC_TITLE_ERROR)
-        val errorMessage = locale.getString(LOGIN_MESSAGE_ERROR_STRING_KEY)
+
         return user?.let {
-            if (validatePassword(password = loginRequest.password, it.password)){
-                AppResult.Success(data = createToken(it, jwtParams), appStatus = HttpStatusCode.OK)
-            } else createError(
-                title = errorTitle ,errorMessage
-            )
-        } ?: createError(title = errorTitle, errorMessage)
+            when {
+                it.isActive.not() -> locale.createUserInactiveError()
+                it.isLocked -> locale.createUserBlockedError()
+                validatePassword(password = loginRequest.password, it.password) -> {
+                    AppResult.Success(data = createToken(it, jwtParams), appStatus = HttpStatusCode.OK)
+                }
+
+                else -> locale.createLoginError()
+            }
+        } ?: locale.createLoginError()
     }
 
     private fun createToken(userLogin: UserLogin, jwtParams: JWTParams): TokenResponse {
@@ -82,9 +76,37 @@ class AuthController(
     }
 
 
-    private fun validatePassword(password: String,hashedPassword: String ): Boolean {
+    private fun validatePassword(password: String, hashedPassword: String): Boolean {
         return password.verifyPassword(hashedPassword = hashedPassword)
     }
 
+    private fun getErrorUserNotCreated(locale: Locale) =
+        locale.createError(
+            descriptionKey = StringResourcesKey.USER_NOT_CREATED_ERROR_KEY,
+            status = HttpStatusCode.BadRequest
+        )
+
+    private fun getErrorEmailExists(locale: Locale) =
+        locale.createError(
+            StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
+            StringResourcesKey.EMAIL_MESSAGE_ERROR_KEY,
+            HttpStatusCode.BadRequest
+        )
+
+
+    private fun Locale.createUserInactiveError() = createError(
+        StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
+        StringResourcesKey.LOGIN_USER_INACTIVE_MESSAGE_ERROR_KEY
+    )
+
+    private fun Locale.createUserBlockedError() = createError(
+        StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
+        StringResourcesKey.LOGIN_USER_BLOCKED_MESSAGE_ERROR_KEY
+    )
+
+    private fun Locale.createLoginError() = createError(
+        StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
+        StringResourcesKey.LOGIN_MESSAGE_ERROR_KEY
+    )
 
 }

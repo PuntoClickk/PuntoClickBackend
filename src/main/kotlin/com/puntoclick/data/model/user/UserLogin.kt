@@ -6,5 +6,7 @@ data class UserLogin(
     val id: UUID,
     val password: String,
     val teamUUID: UUID,
-    val roleUUID: UUID
+    val roleUUID: UUID,
+    val isActive: Boolean,
+    val isLocked: Boolean
 )
