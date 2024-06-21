@@ -10,5 +10,5 @@ fun ApplicationCall.retrieveLocale(): Locale {
     return Locale.forLanguageTag(tag)
 }
 
-fun Locale.getString(key: String): String =
-    ResourceBundle.getBundle("app_strings", this).getString(key)
+fun Locale.getString(key: StringResourcesKey): String =
+    ResourceBundle.getBundle("app_strings", this).getString(key.value)

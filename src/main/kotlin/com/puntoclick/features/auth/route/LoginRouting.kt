@@ -1,7 +1,7 @@
 package com.puntoclick.features.auth.route
 
 import com.puntoclick.data.model.auth.LoginRequest
-import com.puntoclick.data.model.auth.CreateUserRequest
+import com.puntoclick.data.model.auth.CreateAdminRequest
 import com.puntoclick.features.auth.controller.AuthController
 import com.puntoclick.features.utils.handleResult
 import com.puntoclick.plugins.JWTParams
@@ -20,9 +20,9 @@ fun Route.authRouting(jwtParams: JWTParams) {
     route("/auth") {
 
         post("/add") {
-            val request = call.receive<CreateUserRequest>()
+            val request = call.receive<CreateAdminRequest>()
             val locale = call.retrieveLocale()
-            val result = authController.createUser(request, locale)
+            val result = authController.createAdmin(request, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
 

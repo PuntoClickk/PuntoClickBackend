@@ -1,5 +1,7 @@
 package com.puntoclick.di
 
+import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacade
+import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacadeImp
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacadeImp
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
@@ -19,6 +21,9 @@ val daoFacadeModule = module {
     }
     singleOf(::UserDaoFacadeImp) {
         bind<UserDaoFacade>()
+    }
+    singleOf(::InvitationDaoFacadeImp) {
+        bind<InvitationDaoFacade>()
     }
 
 }

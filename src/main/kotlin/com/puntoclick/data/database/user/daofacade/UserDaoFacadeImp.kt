@@ -90,7 +90,9 @@ class UserDaoFacadeImp : UserDaoFacade {
         id = row[UserTable.uuid],
         password = row[UserTable.password],
         teamUUID = row[UserTable.team],
-        roleUUID = row[UserTable.role]
+        roleUUID = row[UserTable.role],
+        isActive = row[UserTable.isActive],
+        isBlocked = row[UserTable.isBlocked]
     )
 
 }
