@@ -33,6 +33,10 @@ class AuthController(
     suspend fun createUser(createUserRequest: CreateUserRequest, locale: Locale): AppResult<Boolean> {
         val errorTitle = locale.getString(GENERIC_TITLE_ERROR)
         val errorMessage = locale.getString(USER_NOT_CREATED_ERROR)
+        val errorEmailMessage = locale.getString(EMAIL_MESSAGE_ERROR)
+
+        if (userDaoFacade.emailExists(createUserRequest.email)) return createError(title = errorTitle, errorEmailMessage, HttpStatusCode.BadRequest)
+
         val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
         val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return createError(title = errorTitle, errorMessage, HttpStatusCode.BadRequest)
 
