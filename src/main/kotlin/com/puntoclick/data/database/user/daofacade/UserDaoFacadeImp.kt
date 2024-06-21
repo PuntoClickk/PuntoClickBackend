@@ -63,6 +63,10 @@ class UserDaoFacadeImp : UserDaoFacade {
         UserTable.deleteWhere { UserTable.uuid eq uuid } > 0
     }
 
+    override suspend fun emailExists(email: String): Boolean = dbQuery {
+        UserTable.select { UserTable.email eq email }.count() > 0
+    }
+
     private fun resultRowToUser(row: ResultRow) = UserResponse(
         id = row[UserTable.uuid],
         name = row[UserTable.name],

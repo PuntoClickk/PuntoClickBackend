@@ -10,10 +10,10 @@ import org.jetbrains.exposed.sql.Table
 
 
 object UserTable : Table("user") {
-    val uuid = uuid("id").autoGenerate()
+    val uuid = uuid("id").autoGenerate().uniqueIndex()
     val name = varchar("name", NAME_LENGTH)
     val lastName = varchar("lastName", NAME_LENGTH)
-    val email = varchar("email", EMAIL_LENGTH)
+    val email = varchar("email", EMAIL_LENGTH).uniqueIndex()
     val phoneNumber = varchar("phoneNumber", PHONE_NUMBER_LENGTH)
     val password = varchar("password",PASSWORD_LENGTH)
     val type = integer("type")
