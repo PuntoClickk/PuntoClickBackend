@@ -45,7 +45,7 @@ class AuthController(
         return user?.let {
             when {
                 it.isActive.not() -> locale.createUserInactiveError()
-                it.isBlocked -> locale.createUserBlockedError()
+                it.isLocked -> locale.createUserBlockedError()
                 validatePassword(password = loginRequest.password, it.password) -> {
                     AppResult.Success(data = createToken(it, jwtParams), appStatus = HttpStatusCode.OK)
                 }

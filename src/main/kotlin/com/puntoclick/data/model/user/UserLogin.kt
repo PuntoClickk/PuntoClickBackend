@@ -8,5 +8,5 @@ data class UserLogin(
     val teamUUID: UUID,
     val roleUUID: UUID,
     val isActive: Boolean,
-    val isBlocked: Boolean
+    val isLocked: Boolean
 )
