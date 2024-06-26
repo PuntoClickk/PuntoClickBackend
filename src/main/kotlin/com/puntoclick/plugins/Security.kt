@@ -88,10 +88,11 @@ data class JWTParams(
 )
 
 
-fun ApplicationCall.getIdentifier(appEncryption: AppEncryption, claimName: String): UUID?{
+fun ApplicationCall.getIdentifier(appEncryption: AppEncryption, claimName: String): UUID {
     val principal = this.principal<JWTPrincipal>()
-    return principal?.payload?.getClaim(claimName)?.asString()?.let {
+    val uuid = principal?.payload?.getClaim(claimName)?.asString()?.let {
         val uuid = appEncryption.decrypt(it)
         UUID.fromString(uuid)
     }
+    return uuid ?: throw Exception("Token Error")
 }
