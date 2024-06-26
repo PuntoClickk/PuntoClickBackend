@@ -12,9 +12,7 @@ class InvitationController(
     private val invitationDaoFacade: InvitationDaoFacade
 ) {
 
-    suspend fun createInvitation(teamId: UUID?, locale: Locale): AppResult<InvitationResponse> {
-        if (teamId == null) return locale.createError(descriptionKey = StringResourcesKey.CODE_GENERATION_FAILED_ERROR_KEY)
-
+    suspend fun createInvitation(teamId: UUID, locale: Locale): AppResult<InvitationResponse> {
         val createInvitationData = CreateInvitationData(getNewCode(), getExpiration(), teamId)
         val result = invitationDaoFacade.createInvitation(createInvitationData)
 
