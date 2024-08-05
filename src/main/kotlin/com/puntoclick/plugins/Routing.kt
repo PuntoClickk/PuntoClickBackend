@@ -2,6 +2,8 @@ package com.puntoclick.plugins
 
 import com.puntoclick.data.model.ErrorResponse
 import com.puntoclick.features.auth.route.authRouting
+import com.puntoclick.features.email.EmailService
+import com.puntoclick.features.email.emailRouting
 import com.puntoclick.features.invitation.route.invitationRouting
 import com.puntoclick.features.roles.route.roleRouting
 import com.puntoclick.features.team.route.teamRouting
@@ -19,6 +21,12 @@ import io.ktor.server.routing.*
 fun Application.configureRouting() {
 
     val jwtParams = getJWTParams()
+    val emailService = EmailService(
+        environment.config.property("email.host").getString(),
+        environment.config.property("email.port").getString(),
+        environment.config.property("email.username").getString(),
+        environment.config.property("email.password").getString()
+    )
 
     install(Resources)
     install(StatusPages) {
@@ -37,5 +45,6 @@ fun Application.configureRouting() {
             userRouting()
             invitationRouting()
         }
+        emailRouting(emailService)
     }
 }

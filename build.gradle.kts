@@ -61,4 +61,7 @@ dependencies {
 
     // BCrypt
     implementation("at.favre.lib:bcrypt:0.10.2")
+
+    implementation("javax.mail:javax.mail-api:1.6.2")
+    implementation("com.sun.mail:javax.mail:1.6.2")
 }
