@@ -3,6 +3,7 @@ package com.puntoclick.data.database.role.daofacade
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.model.role.CreateRoleRequest
+import com.puntoclick.data.model.role.RoleData
 import com.puntoclick.data.model.role.RoleResponse
 import com.puntoclick.data.model.role.UpdateRoleRequest
 import com.puntoclick.features.utils.escapeSingleQuotes
@@ -12,19 +13,19 @@ import java.util.*
 
 class RoleDaoFacadeImp : RoleDaoFacade {
     override suspend fun allRoles(): List<RoleResponse> = dbQuery {
-        RoleTable.selectAll().map(::resultRowToRole)
+        RoleTable.selectAll().map(::resultRowToRoleResponse)
     }
 
     override suspend fun role(uuid: UUID): RoleResponse? = dbQuery {
         RoleTable.select{
             RoleTable.uuid eq uuid
-        }.map(::resultRowToRole).singleOrNull()
+        }.map(::resultRowToRoleResponse).singleOrNull()
     }
 
-    override suspend fun role(type: Int): RoleResponse? = dbQuery {
+    override suspend fun role(type: Int): RoleData? = dbQuery {
         RoleTable.select{
             RoleTable.type eq type
-        }.map(::resultRowToRole).singleOrNull()
+        }.map(::resultRowToRoleData).singleOrNull()
 
     }
 
@@ -47,7 +48,14 @@ class RoleDaoFacadeImp : RoleDaoFacade {
         RoleTable.deleteWhere { RoleTable.uuid eq uuid } > 0
     }
 
-    private fun resultRowToRole(row: ResultRow) = RoleResponse(
+    private fun resultRowToRoleResponse(row: ResultRow) = RoleResponse(
+        id = row[RoleTable.uuid],
+        type = row[RoleTable.type],
+        name = row[RoleTable.name],
+        isActive = row[RoleTable.isActive]
+    )
+
+    private fun resultRowToRoleData(row: ResultRow) = RoleData(
         id = row[RoleTable.uuid],
         type = row[RoleTable.type],
         name = row[RoleTable.name],

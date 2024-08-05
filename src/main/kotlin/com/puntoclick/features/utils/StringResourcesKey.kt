@@ -9,5 +9,6 @@ enum class StringResourcesKey(val value: String) {
     GENERIC_DESCRIPTION_ERROR_KEY("generic_description_error"),
     USER_NOT_CREATED_ERROR_KEY("create_user_message_error"),
     EMAIL_MESSAGE_ERROR_KEY("email_message_error"),
-    CODE_GENERATION_FAILED_ERROR_KEY("code_generation_failed_error");
+    CODE_GENERATION_FAILED_ERROR_KEY("code_generation_failed_error"),
+    CODE_NOT_FOUND_OR_EXPIRED_ERROR_KEY("code_not_found_or_expired_error");
 }

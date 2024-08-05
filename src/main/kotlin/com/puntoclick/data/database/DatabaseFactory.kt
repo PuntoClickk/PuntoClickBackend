@@ -1,6 +1,7 @@
 package com.puntoclick.data.database
 
 import com.puntoclick.data.database.invitation.table.InvitationTable
+import com.puntoclick.data.database.registeruser.RegisterUserTable
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
@@ -25,6 +26,7 @@ fun Application.configureDatabase() {
         SchemaUtils.create(UserTable)
         SchemaUtils.create(RoleTable)
         SchemaUtils.create(TeamTable)
+        SchemaUtils.create(RegisterUserTable)
         SchemaUtils.create(InvitationTable)
         //addIsActiveColumToRole()
         //addNewColumnsToUser()
