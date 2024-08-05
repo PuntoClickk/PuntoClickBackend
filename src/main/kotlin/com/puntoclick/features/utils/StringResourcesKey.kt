@@ -10,5 +10,8 @@ enum class StringResourcesKey(val value: String) {
     USER_NOT_CREATED_ERROR_KEY("create_user_message_error"),
     EMAIL_MESSAGE_ERROR_KEY("email_message_error"),
     CODE_GENERATION_FAILED_ERROR_KEY("code_generation_failed_error"),
-    CODE_NOT_FOUND_OR_EXPIRED_ERROR_KEY("code_not_found_or_expired_error");
+    CODE_NOT_FOUND_OR_EXPIRED_ERROR_KEY("code_not_found_or_expired_error"),
+    USER_NOT_UPDATED_ERROR_KEY("user_not_updated_error"),
+    NO_USER_FOUND_ERROR_KEY("no_user_found_error"),
+    USER_NOT_DELETED_ERROR_KEY("user_not_deleted_error");
 }

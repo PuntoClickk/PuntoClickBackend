@@ -4,6 +4,7 @@ import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.features.user.controller.UserController
 import com.puntoclick.features.utils.handleResult
+import com.puntoclick.features.utils.retrieveLocale
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -19,7 +20,8 @@ fun Route.userRouting() {
 
         post("/") {
             val request = call.receive<UUIDAppRequest>()
-            val result = userController.getUser(userId = request.id)
+            val locale = call.retrieveLocale()
+            val result = userController.getUser(userId = request.id, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -31,13 +33,15 @@ fun Route.userRouting() {
 
         post("/update") {
             val user: User = call.receive()
-            val result = userController.updateUser(user)
+            val locale = call.retrieveLocale()
+            val result = userController.updateUser(user, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
         post("/delete") {
             val request: UUIDAppRequest = call.receive()
-            val result = userController.deleteUser(request.id)
+            val locale = call.retrieveLocale()
+            val result = userController.deleteUser(request.id, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
