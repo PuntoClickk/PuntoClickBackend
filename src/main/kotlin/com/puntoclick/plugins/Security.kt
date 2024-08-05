@@ -89,7 +89,7 @@ data class JWTParams(
 
 
 fun ApplicationCall.getIdentifier(appEncryption: AppEncryption, claimName: String): UUID {
-    val principal = this.principal<JWTPrincipal>()
+    val principal = principal<JWTPrincipal>()
     val uuid = principal?.payload?.getClaim(claimName)?.asString()?.let {
         val uuid = appEncryption.decrypt(it)
         UUID.fromString(uuid)

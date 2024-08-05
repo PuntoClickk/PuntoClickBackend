@@ -1,24 +1,32 @@
 package com.puntoclick.features.invitation.controller
 
 import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacade
+import com.puntoclick.data.database.user.daofacade.UserDaoFacade
 import com.puntoclick.data.model.AppResult
 import com.puntoclick.data.model.invitation.CreateInvitationData
 import com.puntoclick.data.model.invitation.InvitationResponse
-import com.puntoclick.features.utils.*
+import com.puntoclick.data.model.role.RoleType
+import com.puntoclick.features.utils.StringResourcesKey
+import com.puntoclick.features.utils.createError
 import io.ktor.http.*
 import java.util.*
 
 class InvitationController(
-    private val invitationDaoFacade: InvitationDaoFacade
+    private val invitationDaoFacade: InvitationDaoFacade,
+    private val userDaoFacade: UserDaoFacade
 ) {
 
-    suspend fun createInvitation(teamId: UUID, locale: Locale): AppResult<InvitationResponse> {
+    suspend fun createInvitation(userId: UUID, teamId: UUID, locale: Locale): AppResult<InvitationResponse> {
+        if (isUserValidToCreateInvitation(userId)) return locale.createError()
         val createInvitationData = CreateInvitationData(getNewCode(), getExpiration(), teamId)
         val result = invitationDaoFacade.createInvitation(createInvitationData)
 
         return if (result != null) AppResult.Success(data = result, appStatus = HttpStatusCode.OK)
         else locale.createError(descriptionKey = StringResourcesKey.CODE_GENERATION_FAILED_ERROR_KEY)
     }
+
+    private suspend fun isUserValidToCreateInvitation(userId: UUID) =
+        (userDaoFacade.user(userId)?.role?.type != RoleType.ADMIN.value)
 
     private suspend fun getNewCode(): String {
         var code: String

@@ -12,9 +12,9 @@ data class CreateAdminRequest(
     val email: String,
     val phoneNumber: String,
     val password: String,
-    val type: Int = 1,
     val birthday: Long,
-    val teamName: String
+    val teamName: String,
+    val isPending: Boolean = true
 )
 
 @Serializable
@@ -24,13 +24,12 @@ data class CreateUserRequest(
     val email: String,
     val phoneNumber: String,
     val password: String,
-    val type: Int = 2,
     val birthday: Long,
     val invitationCode: String
 )
 
 @Serializable
-data class CreateUser(
+data class CreateUserData(
     val name: String,
     val lastName: String,
     val email: String,
@@ -38,18 +37,22 @@ data class CreateUser(
     val password: String,
     val type: Int,
     val birthday: Long,
-    val teamName: String,
     @Serializable(with = UUIDSerializer::class)
     val role: UUID,
     @Serializable(with = UUIDSerializer::class)
     val team: UUID,
+    val isActive: Boolean,
+    val isPending: Boolean
 )
+
+
 
 fun CreateAdminRequest.mapCreateUserRequestToUser(
     role: UUID,
-    team: UUID
-): CreateUser {
-    return CreateUser(
+    team: UUID,
+    type: Int
+): CreateUserData {
+    return CreateUserData(
         name = name,
         lastName = lastName,
         email = email,
@@ -57,8 +60,30 @@ fun CreateAdminRequest.mapCreateUserRequestToUser(
         password = password,
         type = type,
         birthday = birthday,
-        teamName = teamName,
         role = role,
-        team = team
+        team = team,
+        isActive = true,
+        isPending = isPending
     )
+}
+
+fun CreateUserRequest.mapCreateUserRequestToUser(
+    role: UUID,
+    team: UUID,
+    type: Int
+): CreateUserData {
+    return CreateUserData(
+        name = name,
+        lastName = lastName,
+        email = email,
+        phoneNumber = phoneNumber,
+        password = password,
+        type = type,
+        birthday = birthday,
+        role = role,
+        team = team,
+        isActive = false,
+        isPending = false
+    )
+
 }

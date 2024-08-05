@@ -2,6 +2,9 @@ package com.puntoclick.features.auth.route
 
 import com.puntoclick.data.model.auth.LoginRequest
 import com.puntoclick.data.model.auth.CreateAdminRequest
+import com.puntoclick.data.model.auth.CreateUserRequest
+import com.puntoclick.data.model.auth.ValidateEmailRequest
+import com.puntoclick.data.model.invitation.AcceptInvitationRequest
 import com.puntoclick.features.auth.controller.AuthController
 import com.puntoclick.features.utils.handleResult
 import com.puntoclick.plugins.JWTParams
@@ -16,13 +19,24 @@ fun Route.authRouting(jwtParams: JWTParams) {
 
     val authController by inject<AuthController>()
 
-
     route("/auth") {
-
-        post("/add") {
+        post("/create/admin") {
             val request = call.receive<CreateAdminRequest>()
             val locale = call.retrieveLocale()
             val result = authController.createAdmin(request, locale)
+            call.respond(message = result.handleResult(), status = result.status)
+        }
+
+        post("/validate/email") {
+            val request = call.receive<ValidateEmailRequest>()
+            val result = authController.validateEmail(request)
+            call.respond(message = result.handleResult(), status = result.status)
+        }
+
+        post("/create/user") {
+            val request = call.receive<CreateUserRequest>()
+            val locale = call.retrieveLocale()
+            val result = authController.createUser(request, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -32,5 +46,13 @@ fun Route.authRouting(jwtParams: JWTParams) {
             val result = authController.login(loginRequest, jwtParams, locale)
             call.respond(message = result.handleResult(), status = result.status)
         }
+
+        post("/accept") {
+            val locale = call.retrieveLocale()
+            val request = call.receive<AcceptInvitationRequest>()
+            val result = authController.authenticateToAcceptInvitation(request, locale)
+            call.respond(message = result.handleResult(), status = result.status)
+        }
+
     }
 }

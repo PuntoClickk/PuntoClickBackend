@@ -44,3 +44,11 @@ fun isValidCellPhoneNumber(phoneNumber: String): Boolean {
     val phoneNumberRegex = Regex("^\\+?[1-9]\\d{1,14}$")
     return phoneNumberRegex.matches(phoneNumber)
 }
+
+fun String.maskString(numberOfCharactersVisible: Int = 3): String {
+    if (length < numberOfCharactersVisible) return this
+    val lastThree = takeLast(numberOfCharactersVisible)
+    val maskedPart = "*".repeat(length - numberOfCharactersVisible)
+    return "$maskedPart$lastThree"
+}
+

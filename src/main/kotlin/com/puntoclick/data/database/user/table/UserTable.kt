@@ -3,7 +3,6 @@
 package com.puntoclick.data.database.user.table
 
 import com.puntoclick.data.database.role.table.RoleTable
-import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.utils.EMAIL_LENGTH
 import com.puntoclick.data.utils.NAME_LENGTH
 import com.puntoclick.data.utils.PASSWORD_LENGTH
@@ -23,7 +22,6 @@ object UserTable : Table("user") {
     val validated = bool("validated").default(false)
     val birthday = long("birthday")
     val role = reference("role", RoleTable.uuid, onDelete = ReferenceOption.NO_ACTION)
-    val team = reference("team", TeamTable.uuid)
     val isEmailVerified = bool("isEmailVerified").default(false)
     val isActive = bool("isActive").default(true)
     val isLocked = bool("isLocked").default(false)
