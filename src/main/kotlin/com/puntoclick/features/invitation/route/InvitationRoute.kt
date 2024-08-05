@@ -22,8 +22,6 @@ fun Route.invitationRouting() {
         post("/create") {
             val userId = call.getIdentifier(appEncryption, USER_IDENTIFIER)
             val teamId = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
-            println(userId)
-            println(teamId)
             val locale = call.retrieveLocale()
             val result = invitationController.createInvitation(userId, teamId, locale)
             call.respond(message = result.handleResult(), status = result.status)
