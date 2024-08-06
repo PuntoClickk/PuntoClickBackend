@@ -1,7 +1,10 @@
 package com.puntoclick.data.database
 
+import com.puntoclick.data.database.action.init.initializeActions
+import com.puntoclick.data.database.action.table.ActionTable
 import com.puntoclick.data.database.invitation.table.InvitationTable
 import com.puntoclick.data.database.registeruser.RegisterUserTable
+import com.puntoclick.data.database.role.init.initializeRoles
 import com.puntoclick.data.database.role.table.RoleTable
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
@@ -28,6 +31,9 @@ fun Application.configureDatabase() {
         SchemaUtils.create(TeamTable)
         SchemaUtils.create(RegisterUserTable)
         SchemaUtils.create(InvitationTable)
+        SchemaUtils.create(ActionTable)
+        initializeRoles()
+        initializeActions()
         //addIsActiveColumToRole()
         //addNewColumnsToUser()
         addLogger(StdOutSqlLogger)
@@ -36,3 +42,5 @@ fun Application.configureDatabase() {
 }
 suspend fun <T> dbQuery(block: suspend () -> T): T =
     newSuspendedTransaction(Dispatchers.IO) { block() }
+
+

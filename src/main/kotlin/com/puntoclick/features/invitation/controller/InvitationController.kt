@@ -26,7 +26,7 @@ class InvitationController(
     }
 
     private suspend fun isUserValidToCreateInvitation(userId: UUID) =
-        (userDaoFacade.user(userId)?.role?.type != RoleType.ADMIN.value)
+        (userDaoFacade.user(userId)?.role?.type != RoleType.ADMIN.type)
 
     private suspend fun getNewCode(): String {
         var code: String
