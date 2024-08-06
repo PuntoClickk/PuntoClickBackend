@@ -2,15 +2,14 @@ package com.puntoclick.data.database.user.daofacade
 
 import com.puntoclick.data.database.entity.User
 import com.puntoclick.data.model.auth.CreateUserData
-import com.puntoclick.data.model.user.BaseInfoUser
-import com.puntoclick.data.model.user.UserLogin
-import com.puntoclick.data.model.user.UserResponse
+import com.puntoclick.data.model.user.*
 import java.util.*
 
 interface UserDaoFacade {
     suspend fun allUsers(teamId: UUID): List<UserResponse>
     suspend fun assignUserToTeam(userId: UUID, teamId: UUID): Boolean
     suspend fun user(userId: UUID): UserResponse?
+    suspend fun getUserType(userId: UUID): UserType?
     suspend fun getBaseInfoUser(email: String): BaseInfoUser?
     suspend fun user(email: String): UserLogin?
     suspend fun addUser(user: CreateUserData): Boolean

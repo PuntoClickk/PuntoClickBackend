@@ -3,6 +3,7 @@ package com.puntoclick.features.auth.controller
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacade
+import com.puntoclick.data.database.permission.daofacade.PermissionDaoFacade
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
@@ -29,7 +30,8 @@ class AuthController(
     private val appEncryption: AppEncryption,
     private val teamDaoFacade: TeamDaoFacade,
     private val roleDaoFacade: RoleDaoFacade,
-    private val invitationDaoFacade: InvitationDaoFacade
+    private val invitationDaoFacade: InvitationDaoFacade,
+    private val permissionDaoFacade: PermissionDaoFacade
 ) {
     suspend fun createAdmin(createUserRequest: CreateAdminRequest, locale: Locale): AppResult<Boolean> {
         if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists(locale)
@@ -37,10 +39,9 @@ class AuthController(
         val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return getErrorUserNotCreated(locale)
 
         val user = createUserRequest.mapCreateUserRequestToUser(role = roleUUID, team = teamUUID, UserType.ADMIN.type)
-
-        return if (userDaoFacade.addUser(user)) AppResult.Success(
-            data = true, appStatus = HttpStatusCode.OK
-        ) else locale.createGenericError()
+        permissionDaoFacade.initializePermissionsForTeam(teamUUID)
+        return if (userDaoFacade.addUser(user)) AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
+        else locale.createGenericError()
     }
 
     suspend fun validateEmail(validateEmailRequest: ValidateEmailRequest): AppResult<ValidateEmailResponse> {
