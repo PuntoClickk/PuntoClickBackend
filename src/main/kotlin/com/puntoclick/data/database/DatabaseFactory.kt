@@ -2,6 +2,7 @@ package com.puntoclick.data.database
 
 import com.puntoclick.data.database.action.init.initializeActions
 import com.puntoclick.data.database.action.table.ActionTable
+import com.puntoclick.data.database.category.table.CategoriesTable
 import com.puntoclick.data.database.invitation.table.InvitationTable
 import com.puntoclick.data.database.module.init.initializeModules
 import com.puntoclick.data.database.module.table.ModuleTable
@@ -35,6 +36,7 @@ fun Application.configureDatabase() {
         SchemaUtils.create(RegisterUserTable)
         SchemaUtils.create(InvitationTable)
         SchemaUtils.create(ActionTable)
+        SchemaUtils.create(CategoriesTable)
         SchemaUtils.create(ModuleTable)
         SchemaUtils.create(PermissionTable)
         initializeRoles()

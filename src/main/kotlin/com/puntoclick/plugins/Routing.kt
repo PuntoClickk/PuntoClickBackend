@@ -2,6 +2,7 @@ package com.puntoclick.plugins
 
 import com.puntoclick.data.model.ErrorResponse
 import com.puntoclick.features.auth.route.authRouting
+import com.puntoclick.features.category.route.categoryRouting
 import com.puntoclick.features.invitation.route.invitationRouting
 import com.puntoclick.features.permission.permissionRouting
 import com.puntoclick.features.roles.route.roleRouting
@@ -37,6 +38,7 @@ fun Application.configureRouting() {
             teamRouting()
             userRouting()
             invitationRouting()
+            categoryRouting()
             permissionRouting()
         }
     }
