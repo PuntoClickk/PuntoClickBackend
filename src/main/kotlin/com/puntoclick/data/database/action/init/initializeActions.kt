@@ -1,7 +1,7 @@
 package com.puntoclick.data.database.action.init
 
 import com.puntoclick.data.database.action.table.ActionTable
-import com.puntoclick.data.model.permission.ActionType
+import com.puntoclick.data.model.action.ActionType
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 

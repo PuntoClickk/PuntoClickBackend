@@ -4,6 +4,8 @@ import com.puntoclick.data.database.category.daofacade.CategoryDaoFacade
 import com.puntoclick.data.database.category.daofacade.CategoryDaoFacadeImp
 import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacade
 import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacadeImp
+import com.puntoclick.data.database.permission.daofacade.PermissionDaoFacade
+import com.puntoclick.data.database.permission.daofacade.PermissionDaoFacadeImp
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacadeImp
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
@@ -30,5 +32,7 @@ val daoFacadeModule = module {
     singleOf(::CategoryDaoFacadeImp) {
         bind<CategoryDaoFacade>()
     }
-
+    singleOf(::PermissionDaoFacadeImp) {
+        bind<PermissionDaoFacade>()
+    }
 }

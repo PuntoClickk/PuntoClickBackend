@@ -1,16 +1,15 @@
-package com.puntoclick.data.database.action.table
+package com.puntoclick.data.database.module.table
 
-import com.puntoclick.data.database.module.table.ModuleTable
 import org.jetbrains.exposed.sql.Table
 
 
-object ActionTable : Table("action") {
+object ModuleTable: Table("module") {
     val uuid = uuid("id").autoGenerate().uniqueIndex()
-    val name = varchar("name", 7)
+    val name = varchar("name", 11)
     @Suppress("unused")
     val createAt = long("createAt").default(System.currentTimeMillis())
     @Suppress("unused")
     val updateAt = long("updateAt").default(System.currentTimeMillis())
 
-    override val primaryKey: PrimaryKey = PrimaryKey(ModuleTable.uuid)
+    override val primaryKey: PrimaryKey = PrimaryKey(uuid)
 }

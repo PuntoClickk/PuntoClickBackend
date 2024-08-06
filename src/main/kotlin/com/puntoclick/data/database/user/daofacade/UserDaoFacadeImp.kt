@@ -9,9 +9,7 @@ import com.puntoclick.data.database.user.table.UserTable
 import com.puntoclick.data.model.role.RoleResponse
 import com.puntoclick.data.model.team.TeamResponse
 import com.puntoclick.data.model.auth.CreateUserData
-import com.puntoclick.data.model.user.BaseInfoUser
-import com.puntoclick.data.model.user.UserLogin
-import com.puntoclick.data.model.user.UserResponse
+import com.puntoclick.data.model.user.*
 import com.puntoclick.features.utils.escapeSingleQuotes
 import com.puntoclick.security.hashPassword
 import org.jetbrains.exposed.sql.*
@@ -54,6 +52,14 @@ class UserDaoFacadeImp : UserDaoFacade {
             .mapNotNull(::resultRowToUser)
             .singleOrNull()
 
+    }
+
+
+    override suspend fun getUserType(userId: UUID): UserType? = dbQuery {
+        UserTable
+            .select { UserTable.uuid eq userId }
+            .mapNotNull(::resultRowToUserType)
+            .singleOrNull()
     }
 
     override suspend fun assignUserToTeam(userId: UUID, teamId: UUID): Boolean = dbQuery {
@@ -127,5 +133,9 @@ class UserDaoFacadeImp : UserDaoFacade {
         phoneNumber = row[UserTable.phoneNumber],
         birthday = row[UserTable.birthday],
     )
+
+    private fun resultRowToUserType(row: ResultRow): UserType? =
+        UserType.entries.firstOrNull { row[UserTable.type] == it.type }
+
 
 }
