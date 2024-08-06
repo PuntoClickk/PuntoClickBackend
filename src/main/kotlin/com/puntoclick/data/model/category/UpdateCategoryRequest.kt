@@ -1,14 +1,12 @@
-package com.puntoclick.data.database.entity
+package com.puntoclick.data.model.category
 
 import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.UUID
 
 @Serializable
-data class Role(
+data class UpdateCategoryRequest(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
-    val name: String,
-    val createdAt: Long,
-    val lastUpdate: Long
+    val name: String
 )
