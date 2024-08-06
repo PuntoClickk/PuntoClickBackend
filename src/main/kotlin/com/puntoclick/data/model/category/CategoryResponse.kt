@@ -1,14 +1,12 @@
-package com.puntoclick.data.database.entity
+package com.puntoclick.data.model.category
 
 import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.UUID
 
 @Serializable
-data class Team(
+data class CategoryResponse(
     @Serializable(with = UUIDSerializer::class)
     val id: UUID,
     val name: String,
-    val createdAt: Long,
-    val lastUpdate: Long
 )

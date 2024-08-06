@@ -1,5 +1,7 @@
 package com.puntoclick.di
 
+import com.puntoclick.data.database.category.daofacade.CategoryDaoFacade
+import com.puntoclick.data.database.category.daofacade.CategoryDaoFacadeImp
 import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacade
 import com.puntoclick.data.database.invitation.daofacade.InvitationDaoFacadeImp
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
@@ -24,6 +26,9 @@ val daoFacadeModule = module {
     }
     singleOf(::InvitationDaoFacadeImp) {
         bind<InvitationDaoFacade>()
+    }
+    singleOf(::CategoryDaoFacadeImp) {
+        bind<CategoryDaoFacade>()
     }
 
 }
