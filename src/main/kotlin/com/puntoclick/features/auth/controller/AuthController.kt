@@ -12,6 +12,7 @@ import com.puntoclick.data.model.invitation.AcceptInvitationRequest
 import com.puntoclick.data.model.invitation.AcceptInvitationResponse
 import com.puntoclick.data.model.role.RoleType
 import com.puntoclick.data.model.user.UserLogin
+import com.puntoclick.data.model.user.UserType
 import com.puntoclick.data.utils.ROLE_IDENTIFIER
 import com.puntoclick.data.utils.TEAM_IDENTIFIER
 import com.puntoclick.data.utils.USER_IDENTIFIER
@@ -32,10 +33,10 @@ class AuthController(
 ) {
     suspend fun createAdmin(createUserRequest: CreateAdminRequest, locale: Locale): AppResult<Boolean> {
         if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists(locale)
-        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.value)?.id ?: return getErrorUserNotCreated(locale)
+        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.type)?.id ?: return getErrorUserNotCreated(locale)
         val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return getErrorUserNotCreated(locale)
 
-        val user = createUserRequest.mapCreateUserRequestToUser(role = roleUUID, team = teamUUID, 1)
+        val user = createUserRequest.mapCreateUserRequestToUser(role = roleUUID, team = teamUUID, UserType.ADMIN.type)
 
         return if (userDaoFacade.addUser(user)) AppResult.Success(
             data = true, appStatus = HttpStatusCode.OK
@@ -63,9 +64,9 @@ class AuthController(
         val invitation = invitationDaoFacade.getInvitationByCode(createUserRequest.invitationCode)
             ?: return locale.createCodeExpiredError()
 
-        val role = roleDaoFacade.role(RoleType.WORKER.value) ?: return getErrorUserNotCreated(locale)
+        val role = roleDaoFacade.role(RoleType.VIEWER.type) ?: return getErrorUserNotCreated(locale)
         val user =
-            createUserRequest.mapCreateUserRequestToUser(role = role.id, team = invitation.teamId, /*Base user*/ 2)
+            createUserRequest.mapCreateUserRequestToUser(role = role.id, team = invitation.teamId, UserType.USER.type)
 
         return if (userDaoFacade.addUser(user)) {
             invitationDaoFacade.deleteInvitationByCode(createUserRequest.invitationCode)
