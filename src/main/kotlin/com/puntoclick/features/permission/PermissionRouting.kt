@@ -3,6 +3,7 @@ package com.puntoclick.features.permission
 import com.puntoclick.data.model.permission.AddPermissionRequest
 import com.puntoclick.data.model.permission.DeletePermissionRequest
 import com.puntoclick.data.model.permission.UpdatePermissionRequest
+import com.puntoclick.data.utils.ROLE_IDENTIFIER
 import com.puntoclick.data.utils.TEAM_IDENTIFIER
 import com.puntoclick.data.utils.USER_IDENTIFIER
 import com.puntoclick.features.permission.controller.PermissionController
@@ -43,6 +44,13 @@ fun Route.permissionRouting() {
         post("/permissions") {
             val teamId = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val result = permissionController.getPermissionByTeam(teamId)
+            call.respond(message = result.handleResult(), status = result.status)
+        }
+
+        post("/permissions/role") {
+            val teamId = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
+            val roleId = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
+            val result = permissionController.getPermissionsByRoleAndTeam(roleId, teamId)
             call.respond(message = result.handleResult(), status = result.status)
         }
 

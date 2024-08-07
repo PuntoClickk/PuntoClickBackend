@@ -24,9 +24,9 @@ class PermissionController(
         val userType = userDaoFacade.getUserType(userId) ?: return locale.createError()
         val result = permissionDaoFacade.addPermission(
             userType = userType,
-            roleId = addPermissionRequest.roleId,
-            actionId = addPermissionRequest.actionId,
-            moduleId = addPermissionRequest.moduleId,
+            roleType = addPermissionRequest.roleType,
+            actionType = addPermissionRequest.actionType,
+            moduleType = addPermissionRequest.moduleType,
             teamId = teamId
         )
         return when (result) {
@@ -47,9 +47,11 @@ class PermissionController(
         updatePermissionRequest: UpdatePermissionRequest
     ): AppResult<String> {
         val userType = userDaoFacade.getUserType(userId) ?: return locale.createError()
-        val (permissionId, roleId, actionId, moduleId) = updatePermissionRequest
+        val (permissionId, roleType, actionName, moduleType) = updatePermissionRequest
 
-        val result = permissionDaoFacade.updatePermission(userType, permissionId, roleId, actionId, moduleId, teamId)
+
+        val result =
+            permissionDaoFacade.updatePermission(userType, permissionId, roleType, actionName, moduleType, teamId)
 
         return when (result) {
             UpdatePermissionResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.PERMISSION_UPDATE_ALREADY_EXISTS_ERROR_KEY)
@@ -63,14 +65,14 @@ class PermissionController(
     }
 
     suspend fun deletePermission(
-        userId: UUID,locale: Locale, deletePermissionRequest: DeletePermissionRequest
+        userId: UUID, locale: Locale, deletePermissionRequest: DeletePermissionRequest
     ): AppResult<String> {
         val userType = userDaoFacade.getUserType(userId) ?: return locale.createError()
         val (permissionId) = deletePermissionRequest
 
         val result = permissionDaoFacade.deletePermission(permissionId, userType)
 
-        return when(result){
+        return when (result) {
             DeletePermissionResult.DeleteFailed -> locale.createError(descriptionKey = StringResourcesKey.PERMISSION_DELETE_FAILED_ERROR_KEY)
             DeletePermissionResult.PermissionNotFound -> locale.createError(descriptionKey = StringResourcesKey.PERMISSION_DELETE_NOT_FOUND_ERROR_KEY)
             DeletePermissionResult.UserNotAdmin -> locale.createError(descriptionKey = StringResourcesKey.PERMISSION_DELETE_USER_NOT_ADMIN_ERROR_KEY)
@@ -81,8 +83,13 @@ class PermissionController(
         }
     }
 
-    suspend fun getPermissionByTeam(teamId: UUID): AppResult<List<PermissionInfo>>{
+    suspend fun getPermissionByTeam(teamId: UUID): AppResult<List<PermissionInfo>> {
         val permission = permissionDaoFacade.getPermissionsByTeam(teamId)
+        return AppResult.Success(data = permission, appStatus = HttpStatusCode.OK)
+    }
+
+    suspend fun getPermissionsByRoleAndTeam(roleId: UUID, teamId: UUID): AppResult<List<PermissionInfo>> {
+        val permission = permissionDaoFacade.getPermissionsByRole(roleId, teamId)
         return AppResult.Success(data = permission, appStatus = HttpStatusCode.OK)
     }
 
