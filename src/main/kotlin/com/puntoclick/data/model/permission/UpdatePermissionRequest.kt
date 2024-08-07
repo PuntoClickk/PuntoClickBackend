@@ -1,5 +1,8 @@
 package com.puntoclick.data.model.permission
 
+import com.puntoclick.data.model.action.ActionType
+import com.puntoclick.data.model.module.ModuleType
+import com.puntoclick.data.model.role.RoleType
 import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.*
@@ -8,10 +11,7 @@ import java.util.*
 data class UpdatePermissionRequest(
     @Serializable(with = UUIDSerializer::class)
     val permissionId: UUID,
-    @Serializable(with = UUIDSerializer::class)
-    val roleId: UUID,
-    @Serializable(with = UUIDSerializer::class)
-    val actionId: UUID,
-    @Serializable(with = UUIDSerializer::class)
-    val moduleId: UUID
+    val roleType: RoleType,
+    val actionType: ActionType,
+    val moduleType: ModuleType
 )

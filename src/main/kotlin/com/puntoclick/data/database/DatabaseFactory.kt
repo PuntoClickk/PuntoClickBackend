@@ -3,6 +3,9 @@ package com.puntoclick.data.database
 import com.puntoclick.data.database.action.init.initializeActions
 import com.puntoclick.data.database.action.table.ActionTable
 import com.puntoclick.data.database.category.table.CategoriesTable
+import com.puntoclick.data.database.init.initializeActionsIds
+import com.puntoclick.data.database.init.initializeModuleIds
+import com.puntoclick.data.database.init.initializeRolesIds
 import com.puntoclick.data.database.invitation.table.InvitationTable
 import com.puntoclick.data.database.module.init.initializeModules
 import com.puntoclick.data.database.module.table.ModuleTable
@@ -42,6 +45,9 @@ fun Application.configureDatabase() {
         initializeRoles()
         initializeActions()
         initializeModules()
+        initializeModuleIds()
+        initializeRolesIds()
+        initializeActionsIds()
         //addIsActiveColumToRole()
         //addNewColumnsToUser()
         addLogger(StdOutSqlLogger)
