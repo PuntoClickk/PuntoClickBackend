@@ -8,9 +8,12 @@ import com.puntoclick.data.model.auth.CreateAdminRequest
 import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.data.model.auth.LoginRequest
 import com.puntoclick.data.model.auth.ValidateEmailRequest
+import com.puntoclick.data.model.category.CreateCategoryRequest
+import com.puntoclick.data.model.category.UpdateCategoryRequest
 import com.puntoclick.data.model.invitation.AcceptInvitationRequest
 import com.puntoclick.features.auth.validation.validateEmailRequest
 import com.puntoclick.features.auth.validation.validateLoginRequest
+import com.puntoclick.features.category.validation.validateCreateCategoryRequest
 import com.puntoclick.features.invitation.validation.validateAcceptInvitationRequest
 import com.puntoclick.features.user.validation.validateCreateUserRequest
 import io.ktor.server.application.*
@@ -46,6 +49,14 @@ fun Application.configureRequestValidation() {
 
         validate<AcceptInvitationRequest> { acceptInvitationRequest ->
             acceptInvitationRequest.validateAcceptInvitationRequest()
+        }
+
+        validate<CreateCategoryRequest> { createCategoryRequest ->
+            createCategoryRequest.validateCreateCategoryRequest()
+        }
+
+        validate<UpdateCategoryRequest> { updateCategoryRequest ->
+            updateCategoryRequest.validateCreateCategoryRequest()
         }
     }
 }

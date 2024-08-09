@@ -30,5 +30,14 @@ enum class StringResourcesKey(val value: String) {
     INVALID_PASSWORD_ERROR_KEY("invalid_password_error"),
     INVALID_NAME_ERROR_KEY("invalid_name_error"),
     INVALID_LAST_NAME_ERROR_KEY("invalid_last_name_error"),
-    INVALID_PHONE_ERROR_KEY("invalid_phone_error"),;
+    INVALID_PHONE_ERROR_KEY("invalid_phone_error"),
+    CATEGORY_ADD_SUCCESS_MESSAGE_KEY("category_add_success_message"),
+    CATEGORY_ADD_FAILED_ERROR_KEY("category_add_failed_error"),
+    CATEGORY_ADD_USER_CANNOT_ADD_ERROR_KEY("category_add_user_cannot_add_error"),
+    CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY("category_add_already_exists_error"),
+    VALID_CATEGORY_NAME_ERROR_KEY("valid_category_name_error"),
+    CATEGORY_NOT_FOUND_ERROR_KEY("category_not_found_error"),
+    CATEGORY_DELETED_SUCCESS_MESSAGE_KEY("category_deleted_success_message"),
+    FEATURE_ACCESS_DENIED_ERROR_KEY("feature_access_denied_error"),
+    CATEGORY_UPDATED_SUCCESS_MESSAGE_KEY("category_updated_success_message"),
 }

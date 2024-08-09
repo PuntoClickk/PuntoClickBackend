@@ -3,6 +3,7 @@ package com.puntoclick.data.database.category.daofacade
 import com.puntoclick.data.database.category.table.CategoriesTable
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.model.category.CategoryResponse
+import com.puntoclick.data.model.category.CategoryResult
 import com.puntoclick.data.model.category.CreateCategoryRequest
 import com.puntoclick.data.model.category.UpdateCategoryRequest
 import com.puntoclick.features.utils.escapeSingleQuotes
@@ -11,33 +12,51 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
 
 class CategoryDaoFacadeImp: CategoryDaoFacade {
-    override suspend fun allCategories(): List<CategoryResponse> = dbQuery {
-        CategoriesTable.selectAll().map(::resultRowToCategory)
+    override suspend fun allCategories(teamId: UUID): List<CategoryResponse> = dbQuery {
+        CategoriesTable.select { CategoriesTable.team eq teamId }.map(::resultRowToCategory)
     }
 
-    override suspend fun getCategory(uuid: UUID): CategoryResponse? = dbQuery  {
+    override suspend fun getCategory(uuid: UUID, teamId: UUID): CategoryResponse? = dbQuery  {
         CategoriesTable.select {
-            CategoriesTable.uuid eq uuid
+            (CategoriesTable.uuid eq uuid) and (CategoriesTable.team eq teamId)
         }.map(::resultRowToCategory).singleOrNull()
     }
 
-    override suspend fun addCategory(createCategoryRequest: CreateCategoryRequest, id: UUID): Boolean = dbQuery  {
-        CategoriesTable.insert {
+    override suspend fun addCategory(
+        createCategoryRequest: CreateCategoryRequest,
+        id: UUID,
+        teamId: UUID
+    ): CategoryResult = dbQuery {
+
+        val insertResult = CategoriesTable.insert {
             it[name] = createCategoryRequest.name.escapeSingleQuotes()
             it[user] = id
-        }.resultedValues?.singleOrNull() != null
+            it[team] = teamId
+        }
+
+        if (insertResult.insertedCount > 0 ) CategoryResult.Success
+        else CategoryResult.InsertFailed
     }
 
-    override suspend fun updateUpdateCategory(updateCategoryRequest: UpdateCategoryRequest): Boolean = dbQuery  {
-        CategoriesTable.update({
-            CategoriesTable.uuid eq updateCategoryRequest.id
+    override suspend fun updateUpdateCategory(updateCategoryRequest: UpdateCategoryRequest, teamId: UUID): CategoryResult = dbQuery  {
+
+        val updateResult = CategoriesTable.update({
+            (CategoriesTable.uuid eq updateCategoryRequest.id) and (CategoriesTable.team eq teamId)
         }) {
             it[name] = updateCategoryRequest.name.escapeSingleQuotes()
-        } > 0
+        }
+
+        if (updateResult > 0) CategoryResult.Success
+        else CategoryResult.InsertFailed
     }
 
-    override suspend fun deleteCategory(uuid: UUID): Boolean = dbQuery  {
-        CategoriesTable.deleteWhere { CategoriesTable.uuid eq uuid } > 0
+    override suspend fun deleteCategory(uuid: UUID): CategoryResult = dbQuery  {
+        val deleteResult = CategoriesTable.deleteWhere {
+            CategoriesTable.uuid eq uuid
+        }
+
+        if (deleteResult > 0) CategoryResult.Success
+        else CategoryResult.DeleteFailed
     }
 
     private fun resultRowToCategory(row: ResultRow) = CategoryResponse(
