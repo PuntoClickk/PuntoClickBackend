@@ -1,6 +1,5 @@
 package com.puntoclick.features.category.route
 
-import com.puntoclick.data.model.GlobalLocale
 import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.data.model.category.CreateCategoryRequest
 import com.puntoclick.data.model.category.UpdateCategoryRequest
@@ -30,25 +29,22 @@ fun Route.categoryRouting() {
             val user = call.getIdentifier(appEncryption, USER_IDENTIFIER)
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val locale = GlobalLocale.locale
-            val result = categoryController.addCategory(locale, request, user, role, team,)
+            val result = categoryController.addCategory(request, user, role, team,)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
         post("/all") {
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val locale = GlobalLocale.locale
-            val result = categoryController.allCategories(locale, role, team)
+            val result = categoryController.allCategories(role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
         post("/") {
             val request = call.receive<UUIDAppRequest>()
-            val locale = GlobalLocale.locale
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val result = categoryController.getCategory(locale, request.id, role, team)
+            val result = categoryController.getCategory(request.id, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -56,8 +52,7 @@ fun Route.categoryRouting() {
             val request : UpdateCategoryRequest = call.receive()
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val locale = GlobalLocale.locale
-            val result = categoryController.updateCategory(locale, request, role, team)
+            val result = categoryController.updateCategory(request, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -65,8 +60,7 @@ fun Route.categoryRouting() {
             val request = call.receive<UUIDAppRequest>()
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val locale = GlobalLocale.locale
-            val result = categoryController.deleteCategory(locale, request.id, role, team)
+            val result = categoryController.deleteCategory(request.id, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
     }
