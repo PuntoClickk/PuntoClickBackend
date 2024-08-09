@@ -6,6 +6,7 @@ import com.puntoclick.features.category.route.categoryRouting
 import com.puntoclick.features.invitation.route.invitationRouting
 import com.puntoclick.features.permission.permissionRouting
 import com.puntoclick.features.roles.route.roleRouting
+import com.puntoclick.features.store.routing.storeRouting
 import com.puntoclick.features.team.route.teamRouting
 import com.puntoclick.features.user.route.userRouting
 import io.ktor.http.*
@@ -40,6 +41,7 @@ fun Application.configureRouting() {
             invitationRouting()
             categoryRouting()
             permissionRouting()
+            storeRouting()
         }
     }
 }

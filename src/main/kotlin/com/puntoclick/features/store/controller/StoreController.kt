@@ -10,7 +10,6 @@ import com.puntoclick.data.model.store.CreateStoreResult
 import com.puntoclick.data.model.store.toStoreData
 import com.puntoclick.features.utils.StringResourcesKey
 import com.puntoclick.features.utils.createError
-import java.util.Locale
 import java.util.UUID
 
 class StoreController(
@@ -22,7 +21,7 @@ class StoreController(
 
     suspend fun createStore(
         createStoreRequest: CreateStoreRequest,
-        locale: Locale,
+        userId: UUID,
         roleId: UUID,
         teamId: UUID
     ): AppResult<String> {
@@ -33,14 +32,14 @@ class StoreController(
             teamId = teamId
         )
 
-        if (userAllowed) return locale.createError()
+        if (userAllowed) return createError()
 
-
-        val result = storeDaoFacade.createStore(createStoreRequest.toStoreData())
+        val result = if (storeDaoFacade.storeExists(createStoreRequest.name, teamId)) CreateStoreResult.AlreadyExists
+        else storeDaoFacade.createStore(createStoreRequest.toStoreData(teamId, userId))
 
         return when (result) {
-            CreateStoreResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.PERMISSION_ALREADY_EXISTS_ERROR_KEY)
-            CreateStoreResult.InsertFailed -> locale.createError()
+            CreateStoreResult.AlreadyExists -> createError(descriptionKey = StringResourcesKey.PERMISSION_ALREADY_EXISTS_ERROR_KEY)
+            CreateStoreResult.InsertFailed -> createError()
             CreateStoreResult.Success -> AppResult.Success(data = "")
         }
     }

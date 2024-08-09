@@ -1,6 +1,5 @@
 package com.puntoclick.data.model.store
 
-import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -9,19 +8,15 @@ import java.util.*
 data class CreateStoreRequest(
     val name: String,
     val location: String,
-    @Serializable(with = UUIDSerializer::class)
-    val teamId: UUID,
-    @Serializable(with = UUIDSerializer::class)
-    val userId: UUID
 )
 
 
-fun CreateStoreRequest.toStoreData(): StoreData {
+fun CreateStoreRequest.toStoreData(teamId: UUID, userId: UUID): StoreData {
     return StoreData(
-        name = this.name,
-        location = this.location,
-        teamId = this.teamId,
-        userId = this.userId
+        name = name,
+        location = location,
+        teamId = teamId,
+        userId = userId
     )
 }
 
