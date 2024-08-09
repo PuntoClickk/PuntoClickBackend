@@ -92,8 +92,6 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
             it[this.action] = actionId
             it[this.module] = moduleId
             it[this.team] = teamId
-            it[createAt] = System.currentTimeMillis()
-            it[updateAt] = System.currentTimeMillis()
         }
 
         if (insertResult.insertedCount > 0) {
