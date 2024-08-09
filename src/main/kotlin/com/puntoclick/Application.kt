@@ -2,6 +2,7 @@ package com.puntoclick
 
 
 import com.puntoclick.data.database.configureDatabase
+import com.puntoclick.features.utils.configureGlobalLocale
 import com.puntoclick.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
@@ -16,6 +17,7 @@ fun Application.module() {
     configureMonitoring()
     configureSerialization()
     configureSecurity()
+    configureGlobalLocale()
     configureRequestValidation()
     configureRouting()
 }

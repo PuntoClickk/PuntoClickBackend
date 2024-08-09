@@ -25,5 +25,10 @@ enum class StringResourcesKey(val value: String) {
     PERMISSION_DELETE_SUCCESS_MESSAGE_KEY("permission_delete_success_message"),
     PERMISSION_DELETE_NOT_FOUND_ERROR_KEY("permission_delete_not_found_error"),
     PERMISSION_DELETE_USER_NOT_ADMIN_ERROR_KEY("permission_delete_user_not_admin_error"),
-    PERMISSION_DELETE_FAILED_ERROR_KEY("permission_delete_failed_error");
+    PERMISSION_DELETE_FAILED_ERROR_KEY("permission_delete_failed_error"),
+    INVALID_EMAIL_ERROR_KEY("invalid_email_error"),
+    INVALID_PASSWORD_ERROR_KEY("invalid_password_error"),
+    INVALID_NAME_ERROR_KEY("invalid_name_error"),
+    INVALID_LAST_NAME_ERROR_KEY("invalid_last_name_error"),
+    INVALID_PHONE_ERROR_KEY("invalid_phone_error"),;
 }
