@@ -24,13 +24,13 @@ class CategoryDaoFacadeImp: CategoryDaoFacade {
 
     override suspend fun addCategory(
         createCategoryRequest: CreateCategoryRequest,
-        id: UUID,
+        userId: UUID,
         teamId: UUID
     ): CategoryResult = dbQuery {
 
         val insertResult = CategoriesTable.insert {
             it[name] = createCategoryRequest.name.escapeSingleQuotes()
-            it[user] = id
+            it[user] = userId
             it[team] = teamId
         }
 
@@ -44,15 +44,16 @@ class CategoryDaoFacadeImp: CategoryDaoFacade {
             (CategoriesTable.uuid eq updateCategoryRequest.id) and (CategoriesTable.team eq teamId)
         }) {
             it[name] = updateCategoryRequest.name.escapeSingleQuotes()
+            it[updatedAt] = System.currentTimeMillis()
         }
 
         if (updateResult > 0) CategoryResult.Success
         else CategoryResult.InsertFailed
     }
 
-    override suspend fun deleteCategory(uuid: UUID): CategoryResult = dbQuery  {
+    override suspend fun deleteCategory(uuid: UUID, teamId: UUID): CategoryResult = dbQuery  {
         val deleteResult = CategoriesTable.deleteWhere {
-            CategoriesTable.uuid eq uuid
+            (CategoriesTable.uuid eq uuid) and (CategoriesTable.team eq teamId)
         }
 
         if (deleteResult > 0) CategoryResult.Success

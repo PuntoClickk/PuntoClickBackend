@@ -31,7 +31,7 @@ fun Route.categoryRouting() {
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
             val locale = GlobalLocale.locale
-            val result = categoryController.addCategory(request, user, locale, team, role)
+            val result = categoryController.addCategory(locale, request, user, role, team,)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -39,7 +39,7 @@ fun Route.categoryRouting() {
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
             val locale = GlobalLocale.locale
-            val result = categoryController.allCategories(team, locale, role)
+            val result = categoryController.allCategories(locale, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -48,7 +48,7 @@ fun Route.categoryRouting() {
             val locale = GlobalLocale.locale
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val result = categoryController.getCategory(request.id, locale, team, role)
+            val result = categoryController.getCategory(locale, request.id, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -57,7 +57,7 @@ fun Route.categoryRouting() {
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
             val locale = GlobalLocale.locale
-            val result = categoryController.updateCategory(request, locale, team, role)
+            val result = categoryController.updateCategory(locale, request, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -66,7 +66,7 @@ fun Route.categoryRouting() {
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
             val locale = GlobalLocale.locale
-            val result = categoryController.deleteCategory(request.id, locale, team, role)
+            val result = categoryController.deleteCategory(locale, request.id, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
     }

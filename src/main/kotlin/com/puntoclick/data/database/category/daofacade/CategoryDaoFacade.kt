@@ -9,7 +9,7 @@ import java.util.UUID
 interface CategoryDaoFacade {
     suspend fun allCategories(teamId: UUID): List<CategoryResponse>
     suspend fun getCategory(uuid: UUID, teamId: UUID): CategoryResponse?
-    suspend fun addCategory(createCategoryRequest: CreateCategoryRequest, id: UUID, teamId: UUID): CategoryResult
+    suspend fun addCategory(createCategoryRequest: CreateCategoryRequest, userId: UUID, teamId: UUID): CategoryResult
     suspend fun updateUpdateCategory(updateCategoryRequest: UpdateCategoryRequest, teamId: UUID): CategoryResult
-    suspend fun deleteCategory(uuid: UUID): CategoryResult
+    suspend fun deleteCategory(uuid: UUID, teamId: UUID): CategoryResult
 }
