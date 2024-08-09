@@ -23,25 +23,25 @@ class CategoryController(
 
     private val module = ModuleType.PRODUCTS
 
-    suspend fun allCategories(roleID: UUID, teamId: UUID): AppResult<List<CategoryResponse>> {
+    suspend fun allCategories(locale: Locale, roleID: UUID, teamId: UUID): AppResult<List<CategoryResponse>> {
         val permissionValidation = permissionDaoFacade.hasPermission(roleID, ActionType.READ, module, teamId)
         return if (permissionValidation) {
             val categories = categoryFacade.allCategories(teamId)
             return AppResult.Success(data = categories, appStatus = HttpStatusCode.OK)
-        } else createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        } else locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
     }
 
-    suspend fun getCategory(categoryId: UUID, roleID: UUID, teamId: UUID): AppResult<CategoryResponse> {
+    suspend fun getCategory(locale: Locale, categoryId: UUID, roleID: UUID, teamId: UUID): AppResult<CategoryResponse> {
         val permissionValidation = permissionDaoFacade.hasPermission(roleID, ActionType.READ, module, teamId)
         return if (permissionValidation) {
             val category = categoryFacade.getCategory(categoryId, teamId)
             return category?.let {
                 AppResult.Success(data = it, appStatus = HttpStatusCode.OK)
-            } ?: createGenericError()
-        } else createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+            } ?: locale.createGenericError()
+        } else locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
     }
 
-    suspend fun addCategory(createCategoryRequest: CreateCategoryRequest, userId: UUID, roleID: UUID, teamId: UUID): AppResult<String> {
+    suspend fun addCategory(locale: Locale, createCategoryRequest: CreateCategoryRequest, userId: UUID, roleID: UUID, teamId: UUID): AppResult<String> {
         val permissionValidation = permissionDaoFacade.hasPermission(roleID, ActionType.WRITE, module, teamId)
         return if (permissionValidation) {
 
@@ -49,18 +49,18 @@ class CategoryController(
             else categoryFacade.addCategory(createCategoryRequest, userId, teamId)
 
             return when(result) {
-                CategoryResult.AlreadyExists -> createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY)
-                CategoryResult.InsertFailed -> createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_FAILED_ERROR_KEY)
-                CategoryResult.DeleteFailed -> createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
+                CategoryResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY)
+                CategoryResult.InsertFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_FAILED_ERROR_KEY)
+                CategoryResult.DeleteFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
                 CategoryResult.Success -> AppResult.Success(
-                    data = StringResourcesKey.CATEGORY_ADD_SUCCESS_MESSAGE_KEY.getString(),
+                    data = locale.getString(StringResourcesKey.CATEGORY_ADD_SUCCESS_MESSAGE_KEY),
                     appStatus = HttpStatusCode.OK
                 )
             }
-        } else createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_USER_CANNOT_ADD_ERROR_KEY)
+        } else locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_USER_CANNOT_ADD_ERROR_KEY)
     }
 
-    suspend fun updateCategory(updateCategoryRequest: UpdateCategoryRequest, roleID: UUID, teamId: UUID): AppResult<String> {
+    suspend fun updateCategory(locale: Locale, updateCategoryRequest: UpdateCategoryRequest, roleID: UUID, teamId: UUID): AppResult<String> {
         val permissionValidation = permissionDaoFacade.hasPermission(roleID, ActionType.UPDATE, module, teamId)
         return if (permissionValidation) {
 
@@ -68,18 +68,18 @@ class CategoryController(
             else categoryFacade.updateUpdateCategory(updateCategoryRequest, teamId)
 
             return when(updateResult) {
-                CategoryResult.AlreadyExists -> createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY)
-                CategoryResult.InsertFailed -> createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_FAILED_ERROR_KEY)
-                CategoryResult.DeleteFailed -> createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
+                CategoryResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY)
+                CategoryResult.InsertFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_FAILED_ERROR_KEY)
+                CategoryResult.DeleteFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
                 CategoryResult.Success -> AppResult.Success(
-                    data = StringResourcesKey.CATEGORY_UPDATED_SUCCESS_MESSAGE_KEY.getString(),
+                    data = locale.getString(StringResourcesKey.CATEGORY_UPDATED_SUCCESS_MESSAGE_KEY),
                     appStatus = HttpStatusCode.OK
                 )
             }
-        } else createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        } else locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
     }
 
-    suspend fun deleteCategory(categoryId: UUID, roleID: UUID, teamId: UUID): AppResult<String> {
+    suspend fun deleteCategory(locale: Locale, categoryId: UUID, roleID: UUID, teamId: UUID): AppResult<String> {
         val permissionValidation = permissionDaoFacade.hasPermission(roleID, ActionType.DELETE, module, teamId)
         return if (permissionValidation) {
 
@@ -87,16 +87,16 @@ class CategoryController(
             else categoryFacade.deleteCategory(categoryId, teamId)
 
             return when(deleteResult) {
-                CategoryResult.AlreadyExists -> createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY)
-                CategoryResult.InsertFailed -> createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_FAILED_ERROR_KEY)
-                CategoryResult.DeleteFailed -> createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
+                CategoryResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_ALREADY_EXISTS_ERROR_KEY)
+                CategoryResult.InsertFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_ADD_FAILED_ERROR_KEY)
+                CategoryResult.DeleteFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
                 CategoryResult.Success -> AppResult.Success(
-                    data = StringResourcesKey.CATEGORY_DELETED_SUCCESS_MESSAGE_KEY.getString(),
+                    data = locale.getString(StringResourcesKey.CATEGORY_DELETED_SUCCESS_MESSAGE_KEY),
                     appStatus = HttpStatusCode.OK
                 )
             }
 
-        } else createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        } else locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
     }
 
     private fun isCategoryNameDuplicate(categories: List<CategoryResponse>, categoryName: String): Boolean {

@@ -8,6 +8,7 @@ import com.puntoclick.data.utils.TEAM_IDENTIFIER
 import com.puntoclick.data.utils.USER_IDENTIFIER
 import com.puntoclick.features.permission.controller.PermissionController
 import com.puntoclick.features.utils.handleResult
+import com.puntoclick.features.utils.retrieveLocale
 import com.puntoclick.plugins.getIdentifier
 import com.puntoclick.security.AppEncryption
 import io.ktor.server.application.*
@@ -27,14 +28,16 @@ fun Route.permissionRouting() {
             val request = call.receive<AddPermissionRequest>()
             val userId = call.getIdentifier(appEncryption, USER_IDENTIFIER)
             val teamId = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
-            val result = permissionController.addPermission(userId, teamId, request)
+            val locale = call.retrieveLocale()
+            val result = permissionController.addPermission(userId, teamId, locale, request)
             call.respond(message = result.handleResult(), status = result.status)
         }
         post("/update") {
             val request = call.receive<UpdatePermissionRequest>()
             val userId = call.getIdentifier(appEncryption, USER_IDENTIFIER)
             val teamId = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
-            val result = permissionController.updatePermission(userId, teamId, request)
+            val locale = call.retrieveLocale()
+            val result = permissionController.updatePermission(userId, teamId, locale, request)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -54,7 +57,8 @@ fun Route.permissionRouting() {
         post("/delete") {
             val request = call.receive<DeletePermissionRequest>()
             val userId = call.getIdentifier(appEncryption, USER_IDENTIFIER)
-            val result = permissionController.deletePermission(userId, request)
+            val locale = call.retrieveLocale()
+            val result = permissionController.deletePermission(userId, locale, request)
             call.respond(message = result.handleResult(), status = result.status)
         }
 

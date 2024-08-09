@@ -18,21 +18,21 @@ class UserController(
         return AppResult.Success(data = users, appStatus = HttpStatusCode.OK)
     }
 
-    suspend fun getUser(userId: UUID): AppResult<UserResponse> {
+    suspend fun getUser(userId: UUID, locale: Locale): AppResult<UserResponse> {
         val user = userDaoFacade.user(userId = userId)
         return user?.let {
             AppResult.Success(data = it, appStatus = HttpStatusCode.OK)
-        } ?: createError(descriptionKey = StringResourcesKey.NO_USER_FOUND_ERROR_KEY)
+        } ?: locale.createError(descriptionKey = StringResourcesKey.NO_USER_FOUND_ERROR_KEY)
     }
 
-    suspend fun updateUser(user: User): AppResult<Boolean> {
+    suspend fun updateUser(user: User, locale: Locale): AppResult<Boolean> {
         return if (userDaoFacade.updateUser(user)) AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
-        else createError(descriptionKey = StringResourcesKey.USER_NOT_UPDATED_ERROR_KEY)
+        else locale.createError(descriptionKey = StringResourcesKey.USER_NOT_UPDATED_ERROR_KEY)
     }
 
-    suspend fun deleteUser(userId: UUID): AppResult<Boolean> {
+    suspend fun deleteUser(userId: UUID, locale: Locale): AppResult<Boolean> {
         return if (userDaoFacade.deleteUser(userId)) AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
-        else createError(descriptionKey = StringResourcesKey.USER_NOT_DELETED_ERROR_KEY)
+        else locale.createError(descriptionKey = StringResourcesKey.USER_NOT_DELETED_ERROR_KEY)
     }
 
 }
