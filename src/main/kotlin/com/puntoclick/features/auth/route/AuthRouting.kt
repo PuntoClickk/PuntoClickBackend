@@ -1,6 +1,5 @@
 package com.puntoclick.features.auth.route
 
-import com.puntoclick.data.model.GlobalLocale
 import com.puntoclick.data.model.auth.CreateAdminRequest
 import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.data.model.auth.LoginRequest
@@ -22,8 +21,7 @@ fun Route.authRouting(jwtParams: JWTParams) {
     route("/auth") {
         post("/create/admin") {
             val request = call.receive<CreateAdminRequest>()
-            val locale = GlobalLocale.locale
-            val result = authController.createAdmin(request, locale)
+            val result = authController.createAdmin(request)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
@@ -35,22 +33,19 @@ fun Route.authRouting(jwtParams: JWTParams) {
 
         post("/create/user") {
             val request = call.receive<CreateUserRequest>()
-            val locale = GlobalLocale.locale
-            val result = authController.createUser(request, locale)
+            val result = authController.createUser(request)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
         post("/login") {
             val loginRequest = call.receive<LoginRequest>()
-            val locale = GlobalLocale.locale
-            val result = authController.login(loginRequest, jwtParams, locale)
+            val result = authController.login(loginRequest, jwtParams)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
         post("/accept") {
-            val locale = GlobalLocale.locale
             val request = call.receive<AcceptInvitationRequest>()
-            val result = authController.authenticateToAcceptInvitation(request, locale)
+            val result = authController.authenticateToAcceptInvitation(request)
             call.respond(message = result.handleResult(), status = result.status)
         }
 
