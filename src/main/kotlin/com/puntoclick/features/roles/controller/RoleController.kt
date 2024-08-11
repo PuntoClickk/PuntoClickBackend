@@ -2,6 +2,7 @@ package com.puntoclick.features.roles.controller
 
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.model.AppResult
+import com.puntoclick.data.utils.*
 import com.puntoclick.data.model.role.CreateRoleRequest
 import com.puntoclick.data.model.role.RoleResponse
 import com.puntoclick.data.model.role.UpdateRoleRequest
@@ -25,7 +26,7 @@ class RoleController(
             AppResult.Success(
                 data = it, appStatus = HttpStatusCode.OK
             )
-        } ?: createGenericError()
+        } ?: createError(title = ERROR_TITLE, GET_REGISTER, HttpStatusCode.NotFound)
     }
 
     private suspend fun searchRole(id: UUID): RoleResponse? {
@@ -47,18 +48,24 @@ class RoleController(
                 data = true,
                 appStatus = HttpStatusCode.OK
             )
-        } else createGenericError()
+        } else {
+            createError(
+                title = ERROR_TITLE,
+                description = DELETE_ERROR_MESSAGE,
+                status = HttpStatusCode.NotFound
+            )
+        }
     }
 
     private suspend fun createRole(createRoleRequest: CreateRoleRequest): AppResult<Boolean> =
         if (facade.addRole(createRoleRequest)) {
             AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
-        } else createGenericError()
+        } else createError(title = ERROR_TITLE, CREATE_BODY, HttpStatusCode.BadRequest)
 
 
     private suspend fun updateRoleName(updateRoleRequest: UpdateRoleRequest): AppResult<Boolean> =
         if (facade.updateRole(updateRoleRequest)) {
             AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
-        } else createGenericError()
+        } else createError(title = ERROR_TITLE, UPDATE_BODY, HttpStatusCode.BadRequest)
 
 }
