@@ -10,6 +10,7 @@ interface CategoryDaoFacade {
     suspend fun allCategories(teamId: UUID): List<CategoryResponse>
     suspend fun getCategory(uuid: UUID, teamId: UUID): CategoryResponse?
     suspend fun addCategory(createCategoryRequest: CreateCategoryRequest, userId: UUID, teamId: UUID): CategoryResult
-    suspend fun updateUpdateCategory(updateCategoryRequest: UpdateCategoryRequest, teamId: UUID): CategoryResult
+    suspend fun updateCategory(updateCategoryRequest: UpdateCategoryRequest, teamId: UUID): CategoryResult
+    suspend fun categoryExists(name: String, teamId: UUID): Boolean
     suspend fun deleteCategory(uuid: UUID, teamId: UUID): CategoryResult
 }
