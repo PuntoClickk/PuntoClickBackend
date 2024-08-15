@@ -6,6 +6,7 @@ import com.puntoclick.features.category.route.categoryRouting
 import com.puntoclick.features.invitation.route.invitationRouting
 import com.puntoclick.features.permission.permissionRouting
 import com.puntoclick.features.roles.route.roleRouting
+import com.puntoclick.features.supplier.route.supplierRouting
 import com.puntoclick.features.store.routing.storeRouting
 import com.puntoclick.features.team.route.teamRouting
 import com.puntoclick.features.user.route.userRouting
@@ -31,7 +32,6 @@ fun Application.configureRouting() {
         exception<RequestValidationException> { call, cause ->
             call.respond(message = ErrorResponse("Error",cause.reasons.getOrNull(0) ?: "Error App"), status = HttpStatusCode.BadRequest)
         }
-
     }
     routing {
         authRouting(jwtParams)
@@ -42,6 +42,7 @@ fun Application.configureRouting() {
             invitationRouting()
             categoryRouting()
             permissionRouting()
+            supplierRouting()
             storeRouting()
         }
     }

@@ -5,6 +5,7 @@ import com.puntoclick.features.category.controller.CategoryController
 import com.puntoclick.features.invitation.controller.InvitationController
 import com.puntoclick.features.permission.controller.PermissionController
 import com.puntoclick.features.roles.controller.RoleController
+import com.puntoclick.features.supplier.controller.SupplierController
 import com.puntoclick.features.store.controller.StoreController
 import com.puntoclick.features.team.controller.TeamController
 import com.puntoclick.features.user.controller.UserController
@@ -19,6 +20,7 @@ val controllerModule = module {
     singleOf(::InvitationController)
     singleOf(::CategoryController)
     singleOf(::PermissionController)
+    singleOf(::SupplierController)
     singleOf(::StoreController)
     single { AuthController(get(), get(named("AES")), get(), get(), get(), get()) }
 

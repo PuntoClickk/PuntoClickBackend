@@ -7,6 +7,8 @@ import com.puntoclick.data.model.auth.ValidateEmailRequest
 import com.puntoclick.data.model.category.CreateCategoryRequest
 import com.puntoclick.data.model.category.UpdateCategoryRequest
 import com.puntoclick.data.model.invitation.AcceptInvitationRequest
+import com.puntoclick.data.model.supplier.CreateSupplierRequest
+import com.puntoclick.data.model.supplier.UpdateSupplierRequest
 import com.puntoclick.data.model.role.CreateRoleRequest
 import com.puntoclick.data.model.store.CreateStoreRequest
 import com.puntoclick.data.model.store.UpdateStoreRequest
@@ -15,6 +17,8 @@ import com.puntoclick.features.auth.validation.validateEmailRequest
 import com.puntoclick.features.auth.validation.validateLoginRequest
 import com.puntoclick.features.category.validation.validateCreateCategoryRequest
 import com.puntoclick.features.invitation.validation.validateAcceptInvitationRequest
+import com.puntoclick.features.supplier.validation.validateCreateSupplierRequest
+import com.puntoclick.features.supplier.validation.validateUpdateCategoryRequest
 import com.puntoclick.features.roles.validation.validateRoleRequest
 import com.puntoclick.features.store.validation.validateCreteStoreRequest
 import com.puntoclick.features.team.validation.validateTeamRequest
@@ -60,6 +64,15 @@ fun Application.configureRequestValidation() {
 
         validate<UpdateCategoryRequest> { updateCategoryRequest ->
             updateCategoryRequest.validateCreateCategoryRequest()
+        }
+
+        validate<CreateSupplierRequest> { createSupplierRequest ->
+            createSupplierRequest.validateCreateSupplierRequest()
+
+        }
+
+        validate<UpdateSupplierRequest> { updateSupplierRequest ->
+            updateSupplierRequest.validateUpdateCategoryRequest()
         }
 
         validate<CreateStoreRequest> { createStoreRequest ->
