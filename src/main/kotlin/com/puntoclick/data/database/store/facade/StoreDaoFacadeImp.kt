@@ -14,12 +14,21 @@ import java.util.*
 class StoreDaoFacadeImp : StoreDaoFacade {
 
     override suspend fun createStore(storeData: StoreData): CreateStoreResult = dbQuery {
+        val exists = StoreTable.select {
+            StoreTable.name eq storeData.name
+        }.singleOrNull() != null
+
+        if (exists) {
+            return@dbQuery CreateStoreResult.AlreadyExists
+        }
+
         val insertResult = StoreTable.insert {
             it[name] = storeData.name
             it[location] = storeData.location
             it[team] = storeData.teamId
             it[user] = storeData.userId
         }
+
         if (insertResult.insertedCount > 0) CreateStoreResult.Success
         else CreateStoreResult.InsertFailed
     }

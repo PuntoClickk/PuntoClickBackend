@@ -7,6 +7,7 @@ import com.puntoclick.data.utils.TEAM_IDENTIFIER
 import com.puntoclick.data.utils.USER_IDENTIFIER
 import com.puntoclick.features.store.controller.StoreController
 import com.puntoclick.features.utils.handleResult
+import com.puntoclick.features.utils.retrieveLocale
 import com.puntoclick.plugins.getIdentifier
 import com.puntoclick.security.AppEncryption
 import io.ktor.server.application.*
@@ -25,10 +26,10 @@ fun Route.storeRouting() {
     route("/store") {
         post("/add") {
             val request = call.receive<CreateStoreRequest>()
-            val userId = call.getIdentifier(appEncryption, USER_IDENTIFIER)
+            val locale = call.retrieveLocale()
             val teamId = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val roleId = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
-            val result = storeController.createStore(request, userId, roleId, teamId)
+            val result = storeController.createStore(request, locale, roleId, teamId)
             call.respond(message = result.handleResult(), status = result.status)
         }
     }
