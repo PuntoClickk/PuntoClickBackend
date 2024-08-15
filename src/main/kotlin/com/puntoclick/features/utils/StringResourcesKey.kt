@@ -53,13 +53,12 @@ enum class StringResourcesKey(val value: String) {
     SUPPLIER_PERMISSION_DENIED_ERROR_KEY("supplier_permission_denied_error"),
     SUPPLIER_OPERATION_FAILED_ERROR_KEY("supplier_operation_failed_error"),
     //STORES
-    STORE_CREATE_SUCCESS_MESSAGE_KEY("store_create_success_message"),
+    STORE_OPERATION_SUCCESS_MESSAGE_KEY("store_operation_success_message"),
+    STORE_NAME_ALREADY_EXISTS_ERROR_KEY("store_name_already_exists_error"),
+    STORE_DELETE_FAILED_ERROR_KEY("store_delete_failed_error"),
+    STORE_INSERT_FAILED_ERROR_KEY("store_insert_failed_error"),
     STORE_NOT_FOUND_ERROR_KEY("store_not_found_error"),
     STORE_UPDATE_FAILED_ERROR_KEY("store_update_failed_error"),
-    STORE_UPDATE_SUCCESS_MESSAGE_KEY("store_update_success_message"),
-    STORE_NAME_ALREADY_EXISTS_ERROR_KEY("store_name_already_exists_error"),
-    PERMISSION_DENIED_ERROR_KEY("permission_denied_error"),
-    STORE_DELETE_SUCCESS_MESSAGE_KEY("store_delete_success_message"),
     STORE_NAME_INVALID_ERROR_KEY("store_name_invalid_error"),
-    LOCATION_NAME_INVALID_ERROR_KEY("location_name_invalid_error");
+    STORE_LOCATION_NAME_INVALID_ERROR_KEY("location_name_invalid_error");
 }

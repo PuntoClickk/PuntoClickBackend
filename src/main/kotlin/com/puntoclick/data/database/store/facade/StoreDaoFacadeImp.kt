@@ -10,13 +10,13 @@ import java.util.*
 
 class StoreDaoFacadeImp : StoreDaoFacade {
 
-    override suspend fun createStore(storeData: StoreData): CreateStoreResult = dbQuery {
+    override suspend fun createStore(storeData: StoreData): StoreResult = dbQuery {
         val exists = StoreTable.select {
             StoreTable.name eq storeData.name
         }.singleOrNull() != null
 
         if (exists) {
-            return@dbQuery CreateStoreResult.AlreadyExists
+            return@dbQuery StoreResult.AlreadyExists
         }
 
         val insertResult = StoreTable.insert {
@@ -26,8 +26,8 @@ class StoreDaoFacadeImp : StoreDaoFacade {
             it[user] = storeData.userId
         }
 
-        if (insertResult.insertedCount > 0) CreateStoreResult.Success
-        else CreateStoreResult.InsertFailed
+        if (insertResult.insertedCount > 0) StoreResult.Success
+        else StoreResult.InsertFailed
     }
 
     override suspend fun getStoresWithUserNamesByTeam(teamId: UUID): List<StoreWithUserName> = dbQuery {
@@ -51,7 +51,7 @@ class StoreDaoFacadeImp : StoreDaoFacade {
         exists
     }
 
-    override suspend fun updateStore(storeId: UUID, name: String, location: String): UpdateStoreResult = dbQuery {
+    override suspend fun updateStore(storeId: UUID, name: String, location: String): StoreResult = dbQuery {
         val updateStatement = StoreTable.update({ StoreTable.uuid eq storeId }) {
             it[StoreTable.name] = name
             it[StoreTable.location] = location
@@ -59,27 +59,27 @@ class StoreDaoFacadeImp : StoreDaoFacade {
         }
 
         if (updateStatement > 0) {
-            UpdateStoreResult.Success
+            StoreResult.Success
         } else {
             val exists = StoreTable.select { StoreTable.uuid eq storeId }.singleOrNull() != null
             if (exists) {
-                UpdateStoreResult.UpdateFailed
+                StoreResult.UpdateFailed
             } else {
-                UpdateStoreResult.NotFound
+                StoreResult.NotFound
             }
         }
     }
 
-    override suspend fun deleteStore(storeId: UUID): DeleteStoreResult = dbQuery {
+    override suspend fun deleteStore(storeId: UUID): StoreResult = dbQuery {
         val deleteStatement = StoreTable.deleteWhere { uuid eq storeId }
         if (deleteStatement > 0) {
-            DeleteStoreResult.Success
+            StoreResult.Success
         } else {
             val exists = StoreTable.select { StoreTable.uuid eq storeId }.singleOrNull() != null
             if (exists) {
-                DeleteStoreResult.DeleteFailed
+                StoreResult.DeleteFailed
             } else {
-                DeleteStoreResult.NotFound
+                StoreResult.NotFound
             }
         }
     }

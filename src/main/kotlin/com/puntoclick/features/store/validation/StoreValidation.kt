@@ -14,7 +14,7 @@ fun CreateStoreRequest.validateCreteStoreRequest(): ValidationResult {
     val locale = GlobalLocale.locale
     return when {
         !name.validateStringRequest(NAME_LENGTH) -> ValidationResult.Invalid(locale.getString(StringResourcesKey.STORE_NAME_INVALID_ERROR_KEY))
-        !location.validateStringRequest(LOCATION_LENGTH) -> ValidationResult.Invalid(locale.getString(StringResourcesKey.LOCATION_NAME_INVALID_ERROR_KEY))
+        !location.validateStringRequest(LOCATION_LENGTH) -> ValidationResult.Invalid(locale.getString(StringResourcesKey.STORE_LOCATION_NAME_INVALID_ERROR_KEY))
         else -> ValidationResult.Valid
     }
 }
@@ -23,7 +23,7 @@ fun UpdateStoreRequest.validateCreteStoreRequest(): ValidationResult {
     val locale = GlobalLocale.locale
     return when {
         !name.validateStringRequest(NAME_LENGTH) -> ValidationResult.Invalid(locale.getString(StringResourcesKey.STORE_NAME_INVALID_ERROR_KEY))
-        !location.validateStringRequest(LOCATION_LENGTH) -> ValidationResult.Invalid(locale.getString(StringResourcesKey.LOCATION_NAME_INVALID_ERROR_KEY))
+        !location.validateStringRequest(LOCATION_LENGTH) -> ValidationResult.Invalid(locale.getString(StringResourcesKey.STORE_LOCATION_NAME_INVALID_ERROR_KEY))
         else -> ValidationResult.Valid
     }
 }

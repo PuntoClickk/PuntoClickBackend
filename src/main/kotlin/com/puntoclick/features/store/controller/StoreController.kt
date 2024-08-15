@@ -9,9 +9,9 @@ import com.puntoclick.data.model.module.ModuleType
 import com.puntoclick.data.model.store.*
 import com.puntoclick.features.utils.StringResourcesKey
 import com.puntoclick.features.utils.createError
+import com.puntoclick.features.utils.createPermissionError
 import com.puntoclick.features.utils.getString
-import java.util.Locale
-import java.util.UUID
+import java.util.*
 
 class StoreController(
     private val storeDaoFacade: StoreDaoFacade,
@@ -34,16 +34,12 @@ class StoreController(
             teamId = teamId
         )
 
-        if (!userAllowed) return locale.createError()
+        if (!userAllowed) return locale.createPermissionError()
 
-        val result = if (storeDaoFacade.storeExists(createStoreRequest.name, teamId)) CreateStoreResult.AlreadyExists
+        val result = if (storeDaoFacade.storeExists(createStoreRequest.name, teamId)) StoreResult.AlreadyExists
         else storeDaoFacade.createStore(createStoreRequest.toStoreData(teamId, userId))
 
-        return when (result) {
-            CreateStoreResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.STORE_NAME_ALREADY_EXISTS_ERROR_KEY)
-            CreateStoreResult.InsertFailed -> locale.createError()
-            CreateStoreResult.Success -> AppResult.Success(data = locale.getString(StringResourcesKey.STORE_CREATE_SUCCESS_MESSAGE_KEY))
-        }
+        return result.handleFacadeResult(locale)
     }
 
     suspend fun getStoresWithUserNamesByTeam(
@@ -59,7 +55,7 @@ class StoreController(
         )
 
         if (!userAllowed) {
-            return locale.createError()
+            return locale.createPermissionError()
         }
 
         val stores = storeDaoFacade.getStoresWithUserNamesByTeam(teamId)
@@ -79,17 +75,13 @@ class StoreController(
             teamId = teamId
         )
 
-        if (!userAllowed) return locale.createError()
+        if (!userAllowed) return locale.createPermissionError()
 
-        val result = if (storeDaoFacade.storeExists(updateStoreRequest.name.trim(), teamId)) UpdateStoreResult.AlreadyExists
+        val result = if (storeDaoFacade.storeExists(updateStoreRequest.name.trim(), teamId)) StoreResult.AlreadyExists
         else storeDaoFacade.updateStore(updateStoreRequest.id, updateStoreRequest.name, updateStoreRequest.location)
 
-        return when (result) {
-            UpdateStoreResult.NotFound -> locale.createError(descriptionKey = StringResourcesKey.STORE_NOT_FOUND_ERROR_KEY)
-            UpdateStoreResult.UpdateFailed -> locale.createError(descriptionKey = StringResourcesKey.STORE_UPDATE_FAILED_ERROR_KEY)
-            UpdateStoreResult.Success -> AppResult.Success(data = locale.getString(StringResourcesKey.STORE_UPDATE_SUCCESS_MESSAGE_KEY))
-            UpdateStoreResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.STORE_NAME_ALREADY_EXISTS_ERROR_KEY)
-        }
+
+        return result.handleFacadeResult(locale)
     }
 
     suspend fun deleteStore(
@@ -105,17 +97,20 @@ class StoreController(
             teamId = teamId
         )
 
-        if (!userAllowed) {
-            return locale.createError(descriptionKey = StringResourcesKey.PERMISSION_DENIED_ERROR_KEY)
-        }
+        if (!userAllowed) return locale.createPermissionError()
 
         val result = storeDaoFacade.deleteStore(request.id)
 
-        return when (result) {
-            DeleteStoreResult.NotFound -> locale.createError(descriptionKey = StringResourcesKey.STORE_NOT_FOUND_ERROR_KEY)
-            DeleteStoreResult.DeleteFailed -> locale.createError()
-            DeleteStoreResult.Success -> AppResult.Success(data = locale.getString(StringResourcesKey.STORE_DELETE_SUCCESS_MESSAGE_KEY))
-        }
+        return result.handleFacadeResult(locale)
+    }
+
+    private fun StoreResult.handleFacadeResult(locale: Locale): AppResult<String> = when (this) {
+        StoreResult.Success -> AppResult.Success(locale.getString(StringResourcesKey.STORE_OPERATION_SUCCESS_MESSAGE_KEY))
+        StoreResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.STORE_NAME_ALREADY_EXISTS_ERROR_KEY)
+        StoreResult.DeleteFailed -> locale.createError(descriptionKey = StringResourcesKey.STORE_DELETE_FAILED_ERROR_KEY)
+        StoreResult.InsertFailed -> locale.createError(descriptionKey = StringResourcesKey.STORE_INSERT_FAILED_ERROR_KEY)
+        StoreResult.NotFound -> locale.createError(descriptionKey = StringResourcesKey.STORE_NOT_FOUND_ERROR_KEY)
+        StoreResult.UpdateFailed -> locale.createError(descriptionKey = StringResourcesKey.STORE_UPDATE_FAILED_ERROR_KEY)
     }
 
 }
