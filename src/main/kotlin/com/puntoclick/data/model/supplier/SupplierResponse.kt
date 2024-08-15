@@ -12,6 +12,5 @@ data class SupplierResponse(
     val companyName: String,
     val name: String,
     val email: String,
-    val phoneNumber: String,
-    //val team: TeamResponse
+    val phoneNumber: String
 )

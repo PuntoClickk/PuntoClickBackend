@@ -1,5 +1,6 @@
 package com.puntoclick.data.database.supplier.daofacade
 
+import com.puntoclick.data.database.category.table.CategoriesTable.updatedAt
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.supplier.table.SupplierTable
 import com.puntoclick.data.model.supplier.CreateSupplierRequest
@@ -49,10 +50,21 @@ class SupplierDaoFacadeImp: SupplierDaoFacade {
             it[email] = updateSupplierRequest.email.escapeSingleQuotes()
             it[phoneNumber] = updateSupplierRequest.phoneNumber
             it[team] = teamId
+            it[updatedAt] = System.currentTimeMillis()
         }
 
         if (updateResult > 0) SupplierResult.Success
         else SupplierResult.InsertFailed
+    }
+
+    override suspend fun supplierExists(name: String, email: String, phoneNumber: String, teamId: UUID) : Boolean = dbQuery {
+        val exists = SupplierTable.select {
+            (SupplierTable.name eq name) and
+                    (SupplierTable.email eq email) and
+                    (SupplierTable.phoneNumber eq phoneNumber) and
+                    (SupplierTable.team eq teamId)
+        }.singleOrNull() != null
+        exists
     }
 
     override suspend fun deleteSupplier(supplierID: UUID, teamId: UUID): SupplierResult = dbQuery {

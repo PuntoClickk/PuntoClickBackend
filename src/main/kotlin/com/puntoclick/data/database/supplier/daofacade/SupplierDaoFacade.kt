@@ -11,5 +11,6 @@ interface SupplierDaoFacade {
     suspend fun getSupplier(supplierId: UUID, teamId: UUID): SupplierResponse?
     suspend fun addSupplier(createSupplierRequest: CreateSupplierRequest, userId: UUID, teamId: UUID): SupplierResult
     suspend fun updateSupplier(updateSupplierRequest: UpdateSupplierRequest, teamId: UUID): SupplierResult
+    suspend fun supplierExists(name: String, email: String, phoneNumber: String, teamId: UUID): Boolean
     suspend fun deleteSupplier(supplierID: UUID, teamId: UUID): SupplierResult
 }

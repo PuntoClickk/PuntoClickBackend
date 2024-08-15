@@ -44,11 +44,11 @@ class SupplierController(
         val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
         return if (permissionValidation) {
             val result = if (
-                validateIfSupplierItsDuplicate(
-                    supplierDaoFacade.allSupplier(teamId),
+                supplierDaoFacade.supplierExists(
                     createSupplierRequest.name,
                     createSupplierRequest.email,
-                    createSupplierRequest.phoneNumber)
+                    createSupplierRequest.phoneNumber,
+                    teamId)
                 ) SupplierResult.AlreadyExists
             else supplierDaoFacade.addSupplier(createSupplierRequest, userId, teamId)
 
@@ -61,11 +61,11 @@ class SupplierController(
         val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
         return if (permissionValidation) {
             val updateResult = if (
-                validateIfSupplierItsDuplicate(
-                    supplierDaoFacade.allSupplier(teamId),
+                supplierDaoFacade.supplierExists(
                     updateSupplierRequest.name,
                     updateSupplierRequest.email,
-                    updateSupplierRequest.phoneNumber)
+                    updateSupplierRequest.phoneNumber,
+                    teamId)
                 ) SupplierResult.AlreadyExists
             else supplierDaoFacade.updateSupplier(updateSupplierRequest, teamId)
 
@@ -83,14 +83,6 @@ class SupplierController(
             handleSupplierResult(locale, deleteResult, StringResourcesKey.SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY)
 
         } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
-    }
-
-    private fun validateIfSupplierItsDuplicate(suppliers : List<SupplierResponse>, name: String, email: String, phoneNumber: String): Boolean {
-        return suppliers.any {
-            it.name == name &&
-            it.email == email &&
-            it.phoneNumber == phoneNumber
-        }
     }
 
     private fun validateIfSupplierAlreadyExists(suppliers : List<SupplierResponse>, supplierId: UUID): Boolean {
