@@ -10,6 +10,8 @@ import com.puntoclick.data.database.role.daofacade.RoleDaoFacade
 import com.puntoclick.data.database.role.daofacade.RoleDaoFacadeImp
 import com.puntoclick.data.database.supplier.daofacade.SupplierDaoFacade
 import com.puntoclick.data.database.supplier.daofacade.SupplierDaoFacadeImp
+import com.puntoclick.data.database.store.facade.StoreDaoFacade
+import com.puntoclick.data.database.store.facade.StoreDaoFacadeImp
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacade
 import com.puntoclick.data.database.team.daofacade.TeamDaoFacadeImp
 import com.puntoclick.data.database.user.daofacade.UserDaoFacade
@@ -39,5 +41,8 @@ val daoFacadeModule = module {
     }
     singleOf(::SupplierDaoFacadeImp) {
         bind<SupplierDaoFacade>()
+    }
+    singleOf(::StoreDaoFacadeImp){
+        bind<StoreDaoFacade>()
     }
 }

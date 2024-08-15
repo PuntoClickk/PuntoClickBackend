@@ -1,22 +1,6 @@
 package com.puntoclick.features.utils
 
 
-
-@Deprecated("Use new  validateStringRequest")
-fun String.validateRequestString(maxLength: Int = 30): String? {
-    if (isEmpty()) return null
-    if (length >= maxLength) return null
-
-    // Validate the string
-    val regex = Regex("^[a-zA-Z0-9\\s]*\$") // Only allows letters, numbers, and spaces
-    if (!regex.matches(this)) return null // The string contains disallowed characters
-
-    // Process the string to prevent SQL injection
-    val processedString = replace("'", "''") // Escape single quotes
-
-    return processedString
-}
-
 fun String.validateStringRequest(maxLength: Int = 30): Boolean {
     return  when{
         isEmpty() -> false
