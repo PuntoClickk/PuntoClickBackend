@@ -36,15 +36,15 @@ class AuthController(
     private val invitationDaoFacade: InvitationDaoFacade,
     private val permissionDaoFacade: PermissionDaoFacade
 ) {
-    suspend fun createAdmin(createUserRequest: CreateAdminRequest): AppResult<Boolean> {
-        if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists()
-        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.type)?.id ?: return getErrorUserNotCreated()
-        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return getErrorUserNotCreated()
+    suspend fun createAdmin(createUserRequest: CreateAdminRequest, locale: Locale): AppResult<Boolean> {
+        if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists(locale)
+        val roleUUID = roleDaoFacade.role(RoleType.ADMIN.type)?.id ?: return getErrorUserNotCreated(locale)
+        val teamUUID = teamDaoFacade.addTeam(createUserRequest.teamName) ?: return getErrorUserNotCreated(locale)
 
         val user = createUserRequest.mapCreateUserRequestToUser(role = roleUUID, team = teamUUID, UserType.ADMIN.type)
         permissionDaoFacade.initializePermissionsForTeam(teamUUID)
         return if (userDaoFacade.addUser(user)) AppResult.Success(data = true, appStatus = HttpStatusCode.OK)
-        else createGenericError()
+        else locale.createGenericError()
     }
 
     suspend fun validateEmail(validateEmailRequest: ValidateEmailRequest): AppResult<ValidateEmailResponse> {
@@ -62,13 +62,13 @@ class AuthController(
         )
     }
 
-    suspend fun createUser(createUserRequest: CreateUserRequest): AppResult<Boolean> {
-        if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists()
+    suspend fun createUser(createUserRequest: CreateUserRequest, locale: Locale): AppResult<Boolean> {
+        if (userDaoFacade.emailExists(createUserRequest.email)) return getErrorEmailExists(locale)
 
         val invitation = invitationDaoFacade.getInvitationByCode(createUserRequest.invitationCode)
-            ?: return createCodeExpiredError()
+            ?: return locale.createCodeExpiredError()
 
-        val role = roleDaoFacade.role(RoleType.VIEWER.type) ?: return getErrorUserNotCreated()
+        val role = roleDaoFacade.role(RoleType.VIEWER.type) ?: return getErrorUserNotCreated(locale)
         val user =
             createUserRequest.mapCreateUserRequestToUser(role = role.id, team = invitation.teamId, UserType.USER.type)
 
@@ -77,34 +77,35 @@ class AuthController(
             AppResult.Success(
                 data = true, appStatus = HttpStatusCode.OK
             )
-        } else createGenericError()
+        } else locale.createGenericError()
     }
 
-    suspend fun login(loginRequest: LoginRequest, jwtParams: JWTParams): AppResult<TokenResponse> {
+    suspend fun login(loginRequest: LoginRequest, jwtParams: JWTParams, locale: Locale): AppResult<TokenResponse> {
         val user = userDaoFacade.user(loginRequest.email)
 
         return user?.let {
             when {
-                it.isActive.not() -> createUserInactiveError()
-                it.isLocked -> createUserBlockedError()
+                it.isActive.not() -> locale.createUserInactiveError()
+                it.isLocked -> locale.createUserBlockedError()
                 validatePassword(password = loginRequest.password, it.password) -> {
                     AppResult.Success(data = createToken(it, jwtParams), appStatus = HttpStatusCode.OK)
                 }
 
-                else -> createLoginError()
+                else -> locale.createLoginError()
             }
-        } ?: createLoginError()
+        } ?: locale.createLoginError()
     }
 
     suspend fun authenticateToAcceptInvitation(
-        acceptInvitationRequest: AcceptInvitationRequest
+        acceptInvitationRequest: AcceptInvitationRequest,
+        locale: Locale
     ): AppResult<AcceptInvitationResponse> {
-        val invitation = invitationDaoFacade.getInvitationByCode(acceptInvitationRequest.invitationCode) ?: return createCodeExpiredError()
+        val invitation = invitationDaoFacade.getInvitationByCode(acceptInvitationRequest.invitationCode) ?: return locale.createCodeExpiredError()
 
-        val user = userDaoFacade.user(acceptInvitationRequest.email) ?: return createLoginError()
+        val user = userDaoFacade.user(acceptInvitationRequest.email) ?: return locale.createLoginError()
 
-        if (user.isLocked) return createUserBlockedError()
-        if (!validatePassword(password = acceptInvitationRequest.password, user.password))  return createLoginError()
+        if (user.isLocked) return locale.createUserBlockedError()
+        if (!validatePassword(password = acceptInvitationRequest.password, user.password))  return locale.createLoginError()
 
         val result = userDaoFacade.assignUserToTeam(user.id, invitation.teamId)
 
@@ -136,35 +137,35 @@ class AuthController(
         return password.verifyPassword(hashedPassword = hashedPassword)
     }
 
-    private fun getErrorUserNotCreated() =
-        createError(
+    private fun getErrorUserNotCreated(locale: Locale) =
+        locale.createError(
             descriptionKey = StringResourcesKey.USER_NOT_CREATED_ERROR_KEY,
             status = HttpStatusCode.BadRequest
         )
 
-    private fun getErrorEmailExists() =
-        createError(
+    private fun getErrorEmailExists(locale: Locale) =
+        locale.createError(
             StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
             StringResourcesKey.EMAIL_MESSAGE_ERROR_KEY,
             HttpStatusCode.BadRequest
         )
 
-    private fun createUserInactiveError() = createError(
+    private fun Locale.createUserInactiveError() = createError(
         StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
         StringResourcesKey.LOGIN_USER_INACTIVE_MESSAGE_ERROR_KEY
     )
 
-    private fun createUserBlockedError() = createError(
+    private fun Locale.createUserBlockedError() = createError(
         StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
         StringResourcesKey.LOGIN_USER_BLOCKED_MESSAGE_ERROR_KEY
     )
 
-    private fun createLoginError() = createError(
+    private fun Locale.createLoginError() = createError(
         StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
         StringResourcesKey.LOGIN_MESSAGE_ERROR_KEY
     )
 
-    private fun createCodeExpiredError() = createError(
+    private fun Locale.createCodeExpiredError() = createError(
         StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
         StringResourcesKey.CODE_NOT_FOUND_OR_EXPIRED_ERROR_KEY
     )
