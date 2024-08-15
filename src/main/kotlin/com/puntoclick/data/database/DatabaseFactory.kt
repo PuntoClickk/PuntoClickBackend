@@ -13,6 +13,7 @@ import com.puntoclick.data.database.permission.table.PermissionTable
 import com.puntoclick.data.database.registeruser.RegisterUserTable
 import com.puntoclick.data.database.role.init.initializeRoles
 import com.puntoclick.data.database.role.table.RoleTable
+import com.puntoclick.data.database.supplier.table.SupplierTable
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
 import io.ktor.server.application.*
@@ -42,6 +43,7 @@ fun Application.configureDatabase() {
         SchemaUtils.create(CategoriesTable)
         SchemaUtils.create(ModuleTable)
         SchemaUtils.create(PermissionTable)
+        SchemaUtils.create(SupplierTable)
         initializeRoles()
         initializeActions()
         initializeModules()
