@@ -61,4 +61,7 @@ dependencies {
 
     // BCrypt
     implementation("at.favre.lib:bcrypt:0.10.2")
+
+    // Rate Limit
+    implementation("io.ktor:ktor-server-rate-limit:$ktor_version")
 }

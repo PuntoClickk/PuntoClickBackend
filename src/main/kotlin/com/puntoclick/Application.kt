@@ -12,6 +12,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 @Suppress("unused")
 fun Application.module() {
     configureKoin()
+    configureRateLimit()
     configureDatabase()
     configureHTTP()
     configureMonitoring()
