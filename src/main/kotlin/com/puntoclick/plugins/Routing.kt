@@ -31,6 +31,7 @@ fun Application.configureRouting() {
         exception<RequestValidationException> { call, cause ->
             call.respond(message = ErrorResponse("Error",cause.reasons.getOrNull(0) ?: "Error App"), status = HttpStatusCode.BadRequest)
         }
+
     }
     routing {
         authRouting(jwtParams)

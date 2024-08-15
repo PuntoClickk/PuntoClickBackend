@@ -12,6 +12,7 @@ object StoreTable: Table("store") {
     val location = varchar("location", LOCATION_LENGTH )
     val team = reference("team", TeamTable.uuid)
     val user = reference("user", UserTable.uuid)
+    val isActive = bool("isActive").default(true)
     @Suppress("Unused")
     val createdAt = long("created_at").default(System.currentTimeMillis())
     @Suppress("Unused")

@@ -40,4 +40,13 @@ enum class StringResourcesKey(val value: String) {
     CATEGORY_DELETED_SUCCESS_MESSAGE_KEY("category_deleted_success_message"),
     FEATURE_ACCESS_DENIED_ERROR_KEY("feature_access_denied_error"),
     CATEGORY_UPDATED_SUCCESS_MESSAGE_KEY("category_updated_success_message"),
+    STORE_CREATE_SUCCESS_MESSAGE_KEY("store_create_success_message"),
+    STORE_NOT_FOUND_ERROR_KEY("store_not_found_error"),
+    STORE_UPDATE_FAILED_ERROR_KEY("store_update_failed_error"),
+    STORE_UPDATE_SUCCESS_MESSAGE_KEY("store_update_success_message"),
+    STORE_NAME_ALREADY_EXISTS_ERROR_KEY("store_name_already_exists_error"),
+    PERMISSION_DENIED_ERROR_KEY("permission_denied_error"),
+    STORE_DELETE_SUCCESS_MESSAGE_KEY("store_delete_success_message"),
+    STORE_NAME_INVALID_ERROR_KEY("store_name_invalid_error"),
+    LOCATION_NAME_INVALID_ERROR_KEY("location_name_invalid_error");
 }

@@ -19,4 +19,3 @@ fun CreateStoreRequest.toStoreData(teamId: UUID, userId: UUID): StoreData {
         userId = userId
     )
 }
-

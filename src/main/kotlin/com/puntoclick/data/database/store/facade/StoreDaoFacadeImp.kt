@@ -3,12 +3,9 @@ package com.puntoclick.data.database.store.facade
 import com.puntoclick.data.database.dbQuery
 import com.puntoclick.data.database.store.table.StoreTable
 import com.puntoclick.data.database.user.table.UserTable
-import com.puntoclick.data.model.store.CreateStoreResult
-import com.puntoclick.data.model.store.StoreData
-import com.puntoclick.data.model.store.StoreWithUserName
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import com.puntoclick.data.model.store.*
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
 
 class StoreDaoFacadeImp : StoreDaoFacade {
@@ -47,10 +44,44 @@ class StoreDaoFacadeImp : StoreDaoFacade {
             }
     }
 
-    override suspend fun storeExists(storeName: String, teamId: UUID): Boolean {
+    override suspend fun storeExists(storeName: String, teamId: UUID): Boolean = dbQuery{
         val exists = StoreTable.select {
             (StoreTable.name eq storeName) and (StoreTable.team eq teamId)
         }.singleOrNull() != null
-        return exists
+        exists
     }
+
+    override suspend fun updateStore(storeId: UUID, name: String, location: String): UpdateStoreResult = dbQuery {
+        val updateStatement = StoreTable.update({ StoreTable.uuid eq storeId }) {
+            it[StoreTable.name] = name
+            it[StoreTable.location] = location
+            it[updatedAt] = System.currentTimeMillis()
+        }
+
+        if (updateStatement > 0) {
+            UpdateStoreResult.Success
+        } else {
+            val exists = StoreTable.select { StoreTable.uuid eq storeId }.singleOrNull() != null
+            if (exists) {
+                UpdateStoreResult.UpdateFailed
+            } else {
+                UpdateStoreResult.NotFound
+            }
+        }
+    }
+
+    override suspend fun deleteStore(storeId: UUID): DeleteStoreResult = dbQuery {
+        val deleteStatement = StoreTable.deleteWhere { uuid eq storeId }
+        if (deleteStatement > 0) {
+            DeleteStoreResult.Success
+        } else {
+            val exists = StoreTable.select { StoreTable.uuid eq storeId }.singleOrNull() != null
+            if (exists) {
+                DeleteStoreResult.DeleteFailed
+            } else {
+                DeleteStoreResult.NotFound
+            }
+        }
+    }
+
 }
