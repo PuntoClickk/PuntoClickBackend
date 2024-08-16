@@ -52,7 +52,7 @@ class SupplierController(
                 ) SupplierResult.AlreadyExists
             else supplierDaoFacade.addSupplier(createSupplierRequest, teamId)
 
-            handleSupplierResult(locale, result, StringResourcesKey.SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY)
+            handleSupplierResult(locale, result)
 
         } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
     }
@@ -69,7 +69,7 @@ class SupplierController(
                 ) SupplierResult.AlreadyExists
             else supplierDaoFacade.updateSupplier(updateSupplierRequest, teamId)
 
-            handleSupplierResult(locale, updateResult, StringResourcesKey.SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY)
+            handleSupplierResult(locale, updateResult)
 
         } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
     }
@@ -80,7 +80,7 @@ class SupplierController(
             val deleteResult = if (!validateIfSupplierAlreadyExists(supplierDaoFacade.allSupplier(teamId), supplierId)) SupplierResult.DeleteFailed
             else supplierDaoFacade.deleteSupplier(supplierId, teamId)
 
-            handleSupplierResult(locale, deleteResult, StringResourcesKey.SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY)
+            handleSupplierResult(locale, deleteResult)
 
         } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
     }
@@ -92,11 +92,10 @@ class SupplierController(
     private fun handleSupplierResult(
         locale: Locale,
         result: SupplierResult,
-        successKey: StringResourcesKey
     ): AppResult<String> {
         return when (result) {
             SupplierResult.Success -> AppResult.Success(
-                data = locale.getString(successKey),
+                data = locale.getString(StringResourcesKey.SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY),
                 appStatus = HttpStatusCode.OK
             )
             SupplierResult.AlreadyExists -> locale.createError(descriptionKey = StringResourcesKey.SUPPLIER_ALREADY_EXISTS_ERROR_KEY)
