@@ -6,7 +6,6 @@ import com.puntoclick.data.model.supplier.CreateSupplierRequest
 import com.puntoclick.data.model.supplier.UpdateSupplierRequest
 import com.puntoclick.data.utils.ROLE_IDENTIFIER
 import com.puntoclick.data.utils.TEAM_IDENTIFIER
-import com.puntoclick.data.utils.USER_IDENTIFIER
 import com.puntoclick.features.supplier.controller.SupplierController
 import com.puntoclick.features.utils.handleResult
 import com.puntoclick.plugins.getIdentifier
@@ -27,11 +26,10 @@ fun Route.supplierRouting() {
 
         post("/add") {
             val request = call.receive<CreateSupplierRequest>()
-            val user = call.getIdentifier(appEncryption, USER_IDENTIFIER)
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
             val locale = GlobalLocale.locale
-            val result = supplierController.addSupplier(locale, request, user, role, team)
+            val result = supplierController.addSupplier(locale, request, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 

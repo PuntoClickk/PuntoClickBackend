@@ -15,13 +15,11 @@ import java.util.*
 class SupplierDaoFacadeImp: SupplierDaoFacade {
 
     override suspend fun allSupplier(teamId: UUID): List<SupplierResponse> = dbQuery {
-        SupplierTable.select { SupplierTable.team eq teamId }.map(::resultRowToSupplier)
+        SupplierTable.selectAll().where { SupplierTable.team eq teamId }.map(::resultRowToSupplier)
     }
 
     override suspend fun getSupplier(supplierId: UUID, teamId: UUID): SupplierResponse? = dbQuery {
-        SupplierTable.select {
-            (SupplierTable.uuid eq supplierId) and (SupplierTable.team eq teamId)
-        }.map(::resultRowToSupplier).singleOrNull()
+        SupplierTable.selectAll().where { (SupplierTable.uuid eq supplierId) and (SupplierTable.team eq teamId) }.map(::resultRowToSupplier).singleOrNull()
     }
 
     override suspend fun addSupplier(
@@ -57,7 +55,7 @@ class SupplierDaoFacadeImp: SupplierDaoFacade {
     }
 
     override suspend fun supplierExists(name: String, email: String, phoneNumber: String, teamId: UUID) : Boolean = dbQuery {
-        val exists = SupplierTable.select {
+        val exists = SupplierTable.selectAll().where {
             (SupplierTable.name eq name) and
                     (SupplierTable.email eq email) and
                     (SupplierTable.phoneNumber eq phoneNumber) and
@@ -68,7 +66,7 @@ class SupplierDaoFacadeImp: SupplierDaoFacade {
 
     override suspend fun deleteSupplier(supplierID: UUID, teamId: UUID): SupplierResult = dbQuery {
         val deleteResult = SupplierTable.deleteWhere {
-            (uuid eq uuid) and (team eq teamId)
+            (uuid eq supplierID) and (team eq teamId)
         }
 
         if (deleteResult > 0) SupplierResult.Success

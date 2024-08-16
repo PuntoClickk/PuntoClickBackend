@@ -11,6 +11,7 @@ import com.puntoclick.data.model.supplier.SupplierResult
 import com.puntoclick.data.model.supplier.UpdateSupplierRequest
 import com.puntoclick.features.utils.StringResourcesKey
 import com.puntoclick.features.utils.createError
+import com.puntoclick.features.utils.createPermissionError
 import com.puntoclick.features.utils.getString
 import io.ktor.http.*
 import java.util.Locale
@@ -23,66 +24,88 @@ class SupplierController(
     private val module = ModuleType.PRODUCTS
 
     suspend fun allSuppliers(locale: Locale, roleId: UUID, teamId: UUID): AppResult<List<SupplierResponse>> {
-        val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
-        return if (permissionValidation) {
-            val suppliers = supplierDaoFacade.allSupplier(teamId)
-            return AppResult.Success(data = suppliers, appStatus = HttpStatusCode.OK)
-        } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
+        val userAllowed = permissionDaoFacade.hasPermission(
+            roleId,
+            ActionType.READ,
+            module,
+            teamId
+        )
+        if (!userAllowed) return locale.createPermissionError()
+
+        val suppliers = supplierDaoFacade.allSupplier(teamId)
+        return AppResult.Success(data = suppliers, appStatus = HttpStatusCode.OK)
     }
 
     suspend fun getSupplier(locale: Locale, supplierId: UUID, roleId: UUID, teamId: UUID): AppResult<SupplierResponse> {
-        val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
-        return if (permissionValidation) {
-            val supplier = supplierDaoFacade.getSupplier(supplierId, teamId)
-            supplier?.let {
-                AppResult.Success(data = it, appStatus = HttpStatusCode.OK)
-            } ?: locale.createError(descriptionKey = StringResourcesKey.SUPPLIER_NOT_FOUND_ERROR_KEY)
-        } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
+        val userAllowed = permissionDaoFacade.hasPermission(
+            roleId,
+            ActionType.READ,
+            module,
+            teamId
+        )
+        if (!userAllowed) return locale.createPermissionError()
+
+        val supplier = supplierDaoFacade.getSupplier(supplierId, teamId)
+        return supplier?.let {
+            AppResult.Success(data = it, appStatus = HttpStatusCode.OK)
+        } ?: locale.createError(descriptionKey = StringResourcesKey.SUPPLIER_NOT_FOUND_ERROR_KEY)
     }
 
     suspend fun addSupplier(locale: Locale, createSupplierRequest: CreateSupplierRequest, roleId: UUID, teamId: UUID): AppResult<String> {
-        val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
-        return if (permissionValidation) {
-            val result = if (
-                supplierDaoFacade.supplierExists(
-                    createSupplierRequest.name,
-                    createSupplierRequest.email,
-                    createSupplierRequest.phoneNumber,
-                    teamId)
-                ) SupplierResult.AlreadyExists
-            else supplierDaoFacade.addSupplier(createSupplierRequest, teamId)
+        val userAllowed = permissionDaoFacade.hasPermission(
+            roleId,
+            ActionType.WRITE,
+            module,
+            teamId
+        )
+        if (!userAllowed) return locale.createPermissionError()
 
-            handleSupplierResult(locale, result)
+        val result = if (
+            supplierDaoFacade.supplierExists(
+                createSupplierRequest.name,
+                createSupplierRequest.email,
+                createSupplierRequest.phoneNumber,
+                teamId)
+        ) SupplierResult.AlreadyExists
+        else supplierDaoFacade.addSupplier(createSupplierRequest, teamId)
 
-        } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
+        return handleSupplierResult(locale, result)
     }
 
     suspend fun updateSupplier(locale: Locale, updateSupplierRequest: UpdateSupplierRequest, roleId: UUID, teamId: UUID): AppResult<String> {
-        val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
-        return if (permissionValidation) {
-            val updateResult = if (
-                supplierDaoFacade.supplierExists(
-                    updateSupplierRequest.name,
-                    updateSupplierRequest.email,
-                    updateSupplierRequest.phoneNumber,
-                    teamId)
-                ) SupplierResult.AlreadyExists
-            else supplierDaoFacade.updateSupplier(updateSupplierRequest, teamId)
+        val userAllowed = permissionDaoFacade.hasPermission(
+            roleId,
+            ActionType.UPDATE,
+            module,
+            teamId
+        )
+        if (!userAllowed) return locale.createPermissionError()
 
-            handleSupplierResult(locale, updateResult)
+        val updateResult = if (
+            supplierDaoFacade.supplierExists(
+                updateSupplierRequest.name,
+                updateSupplierRequest.email,
+                updateSupplierRequest.phoneNumber,
+                teamId)
+        ) SupplierResult.AlreadyExists
+        else supplierDaoFacade.updateSupplier(updateSupplierRequest, teamId)
 
-        } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
+        return handleSupplierResult(locale, updateResult)
     }
 
     suspend fun deleteSupplier(locale: Locale, supplierId: UUID, roleId: UUID, teamId: UUID): AppResult<String> {
-        val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
-        return if (permissionValidation) {
-            val deleteResult = if (!validateIfSupplierAlreadyExists(supplierDaoFacade.allSupplier(teamId), supplierId)) SupplierResult.DeleteFailed
-            else supplierDaoFacade.deleteSupplier(supplierId, teamId)
+        val userAllowed = permissionDaoFacade.hasPermission(
+            roleId,
+            ActionType.DELETE,
+            module,
+            teamId
+        )
+        if (!userAllowed) return locale.createPermissionError()
 
-            handleSupplierResult(locale, deleteResult)
+        val deleteResult = if (!validateIfSupplierAlreadyExists(supplierDaoFacade.allSupplier(teamId), supplierId)) SupplierResult.DeleteFailed
+        else supplierDaoFacade.deleteSupplier(supplierId, teamId)
 
-        } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
+        return handleSupplierResult(locale, deleteResult)
     }
 
     private fun validateIfSupplierAlreadyExists(suppliers : List<SupplierResponse>, supplierId: UUID): Boolean {
