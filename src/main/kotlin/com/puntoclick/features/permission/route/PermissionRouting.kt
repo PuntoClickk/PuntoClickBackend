@@ -1,4 +1,4 @@
-package com.puntoclick.features.permission
+package com.puntoclick.features.permission.route
 
 import com.puntoclick.data.model.permission.AddPermissionRequest
 import com.puntoclick.data.model.permission.DeletePermissionRequest
@@ -61,7 +61,5 @@ fun Route.permissionRouting() {
             val result = permissionController.deletePermission(userId, locale, request)
             call.respond(message = result.handleResult(), status = result.status)
         }
-
     }
-
 }
