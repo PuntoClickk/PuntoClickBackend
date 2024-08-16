@@ -40,6 +40,7 @@ enum class StringResourcesKey(val value: String) {
     CATEGORY_UPDATE_FAILED_ERROR_KEY("category_update_failed_error"),
     CATEGORY_DELETE_FAILED_ERROR_KEY("category_delete_failed_error"),
     CATEGORY_NOT_FOUND_ERROR_KEY("category_not_found_error"),
+    VALID_CATEGORY_NAME_ERROR_KEY("valid_category_name_error"),
     //SUPPLIERS
     SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY("supplier_operation_success_message"),
     SUPPLIER_ALREADY_EXISTS_ERROR_KEY("supplier_already_exists_error"),
