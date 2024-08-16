@@ -32,7 +32,7 @@ fun Locale.createGenericError() = createError(
 
 fun Locale.createPermissionError() = createError(
     StringResourcesKey.GENERIC_TITLE_ERROR_KEY,
-    StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY, HttpStatusCode.BadRequest)
+    StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY, HttpStatusCode.BadRequest)
 
 fun Locale.createError(titleKey: StringResourcesKey? = null, descriptionKey: StringResourcesKey? = null, status: HttpStatusCode = HttpStatusCode.BadRequest): AppResult.Error {
     return AppResult.Error(

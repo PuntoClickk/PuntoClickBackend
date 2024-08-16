@@ -32,7 +32,6 @@ enum class StringResourcesKey(val value: String) {
     INVALID_LAST_NAME_ERROR_KEY("invalid_last_name_error"),
     INVALID_PHONE_ERROR_KEY("invalid_phone_error"),
     ACTION_PERMISSION_DENIED_ERROR_KEY("action_permission_denied_error"),
-    FEATURE_ACCESS_DENIED_ERROR_KEY("feature_access_denied_error"),
     //CATEGORIES
     CATEGORY_OPERATION_SUCCESS_MESSAGE_KEY("category_operation_success_message"),
     CATEGORY_ALREADY_EXISTS_ERROR_KEY("category_already_exists_error"),
