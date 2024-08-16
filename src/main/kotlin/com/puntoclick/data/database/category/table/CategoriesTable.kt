@@ -9,6 +9,7 @@ object CategoriesTable: Table("Category") {
     val name = varchar("name", 11)
     val user = reference("user", UserTable.uuid)
     val team = reference("team", TeamTable.uuid)
+    @Suppress("unused")
     val createdAt = long("createdAt").default(System.currentTimeMillis())
     val updatedAt = long("updatedAt").default(System.currentTimeMillis())
 

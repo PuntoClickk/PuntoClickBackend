@@ -21,7 +21,7 @@ fun addIsActiveColumToRole(){
 fun addNewColumnsToUser(){
 
     transaction {
-        val column = Column<Boolean>(UserTable, "isBLocked", BooleanColumnType())
+        val column = Column(UserTable, "isBLocked", BooleanColumnType())
         column.dropStatement().forEach {
             exec(it)
         }

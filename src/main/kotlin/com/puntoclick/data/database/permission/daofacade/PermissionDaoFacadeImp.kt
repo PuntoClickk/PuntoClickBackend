@@ -36,12 +36,12 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
             modules.forEach { moduleId ->
                 allowedActions.forEach { actionType ->
 
-                    val roleId = RoleTable.select { RoleTable.name eq role.roleName }.single()[RoleTable.uuid]
+                    val roleId = RoleTable.selectAll().where { RoleTable.name eq role.roleName }.single()[RoleTable.uuid]
                     val actionId =
-                        ActionTable.select { ActionTable.name eq actionType.actionName }.single()[ActionTable.uuid]
+                        ActionTable.selectAll().where { ActionTable.name eq actionType.actionName }.single()[ActionTable.uuid]
 
 
-                    if (PermissionTable.select {
+                    if (PermissionTable.selectAll().where {
                             (PermissionTable.role eq roleId) and
                                     (PermissionTable.module eq moduleId) and
                                     (PermissionTable.action eq actionId) and
@@ -76,7 +76,7 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
         val actionId = GlobalActionIds.get(actionType)
         val moduleId = GlobalModuleIds.get(moduleType)
 
-        val exists = PermissionTable.select {
+        val exists = PermissionTable.selectAll().where {
             (PermissionTable.role eq roleId) and
                     (PermissionTable.action eq actionId) and
                     (PermissionTable.module eq moduleId) and
@@ -118,7 +118,7 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
         val actionId = GlobalActionIds.get(actionType)
         val moduleId = GlobalModuleIds.get(moduleType)
 
-        val exists = PermissionTable.select {
+        val exists = PermissionTable.selectAll().where {
             (PermissionTable.role eq roleId) and
                     (PermissionTable.action eq actionId) and
                     (PermissionTable.module eq moduleId) and
@@ -146,7 +146,7 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
 
     override suspend fun getPermissionsByTeam(teamId: UUID): List<PermissionInfo> = dbQuery {
         (PermissionTable innerJoin RoleTable innerJoin ActionTable innerJoin ModuleTable)
-            .select { PermissionTable.team eq teamId }
+            .selectAll().where { PermissionTable.team eq teamId }
             .map(::resultRowToInvitationData)
     }
 
@@ -155,7 +155,7 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
             return@dbQuery DeletePermissionResult.UserNotAdmin
         }
 
-        val exists = PermissionTable.select { uuid eq permissionId }.singleOrNull() != null
+        val exists = PermissionTable.selectAll().where { uuid eq permissionId }.singleOrNull() != null
 
         if (!exists) {
             return@dbQuery DeletePermissionResult.PermissionNotFound
@@ -172,7 +172,7 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
 
     override suspend fun getPermissionsByRole(roleId: UUID,teamId: UUID): List<PermissionInfo> = dbQuery {
         (PermissionTable innerJoin RoleTable innerJoin ActionTable innerJoin ModuleTable)
-            .select { (PermissionTable.role eq roleId) and (PermissionTable.team eq teamId) }
+            .selectAll().where { (PermissionTable.role eq roleId) and (PermissionTable.team eq teamId) }
             .map(::resultRowToInvitationData)
     }
 
@@ -180,7 +180,7 @@ class PermissionDaoFacadeImp : PermissionDaoFacade {
         val actionId = GlobalActionIds.get(actionType)
         val moduleId = GlobalModuleIds.get(moduleType)
         PermissionTable
-            .select {
+            .selectAll().where {
                 (PermissionTable.role eq roleId) and
                         (PermissionTable.action eq actionId) and
                         (PermissionTable.module eq moduleId) and

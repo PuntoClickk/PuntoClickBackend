@@ -17,15 +17,11 @@ class RoleDaoFacadeImp : RoleDaoFacade {
     }
 
     override suspend fun role(uuid: UUID): RoleResponse? = dbQuery {
-        RoleTable.select{
-            RoleTable.uuid eq uuid
-        }.map(::resultRowToRoleResponse).singleOrNull()
+        RoleTable.selectAll().where { RoleTable.uuid eq uuid }.map(::resultRowToRoleResponse).singleOrNull()
     }
 
     override suspend fun role(type: Int): RoleData? = dbQuery {
-        RoleTable.select{
-            RoleTable.type eq type
-        }.map(::resultRowToRoleData).singleOrNull()
+        RoleTable.selectAll().where { RoleTable.type eq type }.map(::resultRowToRoleData).singleOrNull()
 
     }
 

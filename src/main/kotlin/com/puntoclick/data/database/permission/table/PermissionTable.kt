@@ -14,7 +14,6 @@ object PermissionTable: Table("permission") {
     val team = reference("team", TeamTable.uuid)
     @Suppress("unused")
     val createAt = long("createAt").default(System.currentTimeMillis())
-    @Suppress("unused")
     val updateAt = long("updateAt").default(System.currentTimeMillis())
 
     override val primaryKey: PrimaryKey = PrimaryKey(uuid)

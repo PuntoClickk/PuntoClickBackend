@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 
 class InvitationDaoFacadeImp: InvitationDaoFacade {
 
@@ -26,15 +26,11 @@ class InvitationDaoFacadeImp: InvitationDaoFacade {
 
 
     override suspend fun invitationCodeExists(code: String): Boolean = dbQuery {
-        InvitationTable.select {
-            InvitationTable.code eq code
-        }.count() > 0
+        InvitationTable.selectAll().where { InvitationTable.code eq code }.count() > 0
     }
 
     override suspend fun getInvitationByCode(code: String): InvitationData? = dbQuery {
-        InvitationTable.select {
-            InvitationTable.code eq code
-        }.singleOrNull()?.let {
+        InvitationTable.selectAll().where { InvitationTable.code eq code }.singleOrNull()?.let {
                 resultRow ->
             resultRowToInvitationData(resultRow)
         }

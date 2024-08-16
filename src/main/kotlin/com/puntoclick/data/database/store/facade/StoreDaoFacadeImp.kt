@@ -11,9 +11,7 @@ import java.util.*
 class StoreDaoFacadeImp : StoreDaoFacade {
 
     override suspend fun createStore(storeData: StoreData): StoreResult = dbQuery {
-        val exists = StoreTable.select {
-            StoreTable.name eq storeData.name
-        }.singleOrNull() != null
+        val exists = StoreTable.selectAll().where { StoreTable.name eq storeData.name }.singleOrNull() != null
 
         if (exists) {
             return@dbQuery StoreResult.AlreadyExists
@@ -32,8 +30,8 @@ class StoreDaoFacadeImp : StoreDaoFacade {
 
     override suspend fun getStoresWithUserNamesByTeam(teamId: UUID): List<StoreWithUserName> = dbQuery {
         (StoreTable leftJoin UserTable)
-            .slice(StoreTable.uuid, StoreTable.name, StoreTable.location, UserTable.name)
-            .select { StoreTable.team eq teamId }
+            .select(StoreTable.uuid, StoreTable.name, StoreTable.location, UserTable.name)
+            .where { StoreTable.team eq teamId }
             .map {
                 StoreWithUserName(
                     storeId = it[StoreTable.uuid],
@@ -45,9 +43,7 @@ class StoreDaoFacadeImp : StoreDaoFacade {
     }
 
     override suspend fun storeExists(storeName: String, teamId: UUID): Boolean = dbQuery{
-        val exists = StoreTable.select {
-            (StoreTable.name eq storeName) and (StoreTable.team eq teamId)
-        }.singleOrNull() != null
+        val exists = StoreTable.selectAll().where { (StoreTable.name eq storeName) and (StoreTable.team eq teamId) }.singleOrNull() != null
         exists
     }
 
@@ -61,7 +57,7 @@ class StoreDaoFacadeImp : StoreDaoFacade {
         if (updateStatement > 0) {
             StoreResult.Success
         } else {
-            val exists = StoreTable.select { StoreTable.uuid eq storeId }.singleOrNull() != null
+            val exists = StoreTable.selectAll().where { StoreTable.uuid eq storeId }.singleOrNull() != null
             if (exists) {
                 StoreResult.UpdateFailed
             } else {
@@ -75,7 +71,7 @@ class StoreDaoFacadeImp : StoreDaoFacade {
         if (deleteStatement > 0) {
             StoreResult.Success
         } else {
-            val exists = StoreTable.select { StoreTable.uuid eq storeId }.singleOrNull() != null
+            val exists = StoreTable.selectAll().where { StoreTable.uuid eq storeId }.singleOrNull() != null
             if (exists) {
                 StoreResult.DeleteFailed
             } else {
