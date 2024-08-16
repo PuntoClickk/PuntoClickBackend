@@ -26,7 +26,6 @@ class SupplierDaoFacadeImp: SupplierDaoFacade {
 
     override suspend fun addSupplier(
         createSupplierRequest: CreateSupplierRequest,
-        userId: UUID,
         teamId: UUID
     ): SupplierResult = dbQuery {
         val insertResult = SupplierTable.insert {
@@ -69,7 +68,7 @@ class SupplierDaoFacadeImp: SupplierDaoFacade {
 
     override suspend fun deleteSupplier(supplierID: UUID, teamId: UUID): SupplierResult = dbQuery {
         val deleteResult = SupplierTable.deleteWhere {
-            (SupplierTable.uuid eq uuid) and (SupplierTable.team eq teamId)
+            (uuid eq uuid) and (team eq teamId)
         }
 
         if (deleteResult > 0) SupplierResult.Success
