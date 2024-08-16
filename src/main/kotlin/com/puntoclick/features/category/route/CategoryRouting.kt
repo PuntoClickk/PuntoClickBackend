@@ -31,7 +31,7 @@ fun Route.categoryRouting() {
             val team = call.getIdentifier(appEncryption, TEAM_IDENTIFIER)
             val role = call.getIdentifier(appEncryption, ROLE_IDENTIFIER)
             val locale = call.retrieveLocale()
-            val result = categoryController.addCategory(locale, request, user, role, team,)
+            val result = categoryController.addCategory(locale, request, user, role, team)
             call.respond(message = result.handleResult(), status = result.status)
         }
 

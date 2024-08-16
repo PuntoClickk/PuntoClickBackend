@@ -1,6 +1,6 @@
 package com.puntoclick.data.model.supplier
 
-import com.puntoclick.data.model.team.TeamResponse
+
 import com.puntoclick.data.utils.UUIDSerializer
 import kotlinx.serialization.Serializable
 import java.util.UUID

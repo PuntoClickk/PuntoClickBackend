@@ -13,13 +13,11 @@ import java.util.*
 
 class CategoryDaoFacadeImp: CategoryDaoFacade {
     override suspend fun allCategories(teamId: UUID): List<CategoryResponse> = dbQuery {
-        CategoriesTable.select { CategoriesTable.team eq teamId }.map(::resultRowToCategory)
+        CategoriesTable.selectAll().where { CategoriesTable.team eq teamId }.map(::resultRowToCategory)
     }
 
     override suspend fun getCategory(uuid: UUID, teamId: UUID): CategoryResponse? = dbQuery  {
-        CategoriesTable.select {
-            (CategoriesTable.uuid eq uuid) and (CategoriesTable.team eq teamId)
-        }.map(::resultRowToCategory).singleOrNull()
+        CategoriesTable.selectAll().where { (CategoriesTable.uuid eq uuid) and (CategoriesTable.team eq teamId) }.map(::resultRowToCategory).singleOrNull()
     }
 
     override suspend fun addCategory(
@@ -52,15 +50,14 @@ class CategoryDaoFacadeImp: CategoryDaoFacade {
     }
 
     override suspend fun categoryExists(name: String, teamId: UUID): Boolean = dbQuery {
-        val exists = CategoriesTable.select {
-            (CategoriesTable.name eq name) and (CategoriesTable.team eq teamId)
-        }.singleOrNull() != null
+        val exists = CategoriesTable.selectAll()
+            .where { (CategoriesTable.name eq name) and (CategoriesTable.team eq teamId) }.singleOrNull() != null
         exists
     }
 
-    override suspend fun deleteCategory(uuid: UUID, teamId: UUID): CategoryResult = dbQuery  {
+    override suspend fun deleteCategory(categoryID: UUID, teamId: UUID): CategoryResult = dbQuery  {
         val deleteResult = CategoriesTable.deleteWhere {
-            (CategoriesTable.uuid eq uuid) and (CategoriesTable.team eq teamId)
+            (uuid eq categoryID) and (team eq teamId)
         }
 
         if (deleteResult > 0) CategoryResult.Success
