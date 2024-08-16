@@ -40,7 +40,7 @@ class SupplierController(
         } else locale.createError(descriptionKey = StringResourcesKey.ACTION_PERMISSION_DENIED_ERROR_KEY)
     }
 
-    suspend fun addSupplier(locale: Locale, createSupplierRequest: CreateSupplierRequest, userId: UUID, roleId: UUID, teamId: UUID): AppResult<String> {
+    suspend fun addSupplier(locale: Locale, createSupplierRequest: CreateSupplierRequest, roleId: UUID, teamId: UUID): AppResult<String> {
         val permissionValidation = permissionDaoFacade.hasPermission(roleId, ActionType.READ, module, teamId)
         return if (permissionValidation) {
             val result = if (
@@ -50,7 +50,7 @@ class SupplierController(
                     createSupplierRequest.phoneNumber,
                     teamId)
                 ) SupplierResult.AlreadyExists
-            else supplierDaoFacade.addSupplier(createSupplierRequest, userId, teamId)
+            else supplierDaoFacade.addSupplier(createSupplierRequest, teamId)
 
             handleSupplierResult(locale, result, StringResourcesKey.SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY)
 
