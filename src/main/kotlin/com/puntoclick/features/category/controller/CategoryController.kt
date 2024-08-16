@@ -11,6 +11,7 @@ import com.puntoclick.data.model.category.UpdateCategoryRequest
 import com.puntoclick.data.model.module.ModuleType
 import com.puntoclick.features.utils.StringResourcesKey
 import com.puntoclick.features.utils.createError
+import com.puntoclick.features.utils.createPermissionError
 import com.puntoclick.features.utils.getString
 import io.ktor.http.*
 import java.util.*
@@ -29,7 +30,7 @@ class CategoryController(
             module,
             teamId
         )
-        if (!userAllowed) return locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        if (!userAllowed) return locale.createPermissionError()
 
         val categories = categoryFacade.allCategories(teamId)
         return AppResult.Success(data = categories, appStatus = HttpStatusCode.OK)
@@ -42,7 +43,7 @@ class CategoryController(
             module,
             teamId
         )
-        if (!userAllowed) return locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        if (!userAllowed) return locale.createPermissionError()
 
         val category = categoryFacade.getCategory(categoryId, teamId)
         return category?.let {
@@ -57,7 +58,7 @@ class CategoryController(
             module,
             teamId
         )
-        if (!userAllowed) return locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        if (!userAllowed) return locale.createPermissionError()
 
         val result = if (categoryFacade.categoryExists(createCategoryRequest.name, teamId)) CategoryResult.AlreadyExists
         else categoryFacade.addCategory(createCategoryRequest, userId, teamId)
@@ -71,7 +72,7 @@ class CategoryController(
             module,
             teamId
         )
-        if (!userAllowed) return locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        if (!userAllowed) return locale.createPermissionError()
 
         val updateResult = if (categoryFacade.categoryExists(updateCategoryRequest.name, teamId)) CategoryResult.AlreadyExists
         else categoryFacade.updateCategory(updateCategoryRequest, teamId)
@@ -85,7 +86,7 @@ class CategoryController(
             module,
             teamId
         )
-        if (!userAllowed) return locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
+        if (!userAllowed) return locale.createPermissionError()
 
         val deleteResult = categoryFacade.deleteCategory(categoryId, teamId)
         return handleCategoryResult(locale, deleteResult, StringResourcesKey.CATEGORY_OPERATION_SUCCESS_MESSAGE_KEY)
