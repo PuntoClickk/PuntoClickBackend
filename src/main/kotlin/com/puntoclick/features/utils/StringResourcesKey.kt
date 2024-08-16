@@ -40,9 +40,6 @@ enum class StringResourcesKey(val value: String) {
     CATEGORY_UPDATE_FAILED_ERROR_KEY("category_update_failed_error"),
     CATEGORY_DELETE_FAILED_ERROR_KEY("category_delete_failed_error"),
     CATEGORY_NOT_FOUND_ERROR_KEY("category_not_found_error"),
-    CATEGORY_INVALID_DATA_ERROR_KEY("category_invalid_data_error"),
-    CATEGORY_PERMISSION_DENIED_ERROR_KEY("category_permission_denied_error"),
-    CATEGORY_OPERATION_FAILED_ERROR_KEY("category_operation_failed_error"),
     //SUPPLIERS
     SUPPLIER_OPERATION_SUCCESS_MESSAGE_KEY("supplier_operation_success_message"),
     SUPPLIER_ALREADY_EXISTS_ERROR_KEY("supplier_already_exists_error"),

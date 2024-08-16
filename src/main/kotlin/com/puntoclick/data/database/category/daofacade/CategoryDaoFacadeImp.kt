@@ -48,7 +48,7 @@ class CategoryDaoFacadeImp: CategoryDaoFacade {
         }
 
         if (updateResult > 0) CategoryResult.Success
-        else CategoryResult.InsertFailed
+        else CategoryResult.UpdateFailed
     }
 
     override suspend fun categoryExists(name: String, teamId: UUID): Boolean = dbQuery {

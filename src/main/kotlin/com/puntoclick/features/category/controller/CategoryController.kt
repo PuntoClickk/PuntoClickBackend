@@ -9,10 +9,8 @@ import com.puntoclick.data.model.category.CategoryResult
 import com.puntoclick.data.model.category.CreateCategoryRequest
 import com.puntoclick.data.model.category.UpdateCategoryRequest
 import com.puntoclick.data.model.module.ModuleType
-import com.puntoclick.data.model.supplier.SupplierResult
 import com.puntoclick.features.utils.StringResourcesKey
 import com.puntoclick.features.utils.createError
-import com.puntoclick.features.utils.createGenericError
 import com.puntoclick.features.utils.getString
 import io.ktor.http.*
 import java.util.*
@@ -89,13 +87,8 @@ class CategoryController(
         )
         if (!userAllowed) return locale.createError(descriptionKey = StringResourcesKey.FEATURE_ACCESS_DENIED_ERROR_KEY)
 
-        val deleteResult = if (!doesCategoryExist(categoryFacade.allCategories(teamId), categoryId)) CategoryResult.DeleteFailed
-        else categoryFacade.deleteCategory(categoryId, teamId)
+        val deleteResult = categoryFacade.deleteCategory(categoryId, teamId)
         return handleCategoryResult(locale, deleteResult, StringResourcesKey.CATEGORY_OPERATION_SUCCESS_MESSAGE_KEY)
-    }
-
-    private fun doesCategoryExist(categories: List<CategoryResponse>, categoryId: UUID): Boolean {
-        return categories.any { it.id == categoryId }
     }
 
     private fun handleCategoryResult(
@@ -112,10 +105,6 @@ class CategoryController(
             CategoryResult.InsertFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_INSERT_FAILED_ERROR_KEY)
             CategoryResult.UpdateFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_UPDATE_FAILED_ERROR_KEY)
             CategoryResult.DeleteFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_DELETE_FAILED_ERROR_KEY)
-            CategoryResult.NotFound -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_NOT_FOUND_ERROR_KEY)
-            CategoryResult.InvalidData -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_INVALID_DATA_ERROR_KEY)
-            CategoryResult.PermissionDenied -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_PERMISSION_DENIED_ERROR_KEY)
-            CategoryResult.OperationFailed -> locale.createError(descriptionKey = StringResourcesKey.CATEGORY_OPERATION_FAILED_ERROR_KEY)
         }
     }
 }
