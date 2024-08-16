@@ -38,7 +38,7 @@ class CategoryDaoFacadeImp: CategoryDaoFacade {
         else CategoryResult.InsertFailed
     }
 
-    override suspend fun updateUpdateCategory(updateCategoryRequest: UpdateCategoryRequest, teamId: UUID): CategoryResult = dbQuery  {
+    override suspend fun updateCategory(updateCategoryRequest: UpdateCategoryRequest, teamId: UUID): CategoryResult = dbQuery  {
 
         val updateResult = CategoriesTable.update({
             (CategoriesTable.uuid eq updateCategoryRequest.id) and (CategoriesTable.team eq teamId)
@@ -48,7 +48,14 @@ class CategoryDaoFacadeImp: CategoryDaoFacade {
         }
 
         if (updateResult > 0) CategoryResult.Success
-        else CategoryResult.InsertFailed
+        else CategoryResult.UpdateFailed
+    }
+
+    override suspend fun categoryExists(name: String, teamId: UUID): Boolean = dbQuery {
+        val exists = CategoriesTable.select {
+            (CategoriesTable.name eq name) and (CategoriesTable.team eq teamId)
+        }.singleOrNull() != null
+        exists
     }
 
     override suspend fun deleteCategory(uuid: UUID, teamId: UUID): CategoryResult = dbQuery  {
