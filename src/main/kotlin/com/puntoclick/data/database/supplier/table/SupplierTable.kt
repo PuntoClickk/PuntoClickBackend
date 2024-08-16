@@ -11,6 +11,7 @@ object SupplierTable: Table("Supplier") {
     val email = varchar("email", 20)
     val phoneNumber = varchar("phoneNumber", PHONE_NUMBER_LENGTH)
     val team = reference("team", TeamTable.uuid)
+    @Suppress("unused")
     val createAt = long("createAt").default(System.currentTimeMillis())
     val updateAt = long("updateAt").default(System.currentTimeMillis())
 }

@@ -12,7 +12,6 @@ object RegisterUserTable : Table("register_user") {
     val isPending = bool("isPending").default(true)
     @Suppress("unused")
     val createAt = long("createAt").default(System.currentTimeMillis())
-    @Suppress("unused")
     val updateAt = long("updateAt").default(System.currentTimeMillis())
 
     override val primaryKey: PrimaryKey = PrimaryKey(uuid)

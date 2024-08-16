@@ -15,9 +15,7 @@ class TeamDaoFacadeImp : TeamDaoFacade {
     }
 
     override suspend fun team(uuid: UUID): TeamResponse? = dbQuery {
-        TeamTable.select {
-            TeamTable.uuid eq uuid
-        }.map(::resultRowToTeam).singleOrNull()
+        TeamTable.selectAll().where { TeamTable.uuid eq uuid }.map(::resultRowToTeam).singleOrNull()
     }
 
     override suspend fun addTeam(name: String): UUID? = dbQuery {

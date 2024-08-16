@@ -19,9 +19,8 @@ import java.util.*
 class UserDaoFacadeImp : UserDaoFacade {
 
     override suspend fun allUsers(teamId: UUID): List<UserResponse> = dbQuery {
-        (UserTable innerJoin RegisterUserTable innerJoin TeamTable innerJoin RoleTable).select {
-            RegisterUserTable.team eq teamId and (UserTable.type eq 2)
-        }.map(::resultRowToUser)
+        (UserTable innerJoin RegisterUserTable innerJoin TeamTable innerJoin RoleTable).selectAll()
+            .where { RegisterUserTable.team eq teamId and (UserTable.type eq 2) }.map(::resultRowToUser)
     }
 
     override suspend fun addUser(user: CreateUserData): Boolean = dbQuery {
@@ -48,7 +47,7 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     override suspend fun user(userId: UUID): UserResponse? = dbQuery {
         (UserTable innerJoin RegisterUserTable innerJoin TeamTable innerJoin RoleTable)
-            .select { UserTable.uuid eq userId }
+            .selectAll().where { UserTable.uuid eq userId }
             .mapNotNull(::resultRowToUser)
             .singleOrNull()
 
@@ -57,7 +56,7 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     override suspend fun getUserType(userId: UUID): UserType? = dbQuery {
         UserTable
-            .select { UserTable.uuid eq userId }
+            .selectAll().where { UserTable.uuid eq userId }
             .mapNotNull(::resultRowToUserType)
             .singleOrNull()
     }
@@ -72,15 +71,13 @@ class UserDaoFacadeImp : UserDaoFacade {
 
     override suspend fun getBaseInfoUser(email: String): BaseInfoUser? = dbQuery {
         UserTable
-            .select { UserTable.email eq email }
+            .selectAll().where { UserTable.email eq email }
             .mapNotNull(::resultRowToBaseInfoUser)
             .singleOrNull()
     }
 
     override suspend fun user(email: String): UserLogin? = dbQuery {
-        (UserTable innerJoin RegisterUserTable).select {
-            UserTable.email eq email
-        }.mapNotNull(::resultRowToUserLogin)
+        (UserTable innerJoin RegisterUserTable).selectAll().where { UserTable.email eq email }.mapNotNull(::resultRowToUserLogin)
             .singleOrNull()
     }
 
@@ -95,7 +92,7 @@ class UserDaoFacadeImp : UserDaoFacade {
     }
 
     override suspend fun emailExists(email: String): Boolean = dbQuery {
-        UserTable.select { UserTable.email eq email }.count() > 0
+        UserTable.selectAll().where { UserTable.email eq email }.count() > 0
     }
 
     private fun resultRowToUser(row: ResultRow) = UserResponse(
