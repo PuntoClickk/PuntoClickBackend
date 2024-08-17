@@ -18,3 +18,11 @@ object UUIDSerializer : KSerializer<UUID> {
         encoder.encodeString(value.toString())
     }
 }
+
+fun UUID.validateUUID(): Boolean {
+    return try {
+        UUID.fromString(this.toString()) != null
+    } catch (e: IllegalArgumentException) {
+        false
+    }
+}

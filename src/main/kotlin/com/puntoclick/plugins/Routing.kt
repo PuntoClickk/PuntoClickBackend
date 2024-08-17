@@ -11,6 +11,7 @@ import com.puntoclick.features.supplier.route.supplierRouting
 import com.puntoclick.features.store.routing.storeRouting
 import com.puntoclick.features.team.route.teamRouting
 import com.puntoclick.features.user.route.userRouting
+import com.puntoclick.features.userstoreassignment.route.userStoreAssignmentRouting
 import com.puntoclick.features.utils.*
 import com.puntoclick.getEnvironment
 import io.ktor.http.*
@@ -80,8 +81,12 @@ fun Application.configureRouting() {
                 permissionRouting()
                 supplierRouting()
                 storeRouting()
+                userStoreAssignmentRouting()
             }
         }
     }
 
 }
+
+
+//e15948ee-a6b4-49a9-b2d3-1202e18bcba2

@@ -17,6 +17,7 @@ import com.puntoclick.data.database.supplier.table.SupplierTable
 import com.puntoclick.data.database.store.table.StoreTable
 import com.puntoclick.data.database.team.table.TeamTable
 import com.puntoclick.data.database.user.table.UserTable
+import com.puntoclick.data.database.userstoreassignment.table.UserStoreAssignmentTable
 import io.ktor.server.application.*
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.Database
@@ -46,6 +47,7 @@ fun Application.configureDatabase() {
         SchemaUtils.create(PermissionTable)
         SchemaUtils.create(SupplierTable)
         SchemaUtils.create(StoreTable)
+        SchemaUtils.create(UserStoreAssignmentTable)
         initializeRoles()
         initializeActions()
         initializeModules()

@@ -60,6 +60,11 @@ enum class StringResourcesKey(val value: String) {
     STORE_NAME_INVALID_ERROR_KEY("store_name_invalid_error"),
     STORE_LOCATION_NAME_INVALID_ERROR_KEY("location_name_invalid_error"),
     // RATE LIMIT
-    TOO_MANY_REQUESTS_ERROR_KEY("too_many_requests_error");
+    TOO_MANY_REQUESTS_ERROR_KEY("too_many_requests_error"),
+    // USER ASSIGNMENT
+    USER_STORE_ASSIGNMENT_OPERATION_SUCCESS_MESSAGE_KEY("user_store_assignment_operation_success_message"),
+    USER_ALREADY_ASSIGNED_ERROR_KEY("user_already_assigned_error"),
+    USER_STORE_ASSIGNMENT_FAILED_ERROR_KEY("user_store_assignment_failed_error"),
+    USER_STORE_ASSIGNMENT_NOT_FOUND_ERROR_KEY("user_store_assignment_not_found_error");
 
 }
