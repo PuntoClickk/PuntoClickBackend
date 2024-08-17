@@ -1,5 +1,6 @@
 package com.puntoclick.plugins
 
+import com.puntoclick.data.model.UUIDAppRequest
 import com.puntoclick.data.model.auth.CreateAdminRequest
 import com.puntoclick.data.model.auth.CreateUserRequest
 import com.puntoclick.data.model.auth.LoginRequest
@@ -23,6 +24,7 @@ import com.puntoclick.features.roles.validation.validateRoleRequest
 import com.puntoclick.features.store.validation.validateCreteStoreRequest
 import com.puntoclick.features.team.validation.validateTeamRequest
 import com.puntoclick.features.user.validation.validateCreateUserRequest
+import com.puntoclick.security.validateUUIDAppRequest
 import io.ktor.server.application.*
 import io.ktor.server.plugins.requestvalidation.*
 
@@ -30,6 +32,9 @@ import io.ktor.server.plugins.requestvalidation.*
 fun Application.configureRequestValidation() {
 
     install(RequestValidation) {
+        validate<UUIDAppRequest> { uuidAppRequest ->
+            uuidAppRequest.validateUUIDAppRequest()
+        }
         validate<CreateAdminRequest> { createUserRequest ->
             createUserRequest.validateCreateUserRequest()
         }
